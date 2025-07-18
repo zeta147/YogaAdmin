@@ -1,15 +1,15 @@
 <resources>
     <string name="app_name">YogaAdmin</string>
+
     <string name="add_yoga_course">Add Course</string>
     <string name="clear_yoga_course">Clear</string>
     <string name="save_yoga_course">Save</string>
     <string name="edit_yoga_course">Edit</string>
     <string name="delete_yoga_course">Delete</string>
     <string name="cancel_yoga_course">Cancel</string>
-    <string name="add_schedule_yoga_course">Add Schedule</string>"
-    <string name="create_schedule_label">Create Schedule</string>
-    <string name="yoga_course_label">Yoga Course</string>
-    <string name="yoga_course_details_label">Yoga Course Details</string>
+    <string name="add_schedule_yoga_course">Add Schedule</string>
+    <string name="create_schedule_yoga_course">Create</string>
+
     <string-array name="day_of_week">
         <item>Monday</item>
         <item>Tuesday</item>
@@ -52,6 +52,7 @@
         <item>Intermediate</item>
         <item>Advanced</item>
     </string-array>
+
     <string name="create_course_label">Create Course</string>"
     <string name="course_name_label">Course Name</string>
     <string name="day_of_week_label">Day of Week</string>
@@ -62,4 +63,7 @@
     <string name="type_label">Type</string>
     <string name="description_label">Description</string>
     <string name="date_label">Date</string>
+    <string name="create_schedule_label">Create Schedule</string>
+    <string name="yoga_course_label">Yoga Course</string>
+    <string name="yoga_course_details_label">Yoga Course Details</string>
 </resources>

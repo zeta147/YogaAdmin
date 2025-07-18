@@ -274,6 +274,7 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
     public void onClickAddSchedule(View view){
         Intent i = new Intent(this, ScheduleCreateActivity.class);
         i.putExtra("course_id", _course_id);
+        i.putExtra("course_dayOfWeek", _dayOfWeek);
         startActivity(i);
     }
 

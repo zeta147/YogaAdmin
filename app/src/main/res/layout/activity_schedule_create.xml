@@ -20,24 +20,66 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textViewDateTime"
-        android:layout_width="350dp"
-        android:layout_height="29dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="108dp"
-        android:text="@string/date_label"
-        android:textColor="@color/black"
-        android:textSize="20sp"
+    <ScrollView
+        android:layout_width="411dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="100dp"
+        android:scrollbars="vertical"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        >
 
-    <DatePicker
-        android:id="@+id/datePickerSchedule"
-        android:layout_width="349dp"
-        android:layout_height="395dp"
-        app:layout_constraintStart_toStartOf="@+id/textViewDateTime"
-        app:layout_constraintTop_toBottomOf="@+id/textViewDateTime" />
-        />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <TextView
+                android:id="@+id/textViewDateTime"
+                android:layout_width="350dp"
+                android:layout_height="29dp"
+                android:layout_marginStart="0dp"
+                android:layout_marginTop="0dp"
+                android:text="@string/date_label"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="TextSizeCheck" />
+
+            <CalendarView
+                android:id="@+id/calendarView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@+id/textViewDateTime"
+                app:layout_constraintTop_toBottomOf="@+id/textViewDateTime" />
+
+            <TextView
+                android:id="@+id/textViewDateScheduleErrorMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textColor="@color/design_default_color_error"
+                android:textSize="16sp"
+                android:visibility="invisible"
+                app:layout_constraintStart_toStartOf="@+id/calendarView"
+                app:layout_constraintTop_toBottomOf="@+id/calendarView" />
+        </LinearLayout>
+    </ScrollView>
+
+
+    <Button
+        android:id="@+id/buttonCreateSchedule"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="160dp"
+        android:layout_marginTop="492dp"
+        android:onClick="onClickAddSchedule"
+        android:text="@string/create_schedule_yoga_course"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/textViewScheduleCreateLabel" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
