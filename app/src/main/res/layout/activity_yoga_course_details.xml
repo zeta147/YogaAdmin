@@ -1,0 +1,351 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    tools:layout_editor_absoluteX="10dp"
+    tools:layout_editor_absoluteY="10dp"
+    android:fillViewport="true">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".YogaCourseDetailsActivity">
+
+        <TextView
+            android:id="@+id/textViewCourseDetailLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="4dp"
+            android:fontFamily="sans-serif-black"
+            android:text="@string/yoga_course_details_label"
+            android:textColor="@color/black"
+            android:textSize="34sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/textViewCourseDetailNameLabel"
+            android:layout_width="350dp"
+            android:layout_height="29dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="62dp"
+            android:fontFamily="sans-serif-black"
+            android:text="@string/course_name_label"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/textViewCourseDetailNameValue"
+            android:layout_width="350dp"
+            android:layout_height="48dp"
+            android:ems="10"
+            android:text="TextView"
+            android:inputType="text"
+            android:textSize="20sp"
+            android:enabled="false"
+            app:layout_constraintStart_toStartOf="@+id/textViewCourseDetailNameLabel"
+            app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailNameLabel" />
+
+
+        <TextView
+            android:id="@+id/textViewCourseDetailNameErrorMessage"
+            android:layout_width="350dp"
+            android:layout_height="24dp"
+            android:text="TextView"
+            android:textColor="@color/design_default_color_error"
+            android:textSize="16sp"
+            android:visibility="invisible"
+            app:layout_constraintStart_toStartOf="@+id/textViewCourseDetailNameValue"
+            app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailNameValue" />
+
+        <TextView
+            android:id="@+id/textViewCourseDetailDayOfWeekLabel"
+            android:layout_width="350dp"
+            android:layout_height="29dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="100dp"
+            android:fontFamily="sans-serif-black"
+            android:text="@string/day_of_week_label"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/textViewCourseDetailNameValue" />
+
+        <Spinner
+            android:id="@+id/textViewCourseDetailDayOfWeekValue"
+            android:layout_width="350dp"
+            android:layout_height="48dp"
+            android:enabled="false"
+            android:entries="@array/day_of_week"
+            app:layout_constraintStart_toStartOf="@+id/textViewCourseDetailDayOfWeekLabel"
+            app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailDayOfWeekLabel" />
+
+        <TextView
+            android:id="@+id/textViewCourseDetailDayOfWeekErrorMessage"
+            android:layout_width="350dp"
+            android:layout_height="24dp"
+            android:text="TextView"
+            android:textColor="@color/design_default_color_error"
+            android:textSize="16sp"
+            android:visibility="invisible"
+            app:layout_constraintStart_toStartOf="@+id/textViewCourseDetailDayOfWeekValue"
+            app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailDayOfWeekValue" />
+
+        <TextView
+            android:id="@+id/textViewCourseDetailTimeLabel"
+            android:layout_width="350dp"
+            android:layout_height="29dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="100dp"
+            android:fontFamily="sans-serif-black"
+            android:text="@string/time_label"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailDayOfWeekLabel" />
+
+        <Spinner
+            android:id="@+id/textViewCourseDetailTimeValue"
+            android:layout_width="350dp"
+            android:layout_height="48dp"
+            android:entries="@array/time"
+            android:enabled="false"
+            app:layout_constraintStart_toStartOf="@+id/textViewCourseDetailTimeLabel"
+            app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailTimeLabel" />
+
+        <TextView
+            android:id="@+id/textViewCourseDetailTimeErrorMessage"
+            android:layout_width="350dp"
+            android:layout_height="24dp"
+            android:text="TextView"
+            android:textColor="@color/design_default_color_error"
+            android:textSize="16sp"
+            android:visibility="invisible"
+            app:layout_constraintStart_toStartOf="@+id/textViewCourseDetailTimeValue"
+            app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailTimeValue" />
+
+        <TextView
+            android:id="@+id/textViewCourseDetailCapacityLabel"
+            android:layout_width="350dp"
+            android:layout_height="29dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="100dp"
+            android:fontFamily="sans-serif-black"
+            android:text="@string/capacity_label"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailTimeLabel" />
+
+        <EditText
+            android:id="@+id/textViewCourseDetailCapacityValue"
+            android:layout_width="350dp"
+            android:layout_height="48dp"
+            android:text="TextView"
+            android:inputType="number"
+            android:textSize="20sp"
+            android:enabled="false"
+            app:layout_constraintStart_toStartOf="@+id/textViewCourseDetailCapacityLabel"
+            app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailCapacityLabel" />
+
+        <TextView
+            android:id="@+id/textViewCourseDetailCapacityErrorMessage"
+            android:layout_width="350dp"
+            android:layout_height="24dp"
+            android:text="TextView"
+            android:textColor="@color/design_default_color_error"
+            android:textSize="16sp"
+            android:visibility="invisible"
+            app:layout_constraintStart_toStartOf="@+id/textViewCourseDetailCapacityValue"
+            app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailCapacityValue" />
+
+        <TextView
+            android:id="@+id/textViewCourseDetailDurationLabel"
+            android:layout_width="350dp"
+            android:layout_height="29dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="100dp"
+            android:fontFamily="sans-serif-black"
+            android:text="@string/duration_label"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailCapacityLabel" />
+
+        <Spinner
+            android:id="@+id/textViewCourseDetailDurationValue"
+            android:layout_width="350dp"
+            android:layout_height="48dp"
+            android:entries="@array/duration"
+            android:enabled="false"
+            app:layout_constraintStart_toStartOf="@+id/textViewCourseDetailDurationLabel"
+            app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailDurationLabel" />
+
+        <TextView
+            android:id="@+id/textViewCourseDetailDurationErrorMessage"
+            android:layout_width="350dp"
+            android:layout_height="24dp"
+            android:text="TextView"
+            android:textColor="@color/design_default_color_error"
+            android:textSize="16sp"
+            android:visibility="invisible"
+            app:layout_constraintStart_toStartOf="@+id/textViewCourseDetailDurationValue"
+            app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailDurationValue" />
+
+        <TextView
+            android:id="@+id/textViewCourseDetailPriceLabel"
+            android:layout_width="350dp"
+            android:layout_height="29dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="100dp"
+            android:fontFamily="sans-serif-black"
+            android:text="@string/price_label"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailDurationLabel" />
+
+        <EditText
+            android:id="@+id/textViewCourseDetailPriceValue"
+            android:layout_width="350dp"
+            android:layout_height="48dp"
+            android:ems="20"
+            android:text="TextView"
+            android:inputType="numberDecimal"
+            android:textSize="20sp"
+            android:enabled="false"
+            app:layout_constraintStart_toStartOf="@+id/textViewCourseDetailPriceLabel"
+            app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailPriceLabel" />
+
+        <TextView
+            android:id="@+id/textViewCourseDetailPriceErrorMessage"
+            android:layout_width="350dp"
+            android:layout_height="24dp"
+            android:text="TextView"
+            android:textColor="@color/design_default_color_error"
+            android:textSize="16sp"
+            android:visibility="invisible"
+            app:layout_constraintStart_toStartOf="@+id/textViewCourseDetailPriceValue"
+            app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailPriceValue" />
+
+        <TextView
+            android:id="@+id/textViewCourseDetailTypeLabel"
+            android:layout_width="350dp"
+            android:layout_height="29dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="100dp"
+            android:fontFamily="sans-serif-black"
+            android:text="@string/type_label"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailPriceLabel" />
+
+        <Spinner
+            android:id="@+id/textViewCourseDetailTypeValue"
+            android:layout_width="350dp"
+            android:layout_height="48dp"
+            android:entries="@array/type"
+            android:enabled="false"
+            app:layout_constraintStart_toStartOf="@+id/textViewCourseDetailTypeLabel"
+            app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailTypeLabel" />
+
+        <TextView
+            android:id="@+id/textViewCourseDetailTypeErrorMessage"
+            android:layout_width="350dp"
+            android:layout_height="24dp"
+            android:text="TextView"
+            android:textColor="@color/design_default_color_error"
+            android:textSize="16sp"
+            android:visibility="invisible"
+            app:layout_constraintStart_toStartOf="@+id/textViewCourseDetailTypeValue"
+            app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailTypeValue" />
+
+        <TextView
+            android:id="@+id/textViewCourseDetailDescriptionLabel"
+            android:layout_width="350dp"
+            android:layout_height="29dp"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="100dp"
+            android:fontFamily="sans-serif-black"
+            android:text="@string/description_label"
+            android:textColor="@color/black"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailTypeLabel" />
+
+        <EditText
+            android:id="@+id/textViewCourseDetailDescriptionValue"
+            android:layout_width="348dp"
+            android:layout_height="154dp"
+            android:enabled="false"
+            android:gravity="start|top"
+            android:inputType="textMultiLine"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@+id/textViewCourseDetailDescriptionLabel"
+            app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailDescriptionLabel" />
+
+        <Button
+            android:id="@+id/buttonCourseDetailSave"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="180dp"
+            android:onClick="onClickSaveYogaCourse"
+            android:text="@string/save_yoga_course"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailDescriptionLabel" />
+
+        <Button
+            android:id="@+id/buttonCourseDetailEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="44dp"
+            android:layout_marginTop="180dp"
+            android:onClick="onClickEditYogaCourse"
+            android:text="@string/edit_yoga_course"
+            app:layout_constraintStart_toEndOf="@+id/buttonCourseDetailSave"
+            app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailDescriptionLabel" />
+
+        <Button
+            android:id="@+id/buttonCourseDetailDelete"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="180dp"
+            android:onClick="onClickDeleteYogaCourse"
+            android:text="@string/delete_yoga_course"
+            app:layout_constraintStart_toEndOf="@+id/buttonCourseDetailEdit"
+            app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailDescriptionLabel" />
+
+        <Button
+            android:id="@+id/buttonCourseDetail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="22dp"
+            android:onClick="onClickCancelYogaCourse"
+            android:text="@string/cancel_yoga_course"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/buttonCourseDetailSave" />
+
+        <Button
+            android:id="@+id/buttonAddSchedule"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="144dp"
+            android:layout_marginTop="248dp"
+            android:onClick="onClickAddSchedule"
+            android:text="@string/add_schedule_yoga_course"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailDescriptionLabel" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
