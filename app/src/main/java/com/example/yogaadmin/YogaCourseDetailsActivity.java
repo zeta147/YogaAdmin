@@ -62,6 +62,7 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
         assignYogaCourseDetailsValue();
         getYogaCourseDetailsInputWidget();
         getYogaCourseDetailsErrorMessageWidget();
+        initializeSetErrorMessageInvisible();
         yogaCourseDetails = new YogaCourse(
                 _course_id,
                 _name,
@@ -173,16 +174,17 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
     }
 
     public void onClickSaveYogaCourse(View view) {
-        boolean canUpdate = true;
-        canUpdate = checkYogaCourseDetailsName();
-        canUpdate = canUpdate && checkYogaCourseDetailsDayOfWeek();
-        canUpdate = canUpdate && checkYogaCourseDetailsTime();
-        canUpdate = canUpdate && checkYogaCourseDetailsCapacity();
-        canUpdate = canUpdate && checkYogaCourseDetailsDuration();
-        canUpdate = canUpdate && checkYogaCourseDetailsPrice();
-        canUpdate = canUpdate && checkYogaCourseDetailsType();
-        canUpdate = canUpdate && checkYogaCourseDetailsDescription();
+        boolean canUpdate;
+        canUpdate = checkYogaCourseDetailsName()
+                && checkYogaCourseDetailsDayOfWeek()
+                && checkYogaCourseDetailsTime()
+                && checkYogaCourseDetailsCapacity()
+                && checkYogaCourseDetailsDuration()
+                && checkYogaCourseDetailsPrice()
+                && checkYogaCourseDetailsType()
+                && checkYogaCourseDetailsDescription();
         if (!canUpdate) {
+            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
             return;
         }
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
@@ -251,8 +253,6 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
             finish();
         });
         alertDialog.create().show();
-
-
     }
 
     private void deleteYogaCourse() {
@@ -274,6 +274,7 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
     public void onClickAddSchedule(View view){
         Intent i = new Intent(this, ScheduleCreateActivity.class);
         i.putExtra("course_id", _course_id);
+        i.putExtra("course_name", _name);
         i.putExtra("course_dayOfWeek", _dayOfWeek);
         startActivity(i);
     }
@@ -393,9 +394,5 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
         _description = descriptionTemp;
         return true;
     }
-
-
-
-
 }
 

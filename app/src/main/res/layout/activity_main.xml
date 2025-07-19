@@ -48,7 +48,7 @@
 
     <ListView
         android:id="@+id/listViewYogaCourse"
-        android:layout_width="460dp"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_marginStart="4dp"
         android:layout_marginTop="100dp"

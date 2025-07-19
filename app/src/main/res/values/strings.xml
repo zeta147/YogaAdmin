@@ -61,8 +61,10 @@
     <string name="duration_label">Duration</string>"
     <string name="price_label">Price</string>
     <string name="type_label">Type</string>
-    <string name="description_label">Description</string>
+    <string name="description_label">Description (Optional)</string>
     <string name="date_label">Date</string>
+    <string name="teacher_name_label">Teacher Name</string>
+    <string name="comment_label">Comment (Optional)</string>
     <string name="create_schedule_label">Create Schedule</string>
     <string name="yoga_course_label">Yoga Course</string>
     <string name="yoga_course_details_label">Yoga Course Details</string>

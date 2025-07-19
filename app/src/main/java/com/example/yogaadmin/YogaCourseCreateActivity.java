@@ -49,15 +49,16 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
 
     public void onCLickAddCourse(View view){
         boolean canAdd;
-        canAdd = checkInputName();
-        canAdd = canAdd && checkInputDayOfWeek();
-        canAdd = canAdd && checkInputTime();
-        canAdd = canAdd && checkInputCapacity();
-        canAdd = canAdd && checkInputDuration();
-        canAdd = canAdd && checkInputPrice();
-        canAdd = canAdd && checkInputType();
-        canAdd = canAdd && checkInputDescription();
+        canAdd = checkInputName()
+                && checkInputDayOfWeek()
+                && checkInputTime()
+                && checkInputCapacity()
+                && checkInputDuration()
+                && checkInputPrice()
+                && checkInputType()
+                && checkInputDescription();
         if(!canAdd){
+            Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
             return;
         }
         Thread t = new Thread(new AddDatabaseYogaCourseThread());
