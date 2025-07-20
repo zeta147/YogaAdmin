@@ -329,7 +329,7 @@
             android:layout_marginStart="32dp"
             android:layout_marginBottom="50dp"
             android:onClick="onClickClear"
-            android:text="@string/clear_yoga_course"
+            android:text="@string/clear"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/buttonAddCourse" />
 

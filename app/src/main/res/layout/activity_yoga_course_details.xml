@@ -311,7 +311,7 @@
         android:layout_marginStart="12dp"
         android:layout_marginBottom="100dp"
         android:onClick="onClickSaveYogaCourse"
-        android:text="@string/save_yoga_course"
+        android:text="@string/save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -322,7 +322,7 @@
         android:layout_marginStart="50dp"
         android:layout_marginBottom="100dp"
         android:onClick="onClickEditYogaCourse"
-        android:text="@string/edit_yoga_course"
+        android:text="@string/edit"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/buttonCourseDetailSave" />
 
@@ -333,7 +333,7 @@
         android:layout_marginStart="40dp"
         android:layout_marginBottom="100dp"
         android:onClick="onClickDeleteYogaCourse"
-        android:text="@string/delete_yoga_course"
+        android:text="@string/delete"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@+id/buttonCourseDetailEdit" />
 
@@ -344,7 +344,7 @@
         android:layout_marginStart="12dp"
         android:layout_marginBottom="50dp"
         android:onClick="onClickCancelYogaCourse"
-        android:text="@string/cancel_yoga_course"
+        android:text="@string/cancel"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

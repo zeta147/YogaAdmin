@@ -46,8 +46,8 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
             adapterDuration,
             adapterType;
 
-    private boolean _isSuccessfulUpdate,
-            _isSuccessfulDelete;
+    private boolean isEditing;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -174,6 +174,10 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
     }
 
     public void onClickSaveYogaCourse(View view) {
+        if(!isEditing){
+            Toast.makeText(this, "Please edit course details first", Toast.LENGTH_SHORT).show();
+            return;
+        }
         boolean canUpdate;
         canUpdate = checkYogaCourseDetailsName()
                 && checkYogaCourseDetailsDayOfWeek()
@@ -231,11 +235,13 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
 
     public void onClickEditYogaCourse(View view) {
         enableCourseDetailsInputField();
+        isEditing = true;
     }
 
     public void onClickCancelYogaCourse(View view) {
         setYogaCourseDetailsValue();
         disableCourseDetailsInputField();
+        isEditing = false;
     }
 
     public void onClickDeleteYogaCourse(View view) {
@@ -249,7 +255,6 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
             deleteDatabaseYogaCourse.start();
             while (deleteDatabaseYogaCourse.isAlive()) {}
             Toast.makeText(this, "Course with id: " + _course_id + " has been deleted", Toast.LENGTH_SHORT).show();
-
             finish();
         });
         alertDialog.create().show();

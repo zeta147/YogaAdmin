@@ -14,7 +14,7 @@
         android:layout_marginStart="76dp"
         android:layout_marginTop="16dp"
         android:fontFamily="sans-serif-black"
-        android:text="@string/create_schedule_label"
+        android:text="@string/schedule_create_label"
         android:textColor="@color/black"
         android:textSize="32sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -169,13 +169,13 @@
 
 
     <Button
-        android:id="@+id/buttonCreateSchedule"
+        android:id="@+id/buttonEditScheduleDetail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="160dp"
         android:layout_marginBottom="50dp"
         android:onClick="onClickAddSchedule"
-        android:text="@string/create_schedule_yoga_course"
+        android:text="@string/create"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

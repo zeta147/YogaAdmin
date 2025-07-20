@@ -7,4 +7,187 @@
     android:layout_height="match_parent"
     tools:context=".ScheduleDetailActivity">
 
+    <TextView
+        android:id="@+id/textViewScheduleCreateLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="sans-serif-black"
+        android:text="@string/yoga_course_schedule_details_label"
+        android:textColor="@color/black"
+        android:textSize="32sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:layout_width="411dp"
+        android:layout_height="400dp"
+        android:layout_marginTop="100dp"
+        android:scrollbars="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp">
+
+            <TextView
+                android:id="@+id/textViewCourseScheduleNameLabel"
+                android:layout_width="350dp"
+                android:layout_height="29dp"
+                android:text="@string/course_name_label"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="TextSizeCheck" />
+
+            <TextView
+                android:id="@+id/textViewCourseScheduleName"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="@id/textViewCourseScheduleNameLabel"
+                app:layout_constraintTop_toBottomOf="@id/textViewCourseScheduleNameLabel" />
+
+            <TextView
+                android:id="@+id/textViewScheduleDateTimeLabel"
+                android:layout_width="350dp"
+                android:layout_height="29dp"
+                android:layout_marginTop="25dp"
+                android:text="@string/date_label"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="@+id/textViewCourseScheduleNameLabel"
+                app:layout_constraintTop_toTopOf="@+id/textViewCourseScheduleNameLabel"
+                tools:ignore="TextSizeCheck" />
+
+            <CalendarView
+                android:id="@+id/calendarViewSchedule"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toStartOf="@+id/textViewScheduleDateTimeLabel"
+                app:layout_constraintTop_toBottomOf="@+id/textViewScheduleDateTimeLabel" />
+
+            <TextView
+                android:id="@+id/textViewDateScheduleErrorMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textColor="@color/design_default_color_error"
+                android:textSize="16sp"
+                android:visibility="invisible"
+                app:layout_constraintStart_toStartOf="@+id/calendarViewSchedule"
+                app:layout_constraintTop_toBottomOf="@+id/calendarViewSchedule" />
+
+            <TextView
+                android:id="@+id/textViewTeacherNameLabel"
+                android:layout_width="350dp"
+                android:layout_height="29dp"
+                android:layout_marginTop="25dp"
+                android:text="@string/teacher_name_label"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="@id/textViewScheduleDateTimeLabel"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="TextSizeCheck" />
+
+            <EditText
+                android:id="@+id/editTextTeacherName"
+                android:layout_width="350dp"
+                android:layout_height="48dp"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="@id/textViewTeacherNameLabel"
+                app:layout_constraintTop_toBottomOf="@id/textViewTeacherNameLabel" />
+
+            <TextView
+                android:id="@+id/textViewTeacherNameErrorMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textColor="@color/design_default_color_error"
+                android:textSize="16sp"
+                android:visibility="invisible"
+                app:layout_constraintStart_toStartOf="@id/editTextTeacherName"
+                app:layout_constraintTop_toBottomOf="@id/editTextTeacherName" />
+
+            <TextView
+                android:id="@+id/textViewCommentLabel"
+                android:layout_width="350dp"
+                android:layout_height="29dp"
+                android:layout_marginTop="25dp"
+                android:text="@string/comment_label"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="@id/textViewTeacherNameLabel"
+                app:layout_constraintTop_toBottomOf="@id/textViewTeacherNameLabel" />
+
+            <EditText
+                android:id="@+id/editTextComment"
+                android:layout_width="350dp"
+                android:layout_height="48dp"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="@id/textViewCommentLabel"
+                app:layout_constraintTop_toBottomOf="@id/textViewCommentLabel" />
+
+            <TextView
+                android:id="@+id/textViewCommentErrorMessage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                android:textColor="@color/design_default_color_error"
+                android:textSize="16sp"
+                android:visibility="invisible"
+                app:layout_constraintStart_toStartOf="@id/editTextComment"
+                app:layout_constraintTop_toBottomOf="@id/editTextComment" />
+        </LinearLayout>
+    </ScrollView>
+
+    <Button
+        android:id="@+id/buttonSaveScheduleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginBottom="50dp"
+        android:onClick="onClickUpdateSchedule"
+        android:text="@string/save"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/buttonEditScheduleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="115dp"
+        android:layout_marginBottom="50dp"
+        android:onClick="onClickEditSchedule"
+        android:text="@string/edit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/buttonCancelScheduleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="215dp"
+        android:layout_marginBottom="50dp"
+        android:onClick="onClickCancelSchedule"
+        android:text="@string/cancel"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <Button
+        android:id="@+id/buttonDeleteScheduleDetail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="315dp"
+        android:layout_marginBottom="50dp"
+        android:onClick="onClickDeleteSchedule"
+        android:text="@string/delete"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

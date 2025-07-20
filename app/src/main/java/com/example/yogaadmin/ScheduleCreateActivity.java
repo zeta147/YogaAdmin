@@ -16,8 +16,6 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -27,7 +25,6 @@ public class ScheduleCreateActivity extends AppCompatActivity {
     private String _courseId, _courseName, _courseDayOfWeek;
     private Date date;
     private int _year, _month, _dayOfMonth, _dayOfWeek;
-
 
     private TextView textViewCourseScheduleName;
     private CalendarView calendarView;
@@ -39,7 +36,8 @@ public class ScheduleCreateActivity extends AppCompatActivity {
             textViewCommentErrorMessage;
 
     private int _dayOfMonthCurrent, _monthCurrent, _yearCurrent;
-    private HashMap<String, Integer> _dayOfWeekMap;
+    private DayOfWeekEnum[] _dayOfWeekEnum;
+    private DatabaseHelper DB;
 
 
     @Override
@@ -58,17 +56,9 @@ public class ScheduleCreateActivity extends AppCompatActivity {
         getScheduleErrorMessageWidget();
         initializeSetErrorMessageInvisible();
         initializeCalendarView();
-        _dayOfWeekMap = new HashMap<>() {
-            {
-                put("Sunday", 1);
-                put("Monday", 2);
-                put("Tuesday", 3);
-                put("Wednesday", 4);
-                put("Thursday", 5);
-                put("Friday", 6);
-                put("Saturday", 7);
-            }
-        };
+        DB = new DatabaseHelper(this);
+        DB.checkAvailableTable();
+        _dayOfWeekEnum = DayOfWeekEnum.values();
 
     }
 
@@ -117,6 +107,7 @@ public class ScheduleCreateActivity extends AppCompatActivity {
                 _dayOfMonth = dayOfMonth;
                 calendar.set(year, month, dayOfMonth);
                 _dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK); //Calendar.DAY_OF_WEEK is one based (Sunday = 1)
+
             }
         });
     }
@@ -139,21 +130,30 @@ public class ScheduleCreateActivity extends AppCompatActivity {
         if(!canAddSchedule){
             return;
         }
-        String dateString = _year +"-"+ _month +"-"+ _dayOfMonth;
-        try {
-            date = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
-        } catch (ParseException e) {
-            throw new RuntimeException(e);
-        }
-        schedule = new Schedule(
-                _courseId,
-                date,
-                editTextTeacherName.getText().toString(),
-                editTextComment.getText().toString()
-        );
-        Log.d("Selected day of week", String.valueOf(date));
-        Toast.makeText(this, "Date: " + String.valueOf(date), Toast.LENGTH_SHORT).show();
+        Thread thread = new Thread(new addScheduleThread());
+        thread.start();
+        while (thread.isAlive()){}
+        Toast.makeText(this, "Schedule added successfully", Toast.LENGTH_SHORT).show();
     }
+
+    private class addScheduleThread implements Runnable {
+        @Override
+        public void run() {
+            String dateString = _year +"-"+ _month +"-"+ _dayOfMonth;
+            schedule = new Schedule(
+                    _courseId,
+                    dateString,
+                    editTextTeacherName.getText().toString(),
+                    editTextComment.getText().toString()
+            );
+            try {
+                DB.insertYogaCourseSchedule(schedule);
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     private boolean checkValidDate(){
         boolean isValid;
@@ -205,7 +205,11 @@ public class ScheduleCreateActivity extends AppCompatActivity {
     }
 
     private boolean checkScheduleDayOfWeek() {
-        if (_dayOfWeek != _dayOfWeekMap.get(_courseDayOfWeek)) {
+        //compare method 1
+//        if(DayOfWeekEnum.valueOf(_courseDayOfWeek).ordinal()+1 != _dayOfWeek){
+//
+//        }
+        if (_dayOfWeekEnum[_dayOfWeek - 1] != DayOfWeekEnum.valueOf(_courseDayOfWeek)) {
             setErrorMessageVisible(textViewDateErrorMessage, "Please select the correct day of week");
             return false;
         }
@@ -229,8 +233,8 @@ public class ScheduleCreateActivity extends AppCompatActivity {
 
     private boolean checkScheduleComment() {
         String commentTemp = editTextComment.getText().toString();
-        if (commentTemp.isEmpty()) {
-            setErrorMessageVisible(textViewCommentErrorMessage, "Please enter comment");
+        if (commentTemp.length() > 255) {
+            setErrorMessageVisible(textViewCommentErrorMessage, "Please enter a comment less than 255 characters");
             return false;
         } else {
             setErrorMessageInvisible(textViewCommentErrorMessage);

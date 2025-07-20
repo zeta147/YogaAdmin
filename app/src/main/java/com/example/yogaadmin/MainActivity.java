@@ -1,5 +1,6 @@
 package com.example.yogaadmin;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -21,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     Adapter yogaCourseAdapter;
     ArrayList<YogaCourse> yogaCoursesList;
     DatabaseHelper db;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,9 +34,10 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
-        db = new DatabaseHelper(this);
+
         listViewYogaCourse = findViewById(R.id.listViewYogaCourse);
         yogaCoursesList = new ArrayList<YogaCourse>();
+        context = this;
     }
 
     @Override
@@ -80,10 +83,10 @@ public class MainActivity extends AppCompatActivity {
         startActivity(i);
     }
 
-
     private class GetDatabaseYogaCourseListThread implements Runnable {
         @Override
         public void run() {
+            db = new DatabaseHelper(context);
             yogaCoursesList = db.getAllYogaCourses();
         }
     }

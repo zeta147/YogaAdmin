@@ -1,5 +1,6 @@
 package com.example.yogaadmin;
 
+import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -26,8 +27,8 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String DESCRIPTION_COLUMN_NAME = "description";
 
     /// Table yoga course schedule
-    private static final String YOGA_COURSE_SCHEDULE_TABLE_NAME = "yoga_course_schedules";
-    private static final String YOGA_COURSE_SCHEDULE_ID_COLUMN_NAME = "yoga_course_schedule_id";
+    private static final String COURSE_SCHEDULE_TABLE_NAME = "yoga_course_schedules";
+    private static final String COURSE_SCHEDULE_ID_COLUMN_NAME = "yoga_course_schedule_id";
     private static final String YOGA_COURSE_ID_COLUMN_NAME = "yoga_course_id";
     private static final String DATE_COLUMN_NAME = "date";
     private static final String TEACHER_NAME_COLUMN_NAME = "teacher_name";
@@ -59,11 +60,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "%s TEXT NOT NULL, " +                          //DATE_COLUMN_NAME
                     "%s TEXT NOT NULL, " +                          //TEACHER_NAME_COLUMN_NAME
                     "%s TEXT, " +                                   //COMMENT_COLUMN_NAME
-                    "FOREIGN KEY(%s) REFERENCES %s(%s))",          //YOGA_COURSE_ID_COLUMN_NAME, YOGA_COURSE_TABLE_NAME, COURSE_ID_COLUMN_NAME
-            YOGA_COURSE_SCHEDULE_TABLE_NAME, YOGA_COURSE_SCHEDULE_ID_COLUMN_NAME, YOGA_COURSE_ID_COLUMN_NAME,
+                    "FOREIGN KEY(%s) REFERENCES %s(%s))",           //YOGA_COURSE_ID_COLUMN_NAME, YOGA_COURSE_TABLE_NAME, COURSE_ID_COLUMN_NAME
+            COURSE_SCHEDULE_TABLE_NAME, COURSE_SCHEDULE_ID_COLUMN_NAME, YOGA_COURSE_ID_COLUMN_NAME,
             DATE_COLUMN_NAME, TEACHER_NAME_COLUMN_NAME, COMMENT_COLUMN_NAME,
             YOGA_COURSE_ID_COLUMN_NAME, YOGA_COURSE_TABLE_NAME, COURSE_ID_COLUMN_NAME
     );
+
+    private static final String COURSE_JOIN_SCHEDULE_QUERY =
+            "SELECT " + YOGA_COURSE_TABLE_NAME + "." + COURSE_ID_COLUMN_NAME + ", " +
+                        YOGA_COURSE_TABLE_NAME + "." + NAME_COLUMN_NAME + ", " +
+                        YOGA_COURSE_TABLE_NAME + "." + DAY_OF_WEEK_COLUMN_NAME + ", " +
+                        COURSE_SCHEDULE_TABLE_NAME + "." + COURSE_SCHEDULE_ID_COLUMN_NAME+ ", " +
+                        COURSE_SCHEDULE_TABLE_NAME + "." + DATE_COLUMN_NAME + ", " +
+                        COURSE_SCHEDULE_TABLE_NAME + "." + TEACHER_NAME_COLUMN_NAME + ", " +
+                        COURSE_SCHEDULE_TABLE_NAME + "." + COMMENT_COLUMN_NAME + " " +
+            "FROM "  +  YOGA_COURSE_TABLE_NAME + " " +
+            "JOIN "  +  COURSE_SCHEDULE_TABLE_NAME + " " +
+            "ON" + " "+ YOGA_COURSE_TABLE_NAME + "." + COURSE_ID_COLUMN_NAME + " = " + COURSE_SCHEDULE_TABLE_NAME + "." + YOGA_COURSE_ID_COLUMN_NAME + " "+
+            "ORDER BY " + COURSE_SCHEDULE_TABLE_NAME + "." + DATE_COLUMN_NAME + " ASC";
+
+
+
 
 
     public DatabaseHelper(Context context){
@@ -72,15 +89,27 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database.execSQL("PRAGMA foreign_keys=ON");
     }
 
+    @SuppressLint("Recycle")
+    public void checkAvailableTable(){
+        Cursor cursor = this.database.rawQuery("SELECT name FROM sqlite_master WHERE type='table'", null);
+        while (cursor.moveToNext()) {
+            Log.d("Tables", "Table Name: " + cursor.getString(0));
+        }
+        cursor.close();
+    }
+
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(DATABASE_YOGA_COURSE_CREATE_QUERY);
+        db.execSQL(DATABASE_YOGA_COURSE_SCHEDULE_CREATE_QUERY);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + YOGA_COURSE_TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + COURSE_SCHEDULE_TABLE_NAME);
         Log.w(this.getClass().getName(), YOGA_COURSE_TABLE_NAME + " database upgrade to version " + newVersion + " - old data lost");
+        Log.w(this.getClass().getName(), COURSE_SCHEDULE_TABLE_NAME + " database upgrade to version " + newVersion + " - old data lost");
         onCreate(db);
     }
 
@@ -112,7 +141,9 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public void deleteYogaCourse(YogaCourse course){
+        database.execSQL("PRAGMA foreign_keys=OFF");
         database.delete(YOGA_COURSE_TABLE_NAME, COURSE_ID_COLUMN_NAME + "=" + course.getYogaCourseId(), null);
+        database.delete(COURSE_SCHEDULE_TABLE_NAME, YOGA_COURSE_ID_COLUMN_NAME + "=" + course.getYogaCourseId(), null);
     }
 
     public ArrayList<YogaCourse> getAllYogaCourses(){
@@ -153,6 +184,109 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
 
+    public void insertYogaCourseSchedule(Schedule schedule){
+        ContentValues rowValues = new ContentValues();
+        rowValues.put(YOGA_COURSE_ID_COLUMN_NAME,schedule.getYogaCourseId());
+        rowValues.put(DATE_COLUMN_NAME,schedule.getDate());
+        rowValues.put(TEACHER_NAME_COLUMN_NAME,schedule.getTeacherName());
+        rowValues.put(COMMENT_COLUMN_NAME,schedule.getComment());
+        database.insertOrThrow(COURSE_SCHEDULE_TABLE_NAME, null, rowValues);
+    }
 
+    public void updateSchedule(Schedule schedule){
+        ContentValues rowValues = new ContentValues();
+        rowValues.put(YOGA_COURSE_ID_COLUMN_NAME,Integer.parseInt(schedule.getYogaCourseId()));
+        rowValues.put(DATE_COLUMN_NAME,schedule.getDate());
+        rowValues.put(TEACHER_NAME_COLUMN_NAME,schedule.getTeacherName());
+        rowValues.put(COMMENT_COLUMN_NAME,schedule.getComment());
+        database.update(COURSE_SCHEDULE_TABLE_NAME, rowValues, COURSE_SCHEDULE_ID_COLUMN_NAME + "=" + schedule.getYogaCourseScheduleId(), null);
+    }
 
+    public void deleteSchedule(Schedule schedule){
+        database.delete(COURSE_SCHEDULE_TABLE_NAME, COURSE_SCHEDULE_ID_COLUMN_NAME + "=" + schedule.getYogaCourseScheduleId(), null);
+    }
+
+    public ArrayList<Schedule> getAllYogaCourseSchedules() {
+        Cursor results = database.query("yoga_course_schedules",
+                new String[]{"yoga_course_schedule_id",
+                        "yoga_course_id",
+                        "date",
+                        "teacher_name",
+                        "comment"},
+                null, null, null, null, "date");
+        ArrayList<Schedule> arrayListSchedule = new ArrayList<Schedule>();
+        results.moveToFirst();
+        while (!results.isAfterLast()) {
+            int yoga_course_schedule_id = results.getInt(0);
+            int yoga_course_id = results.getInt(1);
+            String date = results.getString(2);
+            String teacher_name = results.getString(3);
+            String comment = results.getString(4);
+            String idStr = String.valueOf(yoga_course_schedule_id);
+            String yoga_course_idStr = String.valueOf(yoga_course_id);
+            Schedule schedule = new Schedule(idStr, yoga_course_idStr, date, teacher_name, comment);
+            arrayListSchedule.add(schedule);
+            results.moveToNext();
+        }
+        results.close();
+        return arrayListSchedule;
+    }
+
+    @SuppressLint("Recycle")
+    public ArrayList<Schedule> getYogaCourseJoinScheduleList(){
+        Cursor results = database.rawQuery(COURSE_JOIN_SCHEDULE_QUERY, null, null);
+        ArrayList<Schedule> arrayListSchedule = new ArrayList<Schedule>();
+        results.moveToFirst();
+        while (!results.isAfterLast()) {
+            int yoga_course_id = results.getInt(0);
+            String name = results.getString(1);
+            String day_of_week = results.getString(2);
+            int yoga_course_schedule_id = results.getInt(3);
+            String date = results.getString(4);
+            String teacher_name = results.getString(5);
+            String comment = results.getString(6);
+            String idStr = String.valueOf(yoga_course_schedule_id);
+            String yoga_course_idStr = String.valueOf(yoga_course_id);
+            Schedule schedule = new Schedule(idStr, yoga_course_idStr, name, day_of_week, date, teacher_name, comment);
+            arrayListSchedule.add(schedule);
+            results.moveToNext();
+        }
+        results.close();
+        return arrayListSchedule;
+    }
+
+    public ArrayList<Schedule> getYogaCourseJoinScheduleFilteredTeacherList(String keyWord){
+         String COURSE_JOIN_SCHEDULE_FILTERED_QUERY =
+                "SELECT " + "y" + "." + COURSE_ID_COLUMN_NAME + ", " +
+                        "y" + "." + NAME_COLUMN_NAME + ", " +
+                        "y" + "." + DAY_OF_WEEK_COLUMN_NAME + ", " +
+                        "s" + "." + COURSE_SCHEDULE_ID_COLUMN_NAME+ ", " +
+                        "s" + "." + DATE_COLUMN_NAME + ", " +
+                        "s" + "." + TEACHER_NAME_COLUMN_NAME + ", " +
+                        "s" + "." + COMMENT_COLUMN_NAME + " " +
+                        "FROM "  +  YOGA_COURSE_TABLE_NAME + " y " +
+                        "JOIN "  +  COURSE_SCHEDULE_TABLE_NAME + " s " +
+                        "ON " + "y" + "." + COURSE_ID_COLUMN_NAME + " = " + " s" + "." + YOGA_COURSE_ID_COLUMN_NAME + " "+
+                        "WHERE " + "s" + "." + TEACHER_NAME_COLUMN_NAME + " LIKE '%" + keyWord + "%' " +
+                        "ORDER BY " + "s" + "." + DATE_COLUMN_NAME + " ASC " ;
+        Cursor results = database.rawQuery(COURSE_JOIN_SCHEDULE_FILTERED_QUERY, null, null);
+        ArrayList<Schedule> arrayListSchedule = new ArrayList<Schedule>();
+        results.moveToFirst();
+        while (!results.isAfterLast()) {
+            int yoga_course_id = results.getInt(0);
+            String name = results.getString(1);
+            String day_of_week = results.getString(2);
+            int yoga_course_schedule_id = results.getInt(3);
+            String date = results.getString(4);
+            String teacher_name = results.getString(5);
+            String comment = results.getString(6);
+            String idStr = String.valueOf(yoga_course_schedule_id);
+            String yoga_course_idStr = String.valueOf(yoga_course_id);
+            Schedule schedule = new Schedule(idStr, yoga_course_idStr, name, day_of_week, date, teacher_name, comment);
+            arrayListSchedule.add(schedule);
+            results.moveToNext();
+        }
+        results.close();
+        return arrayListSchedule;
+    }
 }
