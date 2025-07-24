@@ -36,4 +36,15 @@ public class YogaCourse {
     public float getPrice(){return this._price;}
     public String getType(){return this._type;}
     public String getDescription(){return this._description;}
+
+
+    public void setYogaCourseId(String course_id){this._yogaCourseId = course_id;}
+    public void setName(String name){this._name = name;}
+    public void setDayOfWeek(String dayOfWeek){this._dayOfWeek = dayOfWeek;}
+    public void setTime(String time){this._time = time;}
+    public void setCapacity(int capacity){this._capacity = capacity;}
+    public void setDuration(String duration){this._duration = duration;}
+    public void setPrice(float price){this._price = price;}
+    public void setType(String type){this._type = type;}
+    public void setDescription(String description){this._description = description;}
 }

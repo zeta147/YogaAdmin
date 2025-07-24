@@ -21,23 +21,23 @@ import java.util.Date;
 import java.util.HashMap;
 
 public class ScheduleCreateActivity extends AppCompatActivity {
-    private Schedule schedule;
+    private Schedule _schedule;
     private String _courseId, _courseName, _courseDayOfWeek;
-    private Date date;
+    private Date _date;
     private int _year, _month, _dayOfMonth, _dayOfWeek;
 
-    private TextView textViewCourseScheduleName;
-    private CalendarView calendarView;
-    private Calendar calendar;
-    private EditText editTextTeacherName, editTextComment;
+    private TextView _textViewCourseScheduleName;
+    private CalendarView _calendarView;
+    private Calendar _calendar;
+    private EditText _editTextTeacherName, editTextComment;
 
-    private TextView textViewDateErrorMessage,
-            textViewTeacherNameErrorMessage,
-            textViewCommentErrorMessage;
+    private TextView _textViewDateErrorMessage,
+            _textViewTeacherNameErrorMessage,
+            _textViewCommentErrorMessage;
 
     private int _dayOfMonthCurrent, _monthCurrent, _yearCurrent;
     private DayOfWeekEnum[] _dayOfWeekEnum;
-    private DatabaseHelper DB;
+    private DatabaseHelper _dbHelper;
 
 
     @Override
@@ -56,31 +56,31 @@ public class ScheduleCreateActivity extends AppCompatActivity {
         getScheduleErrorMessageWidget();
         initializeSetErrorMessageInvisible();
         initializeCalendarView();
-        DB = new DatabaseHelper(this);
-        DB.checkAvailableTable();
+        _dbHelper = new DatabaseHelper(this);
+        _dbHelper.checkAvailableTable();
         _dayOfWeekEnum = DayOfWeekEnum.values();
 
     }
 
 
     private void getScheduleInputWidget() {
-        textViewCourseScheduleName = findViewById(R.id.textViewCourseScheduleName);
-        textViewCourseScheduleName.setText(_courseName);
-        calendarView = findViewById(R.id.calendarViewSchedule);
-        editTextTeacherName = findViewById(R.id.editTextTeacherName);
+        _textViewCourseScheduleName = findViewById(R.id.textViewCourseScheduleName);
+        _textViewCourseScheduleName.setText(_courseName);
+        _calendarView = findViewById(R.id.calendarViewSchedule);
+        _editTextTeacherName = findViewById(R.id.editTextTeacherName);
         editTextComment = findViewById(R.id.editTextComment);
     }
 
     private void getScheduleErrorMessageWidget() {
-        textViewDateErrorMessage = findViewById(R.id.textViewDateScheduleErrorMessage);
-        textViewTeacherNameErrorMessage = findViewById(R.id.textViewTeacherNameErrorMessage);
-        textViewCommentErrorMessage = findViewById(R.id.textViewCommentErrorMessage);
+        _textViewDateErrorMessage = findViewById(R.id.textViewDateScheduleErrorMessage);
+        _textViewTeacherNameErrorMessage = findViewById(R.id.textViewTeacherNameErrorMessage);
+        _textViewCommentErrorMessage = findViewById(R.id.textViewCommentErrorMessage);
     }
 
     private void initializeSetErrorMessageInvisible() {
-        textViewDateErrorMessage.setVisibility(View.INVISIBLE);
-        textViewTeacherNameErrorMessage.setVisibility(View.INVISIBLE);
-        textViewCommentErrorMessage.setVisibility(View.INVISIBLE);
+        _textViewDateErrorMessage.setVisibility(View.INVISIBLE);
+        _textViewTeacherNameErrorMessage.setVisibility(View.INVISIBLE);
+        _textViewCommentErrorMessage.setVisibility(View.INVISIBLE);
     }
 
     private void getYogaCourseDetailsValue() {
@@ -90,33 +90,33 @@ public class ScheduleCreateActivity extends AppCompatActivity {
     }
 
     private void initializeCalendarView() {
-        calendar = Calendar.getInstance();
-        calendarView.setDate(calendar.getTimeInMillis());
-        _year = calendar.get(Calendar.YEAR);
-        _month = calendar.get(Calendar.MONTH) + 1; //Calendar.MONTH is zero based
-        _dayOfMonth = calendar.get(Calendar.DAY_OF_MONTH);
-        _dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK); //Calendar.DAY_OF_WEEK is one based (Sunday = 1)
+        _calendar = Calendar.getInstance();
+        _calendarView.setDate(_calendar.getTimeInMillis());
+        _year = _calendar.get(Calendar.YEAR);
+        _month = _calendar.get(Calendar.MONTH) + 1; //Calendar.MONTH is zero based
+        _dayOfMonth = _calendar.get(Calendar.DAY_OF_MONTH);
+        _dayOfWeek = _calendar.get(Calendar.DAY_OF_WEEK); //Calendar.DAY_OF_WEEK is one based (Sunday = 1)
     }
 
     private void getCalendarViewDate(){
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+        _calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 _year = year;
                 _month = month + 1; //Calendar.MONTH is zero based
                 _dayOfMonth = dayOfMonth;
-                calendar.set(year, month, dayOfMonth);
-                _dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK); //Calendar.DAY_OF_WEEK is one based (Sunday = 1)
+                _calendar.set(year, month, dayOfMonth);
+                _dayOfWeek = _calendar.get(Calendar.DAY_OF_WEEK); //Calendar.DAY_OF_WEEK is one based (Sunday = 1)
 
             }
         });
     }
 
     private void getCalendarCurrentDate(){
-        calendar = Calendar.getInstance();
-        _yearCurrent = calendar.get(Calendar.YEAR);
-        _monthCurrent = calendar.get(Calendar.MONTH)+1; //Calendar.MONTH is zero based
-        _dayOfMonthCurrent = calendar.get(Calendar.DAY_OF_MONTH);
+        _calendar = Calendar.getInstance();
+        _yearCurrent = _calendar.get(Calendar.YEAR);
+        _monthCurrent = _calendar.get(Calendar.MONTH)+1; //Calendar.MONTH is zero based
+        _dayOfMonthCurrent = _calendar.get(Calendar.DAY_OF_MONTH);
 
     }
 
@@ -140,14 +140,14 @@ public class ScheduleCreateActivity extends AppCompatActivity {
         @Override
         public void run() {
             String dateString = _year +"-"+ _month +"-"+ _dayOfMonth;
-            schedule = new Schedule(
+            _schedule = new Schedule(
                     _courseId,
                     dateString,
-                    editTextTeacherName.getText().toString(),
+                    _editTextTeacherName.getText().toString(),
                     editTextComment.getText().toString()
             );
             try {
-                DB.insertYogaCourseSchedule(schedule);
+                _dbHelper.insertYogaCourseSchedule(_schedule);
             } catch (Exception e){
                 e.printStackTrace();
             }
@@ -173,33 +173,33 @@ public class ScheduleCreateActivity extends AppCompatActivity {
 
     private boolean checkScheduleYear() {
         if(_year < _yearCurrent){
-            setErrorMessageVisible(textViewDateErrorMessage, "Please select a current or future year");
+            setErrorMessageVisible(_textViewDateErrorMessage, "Please select a current or future year");
             return false;
         }
         else{
-            setErrorMessageInvisible(textViewDateErrorMessage);
+            setErrorMessageInvisible(_textViewDateErrorMessage);
         }
         return true;
     }
 
     private boolean checkScheduleMonth() {
         if (_month < _monthCurrent) {
-            setErrorMessageVisible(textViewDateErrorMessage, "Please select a current or future month");
+            setErrorMessageVisible(_textViewDateErrorMessage, "Please select a current or future month");
             return false;
         }
         else{
-            setErrorMessageInvisible(textViewDateErrorMessage);
+            setErrorMessageInvisible(_textViewDateErrorMessage);
         }
         return true;
     }
 
     private boolean checkScheduleDayOfMonth() {
         if (_dayOfMonth < _dayOfMonthCurrent) {
-            setErrorMessageVisible(textViewDateErrorMessage, "Please select a current or future date");
+            setErrorMessageVisible(_textViewDateErrorMessage, "Please select a current or future _date");
             return false;
         }
         else{
-            setErrorMessageInvisible(textViewDateErrorMessage);
+            setErrorMessageInvisible(_textViewDateErrorMessage);
         }
         return true;
     }
@@ -210,23 +210,23 @@ public class ScheduleCreateActivity extends AppCompatActivity {
 //
 //        }
         if (_dayOfWeekEnum[_dayOfWeek - 1] != DayOfWeekEnum.valueOf(_courseDayOfWeek)) {
-            setErrorMessageVisible(textViewDateErrorMessage, "Please select the correct day of week");
+            setErrorMessageVisible(_textViewDateErrorMessage, "Please select the correct day of week");
             return false;
         }
         else {
-            setErrorMessageInvisible(textViewDateErrorMessage);
+            setErrorMessageInvisible(_textViewDateErrorMessage);
         }
 
         return true;
     }
 
     private boolean checkScheduleTeacherName() {
-        String teacherNameTemp = editTextTeacherName.getText().toString();
+        String teacherNameTemp = _editTextTeacherName.getText().toString();
         if (teacherNameTemp.isEmpty()) {
-            setErrorMessageVisible(textViewTeacherNameErrorMessage, "Please enter teacher name");
+            setErrorMessageVisible(_textViewTeacherNameErrorMessage, "Please enter teacher name");
             return false;
         } else {
-            setErrorMessageInvisible(textViewTeacherNameErrorMessage);
+            setErrorMessageInvisible(_textViewTeacherNameErrorMessage);
         }
         return true;
     }
@@ -234,10 +234,10 @@ public class ScheduleCreateActivity extends AppCompatActivity {
     private boolean checkScheduleComment() {
         String commentTemp = editTextComment.getText().toString();
         if (commentTemp.length() > 255) {
-            setErrorMessageVisible(textViewCommentErrorMessage, "Please enter a comment less than 255 characters");
+            setErrorMessageVisible(_textViewCommentErrorMessage, "Please enter a comment less than 255 characters");
             return false;
         } else {
-            setErrorMessageInvisible(textViewCommentErrorMessage);
+            setErrorMessageInvisible(_textViewCommentErrorMessage);
         }
         return true;
     }

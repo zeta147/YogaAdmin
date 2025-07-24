@@ -24,14 +24,14 @@ public class YogaCourseActivity extends AppCompatActivity {
                             _panelLoading;
     private Adapter _yogaCourseAdapter;
     private ArrayList<YogaCourse> _yogaCoursesList;
-    private DatabaseHelper _db;
+    private DatabaseHelper _dbHelper;
     private Context _context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_yoga_course);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -97,8 +97,8 @@ public class YogaCourseActivity extends AppCompatActivity {
     private class GetDatabaseYogaCourseListThread implements Runnable {
         @Override
         public void run() {
-            _db = new DatabaseHelper(_context);
-            _yogaCoursesList = _db.getAllYogaCourses();
+            _dbHelper = new DatabaseHelper(_context);
+            _yogaCoursesList = _dbHelper.getAllYogaCourses();
         }
     }
 

@@ -15,7 +15,7 @@ public class Schedule {
     private String _date;
     private String _teacherName;
     private String _comment;
-    private static final DayOfWeekEnum[] dayOfWeekList = DayOfWeekEnum.values();
+    private static final DayOfWeekEnum[] _dayOfWeekList = DayOfWeekEnum.values();
 
     /// constructors for creating schedule
     public Schedule(String yogaCourseId, String date, String teacherName, String comment) {
@@ -85,6 +85,6 @@ public class Schedule {
     }
 
     public static String getDayOfWeek(int dayOfWeekInt){
-        return dayOfWeekList[dayOfWeekInt-1].toString();
+        return _dayOfWeekList[dayOfWeekInt-1].toString();
     }
 }

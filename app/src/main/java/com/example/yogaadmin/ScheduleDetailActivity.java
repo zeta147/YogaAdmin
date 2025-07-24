@@ -20,27 +20,27 @@ import androidx.core.view.WindowInsetsCompat;
 import java.util.Calendar;
 
 public class ScheduleDetailActivity extends AppCompatActivity {
-    private Schedule schedule;
+    private Schedule _schedule;
     private String _scheduleId, _courseId, _courseName, _courseDayOfWeek, _courseDate, _courseTeacherName, _courseComment;
     private int _year, _month, _dayOfMonth, _dayOfWeek;
     private int _dayOfMonthCurrent, _monthCurrent, _yearCurrent;
-    private TextView textViewYogaCourseName;
-    private CalendarView calendarView;
-    private Calendar calendar;
-    private EditText editTextTeacherName;
-    private EditText editTextComment;
-    private TextView textViewDateScheduleErrorMessage,
-                    textViewTeacherNameErrorMessage,
-                    textViewCommentErrorMessage;
+    private TextView _textViewYogaCourseName;
+    private CalendarView _calendarView;
+    private Calendar _calendar;
+    private EditText _editTextTeacherName;
+    private EditText _editTextComment;
+    private TextView _textViewDateScheduleErrorMessage,
+                    _textViewTeacherNameErrorMessage,
+                    _textViewCommentErrorMessage;
 
-    private Button buttonEdit,
-            buttonSave,
-            buttonCancel,
-            buttonDelete;
-    private DatabaseHelper DB;
-    private Context context;
-    private DayOfWeekEnum[] dayOfWeekEnum = DayOfWeekEnum.values();
-    private boolean isEditing;
+    private Button _buttonEdit,
+            _buttonSave,
+            _buttonCancel,
+            _buttonDelete;
+    private DatabaseHelper _dbHelper;
+    private Context _context;
+    private DayOfWeekEnum[] _dayOfWeekEnum = DayOfWeekEnum.values();
+    private boolean _isEditing;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,29 +58,29 @@ public class ScheduleDetailActivity extends AppCompatActivity {
         setScheduleDetailValue();
         disableInputWidget();
         getCalendarCurrentDate();
-        isEditing = false;
-        context = this;
-        schedule = new Schedule(_scheduleId, _courseId, _year + "-" + _month + "-" + _dayOfMonth, _courseTeacherName, _courseComment);
+        _isEditing = false;
+        _context = this;
+        _schedule = new Schedule(_scheduleId, _courseId, _year + "-" + _month + "-" + _dayOfMonth, _courseTeacherName, _courseComment);
 
     }
 
     private void initializeWidget(){
-        textViewYogaCourseName = findViewById(R.id.textViewCourseScheduleName);
-        calendarView = findViewById(R.id.calendarViewSchedule);
-        editTextTeacherName = findViewById(R.id.editTextTeacherName);
-        editTextComment = findViewById(R.id.editTextComment);
+        _textViewYogaCourseName = findViewById(R.id.textViewCourseScheduleName);
+        _calendarView = findViewById(R.id.calendarViewSchedule);
+        _editTextTeacherName = findViewById(R.id.editTextTeacherName);
+        _editTextComment = findViewById(R.id.editTextComment);
 
-        textViewDateScheduleErrorMessage = findViewById(R.id.textViewDateScheduleErrorMessage);
-        textViewTeacherNameErrorMessage = findViewById(R.id.textViewTeacherNameErrorMessage);
-        textViewCommentErrorMessage = findViewById(R.id.textViewCommentErrorMessage);
+        _textViewDateScheduleErrorMessage = findViewById(R.id.textViewDateScheduleErrorMessage);
+        _textViewTeacherNameErrorMessage = findViewById(R.id.textViewTeacherNameErrorMessage);
+        _textViewCommentErrorMessage = findViewById(R.id.textViewCommentErrorMessage);
 
-        buttonEdit = findViewById(R.id.buttonEdit);
-        buttonSave = findViewById(R.id.buttonSave);
-        buttonCancel = findViewById(R.id.buttonCancel);
-        buttonDelete = findViewById(R.id.buttonDelete);
+        _buttonEdit = findViewById(R.id.buttonEdit);
+        _buttonSave = findViewById(R.id.buttonSave);
+        _buttonCancel = findViewById(R.id.buttonCancel);
+        _buttonDelete = findViewById(R.id.buttonDelete);
 
-        buttonSave.setVisibility(View.INVISIBLE);
-        buttonCancel.setVisibility(View.INVISIBLE);
+        _buttonSave.setVisibility(View.INVISIBLE);
+        _buttonCancel.setVisibility(View.INVISIBLE);
     }
 
 
@@ -98,100 +98,100 @@ public class ScheduleDetailActivity extends AppCompatActivity {
         _year = Integer.parseInt(date[0]);
         _month = Integer.parseInt(date[1]);
         _dayOfMonth = Integer.parseInt(date[2]);
-        calendar = Calendar.getInstance();
-        calendar.set(_year, _month-1, _dayOfMonth); //Calendar.MONTH is zero based
-        _dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK); //Calendar.DAY_OF_WEEK is one based (Sunday = 1)
+        _calendar = Calendar.getInstance();
+        _calendar.set(_year, _month-1, _dayOfMonth); //Calendar.MONTH is zero based
+        _dayOfWeek = _calendar.get(Calendar.DAY_OF_WEEK); //Calendar.DAY_OF_WEEK is one based (Sunday = 1)
     }
 
     private void setScheduleDetailValue(){
-        textViewYogaCourseName.setText(_courseName);
-        calendar = Calendar.getInstance();
-        calendar.set(_year, _month-1, _dayOfMonth); //Calendar.MONTH is zero based
-        calendarView.setDate(calendar.getTimeInMillis());
-        editTextTeacherName.setText(_courseTeacherName);
-        editTextComment.setText(_courseComment);
+        _textViewYogaCourseName.setText(_courseName);
+        _calendar = Calendar.getInstance();
+        _calendar.set(_year, _month-1, _dayOfMonth); //Calendar.MONTH is zero based
+        _calendarView.setDate(_calendar.getTimeInMillis());
+        _editTextTeacherName.setText(_courseTeacherName);
+        _editTextComment.setText(_courseComment);
     }
 
 
     private void disableInputWidget(){
-        calendarView.setEnabled(false);
-        editTextTeacherName.setEnabled(false);
-        editTextComment.setEnabled(false);
+        _calendarView.setEnabled(false);
+        _editTextTeacherName.setEnabled(false);
+        _editTextComment.setEnabled(false);
     }
 
     private void enableInputWidget(){
-        calendarView.setEnabled(true);
-        editTextTeacherName.setEnabled(true);
-        editTextComment.setEnabled(true);
+        _calendarView.setEnabled(true);
+        _editTextTeacherName.setEnabled(true);
+        _editTextComment.setEnabled(true);
     }
 
     private void getCalendarCurrentDate(){
-        calendar = Calendar.getInstance();
-        _yearCurrent = calendar.get(Calendar.YEAR);
-        _monthCurrent = calendar.get(Calendar.MONTH)+1; //Calendar.MONTH is zero based
-        _dayOfMonthCurrent = calendar.get(Calendar.DAY_OF_MONTH);
+        _calendar = Calendar.getInstance();
+        _yearCurrent = _calendar.get(Calendar.YEAR);
+        _monthCurrent = _calendar.get(Calendar.MONTH)+1; //Calendar.MONTH is zero based
+        _dayOfMonthCurrent = _calendar.get(Calendar.DAY_OF_MONTH);
     }
 
     private void getCalendarViewDate(){
-        calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
+        _calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
                 _year = year;
                 _month = month + 1; //Calendar.MONTH is zero based
                 _dayOfMonth = dayOfMonth;
-                calendar.set(year, month, dayOfMonth);
-                _dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK); //Calendar.DAY_OF_WEEK is one based (Sunday = 1)
+                _calendar.set(year, month, dayOfMonth);
+                _dayOfWeek = _calendar.get(Calendar.DAY_OF_WEEK); //Calendar.DAY_OF_WEEK is one based (Sunday = 1)
             }
         });
     }
 
     /// when press cancel button call viewMode method
     private void viewMode(){
-        buttonSave.setVisibility(View.INVISIBLE);
-        buttonCancel.setVisibility(View.INVISIBLE);
-        buttonEdit.setVisibility(View.VISIBLE);
-        buttonDelete.setVisibility(View.VISIBLE);
+        _buttonSave.setVisibility(View.INVISIBLE);
+        _buttonCancel.setVisibility(View.INVISIBLE);
+        _buttonEdit.setVisibility(View.VISIBLE);
+        _buttonDelete.setVisibility(View.VISIBLE);
         disableInputWidget();
     }
 
     private void editMode(){
-        buttonSave.setVisibility(View.VISIBLE);
-        buttonCancel.setVisibility(View.VISIBLE);
-        buttonEdit.setVisibility(View.INVISIBLE);
-        buttonDelete.setVisibility(View.INVISIBLE);
+        _buttonSave.setVisibility(View.VISIBLE);
+        _buttonCancel.setVisibility(View.VISIBLE);
+        _buttonEdit.setVisibility(View.INVISIBLE);
+        _buttonDelete.setVisibility(View.INVISIBLE);
         enableInputWidget();
     }
 
 
     public void onClickUpdateSchedule(View view){
-        if(!isEditing) {
-            Toast.makeText(context, "Please click edit button to update schedule", Toast.LENGTH_SHORT).show();
+        if(!_isEditing) {
+            Toast.makeText(_context, "Please click edit button to update _schedule", Toast.LENGTH_SHORT).show();
             return;
         }
         boolean canUpdateSchedule;
         getCalendarViewDate();
         canUpdateSchedule = checkValidDate() && checkValidInput();
         if(!canUpdateSchedule){
-            Toast.makeText(context, "Please check your input", Toast.LENGTH_SHORT).show();
+            Toast.makeText(_context, "Please check your input", Toast.LENGTH_SHORT).show();
             return;
         }
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(_context);
         alertDialog.setTitle("Update Schedule");
-        alertDialog.setMessage("Are you sure you want to update this schedule?");
+        alertDialog.setMessage("Are you sure you want to update this _schedule?");
         alertDialog.setNegativeButton("No", (dialog, which) ->{});
         alertDialog.setPositiveButton("Yes", (dialog, which) -> {
             Thread t = new Thread(new UpdateScheduleThread());
             t.start();
             while(t.isAlive()){}
-            Toast.makeText(this, "Update schedule successfully", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Update _schedule successfully", Toast.LENGTH_SHORT).show();
         });
         alertDialog.create().show();
     }
 
     private void updateSchedule(){
-        schedule = new Schedule(_scheduleId, _courseId, _year + "-" + _month + "-" + _dayOfMonth, _courseTeacherName, _courseComment);
-        DB = new DatabaseHelper(getApplicationContext());
-        DB.updateSchedule(schedule);
+        _schedule = new Schedule(_scheduleId, _courseId, _year + "-" + _month + "-" + _dayOfMonth, _courseTeacherName, _courseComment);
+        _dbHelper = new DatabaseHelper(getApplicationContext());
+        _dbHelper.updateSchedule(_schedule);
     }
 
     private class UpdateScheduleThread extends Thread {
@@ -207,29 +207,29 @@ public class ScheduleDetailActivity extends AppCompatActivity {
 
     public void onClickEditSchedule(View view){
         editMode();
-        isEditing = true;
+        _isEditing = true;
     }
 
     public void onClickCancelSchedule(View view){
         viewMode();
-        isEditing = false;
+        _isEditing = false;
     }
 
     public void onClickDeleteSchedule(View view){
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(context);
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(_context);
         alertDialog.setTitle("Delete Schedule");
-        alertDialog.setMessage("Are you sure you want to delete this schedule?");
+        alertDialog.setMessage("Are you sure you want to delete this _schedule?");
         alertDialog.setNegativeButton("No", (dialog, which) -> {});
         alertDialog.setPositiveButton("Yes", (dialog, which) -> {
-            DB = new DatabaseHelper(getApplicationContext());
+            _dbHelper = new DatabaseHelper(getApplicationContext());
             try {
-                DB.deleteSchedule(schedule);
+                _dbHelper.deleteSchedule(_schedule);
             } catch (RuntimeException e) {
                 e.printStackTrace();
-                Toast.makeText(this, "Delete schedule failed", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Delete _schedule failed", Toast.LENGTH_SHORT).show();
                 return;
             }
-            Toast.makeText(this, "Delete schedule successfully", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Delete _schedule successfully", Toast.LENGTH_SHORT).show();
             finish();
         });
         alertDialog.create().show();
@@ -253,33 +253,33 @@ public class ScheduleDetailActivity extends AppCompatActivity {
 
     private boolean checkScheduleYear(){
         if(_year < _yearCurrent){
-            setErrorMessageVisible(textViewDateScheduleErrorMessage, "Please select a current or future year");
+            setErrorMessageVisible(_textViewDateScheduleErrorMessage, "Please select a current or future year");
             return false;
         }
         else{
-            setErrorMessageInvisible(textViewDateScheduleErrorMessage);
+            setErrorMessageInvisible(_textViewDateScheduleErrorMessage);
         }
         return true;
     }
 
     private boolean checkScheduleMonth(){
         if(_month < _monthCurrent){
-            setErrorMessageVisible(textViewDateScheduleErrorMessage, "Please select a current or future month");
+            setErrorMessageVisible(_textViewDateScheduleErrorMessage, "Please select a current or future month");
             return false;
         }
         else{
-            setErrorMessageInvisible(textViewDateScheduleErrorMessage);
+            setErrorMessageInvisible(_textViewDateScheduleErrorMessage);
         }
         return true;
     }
 
     private boolean checkScheduleDayOfMonth(){
         if(_dayOfMonth < _dayOfMonthCurrent){
-            setErrorMessageVisible(textViewDateScheduleErrorMessage, "Please select a current or future date");
+            setErrorMessageVisible(_textViewDateScheduleErrorMessage, "Please select a current or future date");
             return false;
         }
         else{
-            setErrorMessageInvisible(textViewDateScheduleErrorMessage);
+            setErrorMessageInvisible(_textViewDateScheduleErrorMessage);
         }
         return true;
     }
@@ -291,36 +291,36 @@ public class ScheduleDetailActivity extends AppCompatActivity {
 //        }
         //_dayOfWeek is one based (Sunday = 1)
         //dayOfWeekEnum is zero based (Sunday = 0)
-        if(dayOfWeekEnum[_dayOfWeek - 1] != DayOfWeekEnum.valueOf(_courseDayOfWeek)){
-            setErrorMessageVisible(textViewDateScheduleErrorMessage, "Please select the correct day of week");
+        if(_dayOfWeekEnum[_dayOfWeek - 1] != DayOfWeekEnum.valueOf(_courseDayOfWeek)){
+            setErrorMessageVisible(_textViewDateScheduleErrorMessage, "Please select the correct day of week");
         }
         else{
-            setErrorMessageInvisible(textViewDateScheduleErrorMessage);
+            setErrorMessageInvisible(_textViewDateScheduleErrorMessage);
         }
         return true;
     }
 
     private boolean checkScheduleTeacherName(){
-        String teacherNameTemp = editTextTeacherName.getText().toString();
+        String teacherNameTemp = _editTextTeacherName.getText().toString();
         if(teacherNameTemp.isEmpty()){
-            setErrorMessageVisible(textViewTeacherNameErrorMessage, "Please enter teacher name");
+            setErrorMessageVisible(_textViewTeacherNameErrorMessage, "Please enter teacher name");
             return false;
         }
         else{
-            setErrorMessageInvisible(textViewTeacherNameErrorMessage);
+            setErrorMessageInvisible(_textViewTeacherNameErrorMessage);
         }
         _courseTeacherName = teacherNameTemp;
         return true;
     }
 
     private boolean checkScheduleComment(){
-        String commentTemp = editTextComment.getText().toString();
+        String commentTemp = _editTextComment.getText().toString();
         if(commentTemp.length() > 255){
-            setErrorMessageVisible(textViewCommentErrorMessage, "Please enter a comment less than 255 characters");
+            setErrorMessageVisible(_textViewCommentErrorMessage, "Please enter a comment less than 255 characters");
             return false;
         }
         else{
-            setErrorMessageInvisible(textViewCommentErrorMessage);
+            setErrorMessageInvisible(_textViewCommentErrorMessage);
         }
         _courseComment = commentTemp;
         return true;

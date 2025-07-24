@@ -19,17 +19,19 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
     private String _course_id, _name, _dayOfWeek, _time, _duration, _type, _description;
     private int _capacity;
     private float _price;
-    TextView textViewNameErrorMessage,
-            textViewDayOfWeekErrorMessage,
-            textViewTimeErrorMessage,
-            textViewCapacityErrorMessage,
-            textViewDurationErrorMessage,
-            textViewPriceErrorMessage,
-            textViewTypeErrorMessage;
-    EditText editText;
-    Spinner spinner;
-    DatabaseHelper DB;
+    private TextView _textViewNameErrorMessage,
+            _textViewDayOfWeekErrorMessage,
+            _textViewTimeErrorMessage,
+            _textViewCapacityErrorMessage,
+            _textViewDurationErrorMessage,
+            _textViewPriceErrorMessage,
+            _textViewTypeErrorMessage;
+    private EditText _editText;
+    private Spinner _spinner;
+    private DatabaseHelper _dbHelper;
+    private FirebaseHelper _firebaseHelper;
 
+    private Context _context;
     private boolean _isSuccessfulAdded;
 
     @Override
@@ -44,6 +46,7 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
         });
 
         InitializeSetErrorMessageInvisible();
+        _context = this;
     }
 
 
@@ -61,36 +64,15 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
             Toast.makeText(this, "Please fill in all fields", Toast.LENGTH_SHORT).show();
             return;
         }
-        Thread t = new Thread(new AddDatabaseYogaCourseThread());
+        Thread t = new Thread(new AddYogaCourseThread());
         t.start();
         while(t.isAlive()){}
         if(!_isSuccessfulAdded){
             Toast.makeText(this, "Course create failed", Toast.LENGTH_SHORT).show();
-            return;
         }
         else{
             Toast.makeText(this, "Course with id: " + _course_id + " create successfully", Toast.LENGTH_SHORT).show();
         }
-        Intent i = new Intent(this, YogaCourseDetailsActivity.class);
-        YogaCourse newCourse = new YogaCourse(_course_id,
-                                                _name,
-                                                _dayOfWeek,
-                                                _time,
-                                                _capacity,
-                                                _duration,
-                                                _price,
-                                                _type,
-                                                _description);
-        i.putExtra("course_id", newCourse.getYogaCourseId());
-        i.putExtra("course_name", newCourse.getName());
-        i.putExtra("course_dayOfWeek", newCourse.getDayOfWeek());
-        i.putExtra("course_time", newCourse.getTime());
-        i.putExtra("course_capacity", String.valueOf(newCourse.getCapacity()));
-        i.putExtra("course_duration", newCourse.getDuration());
-        i.putExtra("course_price", String.valueOf(newCourse.getPrice()));
-        i.putExtra("course_type", newCourse.getType());
-        i.putExtra("course_description", newCourse.getDescription());
-        startActivity(i);
     }
 
     private void addNewCourse(){
@@ -103,17 +85,21 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
                 _price,
                 _type,
                 _description);
-        DB = new DatabaseHelper(getApplicationContext());
         try {
-            _course_id = String.valueOf(DB.insertYogaCourse(newCourse));
+            _dbHelper = new DatabaseHelper(getApplicationContext());
+            _course_id = String.valueOf(_dbHelper.insertYogaCourse(newCourse));
+            newCourse.setYogaCourseId(_course_id);
+            _firebaseHelper = new FirebaseHelper();
+            _firebaseHelper.insertYogaCourse(newCourse, _context);
         } catch (RuntimeException e) {
             _isSuccessfulAdded = false;
             return;
         }
+        _dbHelper.close();
         _isSuccessfulAdded = true;
     }
 
-    private class AddDatabaseYogaCourseThread extends Thread {
+    private class AddYogaCourseThread extends Thread {
         @Override
         public void run() {
             try {
@@ -146,21 +132,21 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
 
 
     private void InitializeSetErrorMessageInvisible(){
-        textViewNameErrorMessage = findViewById(R.id.textViewNameErrorMessage);
-        textViewDayOfWeekErrorMessage = findViewById(R.id.textViewDayOfWeekErrorMessage);
-        textViewTimeErrorMessage = findViewById(R.id.textViewTimeErrorMessage);
-        textViewCapacityErrorMessage = findViewById(R.id.textViewCapacityErrorMessage);
-        textViewDurationErrorMessage = findViewById(R.id.textViewDurationErrorMessage);
-        textViewPriceErrorMessage = findViewById(R.id.textViewPriceErrorMessage);
-        textViewTypeErrorMessage = findViewById(R.id.textViewTypeErrorMessage);
+        _textViewNameErrorMessage = findViewById(R.id.textViewNameErrorMessage);
+        _textViewDayOfWeekErrorMessage = findViewById(R.id.textViewDayOfWeekErrorMessage);
+        _textViewTimeErrorMessage = findViewById(R.id.textViewTimeErrorMessage);
+        _textViewCapacityErrorMessage = findViewById(R.id.textViewCapacityErrorMessage);
+        _textViewDurationErrorMessage = findViewById(R.id.textViewDurationErrorMessage);
+        _textViewPriceErrorMessage = findViewById(R.id.textViewPriceErrorMessage);
+        _textViewTypeErrorMessage = findViewById(R.id.textViewTypeErrorMessage);
 
-        textViewNameErrorMessage.setVisibility(View.INVISIBLE);
-        textViewDayOfWeekErrorMessage.setVisibility(View.INVISIBLE);
-        textViewTimeErrorMessage.setVisibility(View.INVISIBLE);
-        textViewCapacityErrorMessage.setVisibility(View.INVISIBLE);
-        textViewDurationErrorMessage.setVisibility(View.INVISIBLE);
-        textViewPriceErrorMessage.setVisibility(View.INVISIBLE);
-        textViewTypeErrorMessage.setVisibility(View.INVISIBLE);
+        _textViewNameErrorMessage.setVisibility(View.INVISIBLE);
+        _textViewDayOfWeekErrorMessage.setVisibility(View.INVISIBLE);
+        _textViewTimeErrorMessage.setVisibility(View.INVISIBLE);
+        _textViewCapacityErrorMessage.setVisibility(View.INVISIBLE);
+        _textViewDurationErrorMessage.setVisibility(View.INVISIBLE);
+        _textViewPriceErrorMessage.setVisibility(View.INVISIBLE);
+        _textViewTypeErrorMessage.setVisibility(View.INVISIBLE);
     }
 
     private void setErrorMessageInvisible(TextView textView){
@@ -176,11 +162,11 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
         EditText editTextName = findViewById(R.id.editTextCourseName);
         String nameTemp = editTextName.getText().toString();
         if(nameTemp.isEmpty()){
-            setErrorMessageVisible(textViewNameErrorMessage, "Name cannot be empty");
+            setErrorMessageVisible(_textViewNameErrorMessage, "Name cannot be empty");
             return false;
         }
         else {
-            setErrorMessageInvisible(textViewNameErrorMessage);
+            setErrorMessageInvisible(_textViewNameErrorMessage);
         }
         _name = nameTemp;
         return true;
@@ -190,11 +176,11 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
         Spinner spinnerDayOfWeek = findViewById(R.id.spinnerDayOfWeek);
         String dayOfWeekTemp = spinnerDayOfWeek.getSelectedItem().toString();
         if (dayOfWeekTemp.isEmpty()) {
-            setErrorMessageVisible(textViewDayOfWeekErrorMessage, "Day of week cannot be empty");
+            setErrorMessageVisible(_textViewDayOfWeekErrorMessage, "Day of week cannot be empty");
             return false;
         }
         else{
-            setErrorMessageInvisible(textViewDayOfWeekErrorMessage);
+            setErrorMessageInvisible(_textViewDayOfWeekErrorMessage);
         }
         _dayOfWeek = dayOfWeekTemp;
         return true;
@@ -204,11 +190,11 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
         Spinner spinnerTime = findViewById(R.id.spinnerTime);
         String timeTemp = spinnerTime.getSelectedItem().toString();
         if (timeTemp.isEmpty()) {
-            setErrorMessageVisible(textViewTimeErrorMessage, "Time cannot be empty");
+            setErrorMessageVisible(_textViewTimeErrorMessage, "Time cannot be empty");
             return false;
         }
         else {
-            setErrorMessageInvisible(textViewTimeErrorMessage);
+            setErrorMessageInvisible(_textViewTimeErrorMessage);
         }
         _time = timeTemp;
         return true;
@@ -218,16 +204,16 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
         EditText editTextCapacity = findViewById(R.id.editTextCapacity);
         String capacityTemp = editTextCapacity.getText().toString();
         if(capacityTemp.isEmpty()){
-            setErrorMessageVisible(textViewCapacityErrorMessage, "Capacity cannot be empty");
+            setErrorMessageVisible(_textViewCapacityErrorMessage, "Capacity cannot be empty");
             return false;
         }
         else {
-            setErrorMessageInvisible(textViewCapacityErrorMessage);
+            setErrorMessageInvisible(_textViewCapacityErrorMessage);
         }
         try {
             _capacity = Integer.parseInt(capacityTemp);
         } catch (NumberFormatException e) {
-            setErrorMessageVisible(textViewCapacityErrorMessage, "Capacity must be a number");
+            setErrorMessageVisible(_textViewCapacityErrorMessage, "Capacity must be a number");
             return false;
         }
         return true;
@@ -237,10 +223,10 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
         Spinner spinnerDuration = findViewById(R.id.spinnerDuration);
         String durationTemp = spinnerDuration.getSelectedItem().toString();
         if (durationTemp.isEmpty()) {
-            setErrorMessageVisible(textViewDurationErrorMessage, "Duration cannot be empty");
+            setErrorMessageVisible(_textViewDurationErrorMessage, "Duration cannot be empty");
             return false;
         } else {
-            setErrorMessageInvisible(textViewDurationErrorMessage);
+            setErrorMessageInvisible(_textViewDurationErrorMessage);
         }
         _duration = durationTemp;
         return true;
@@ -250,16 +236,16 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
         EditText editTextPrice = findViewById(R.id.editTextPrice);
         String priceTemp = editTextPrice.getText().toString();
         if(priceTemp.isEmpty()){
-            setErrorMessageVisible(textViewPriceErrorMessage, "Price cannot be empty");
+            setErrorMessageVisible(_textViewPriceErrorMessage, "Price cannot be empty");
             return false;
         }
         else {
-            setErrorMessageInvisible(textViewPriceErrorMessage);
+            setErrorMessageInvisible(_textViewPriceErrorMessage);
         }
         try {
             _price = Float.parseFloat(priceTemp);
         } catch (NumberFormatException e) {
-            setErrorMessageVisible(textViewPriceErrorMessage, "Price must be a number");
+            setErrorMessageVisible(_textViewPriceErrorMessage, "Price must be a number");
             return false;
         }
         return true;
@@ -269,11 +255,11 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
         Spinner spinnerType = findViewById(R.id.spinnerType);
         String typeTemp = spinnerType.getSelectedItem().toString();
         if (typeTemp.isEmpty()) {
-            setErrorMessageVisible(textViewTypeErrorMessage, "Type cannot be empty");
+            setErrorMessageVisible(_textViewTypeErrorMessage, "Type cannot be empty");
             return false;
         }
         else {
-            setErrorMessageInvisible(textViewTypeErrorMessage);
+            setErrorMessageInvisible(_textViewTypeErrorMessage);
         }
         _type = typeTemp;
         return true;
@@ -283,11 +269,11 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
         EditText editTextDescription = findViewById(R.id.editTextDescription);
         String descriptionTemp = editTextDescription.getText().toString();
         if(descriptionTemp.length() > 255){
-            setErrorMessageVisible(textViewTypeErrorMessage, "Description cannot be more than 255 characters");
+            setErrorMessageVisible(_textViewTypeErrorMessage, "Description cannot be more than 255 characters");
             return false;
         }
         else {
-            setErrorMessageInvisible(textViewTypeErrorMessage);
+            setErrorMessageInvisible(_textViewTypeErrorMessage);
         }
         _description = descriptionTemp;
         return true;

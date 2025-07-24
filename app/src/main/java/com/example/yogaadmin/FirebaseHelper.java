@@ -3,27 +3,26 @@ package com.example.yogaadmin;
 import android.content.Context;
 import android.widget.Toast;
 
-import com.google.firebase.Firebase;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
 public class FirebaseHelper {
-    private FirebaseDatabase firebaseDatabase;
-    private DatabaseReference databaseReference;
-    private ArrayList<YogaCourse> yogaCourses;
-
+    private FirebaseDatabase _firebaseDatabase;
+    private DatabaseReference _databaseReference;
+    private ArrayList<YogaCourse> _yogaCourses;
+    private ArrayList<Schedule> _schedules;
 
     public FirebaseHelper() {
-        this.firebaseDatabase = FirebaseDatabase.getInstance();
-        databaseReference = firebaseDatabase.getReference();
+        this._firebaseDatabase = FirebaseDatabase.getInstance();
+        _databaseReference = _firebaseDatabase.getReference();
     }
 
 
     public void insertYogaCourse(YogaCourse yogaCourse, Context context) {
         try{
-            databaseReference
+            _databaseReference
             .child("yogaCourses")
             .child(String.valueOf(yogaCourse.getYogaCourseId()))
             .setValue(yogaCourse)
@@ -41,15 +40,14 @@ public class FirebaseHelper {
         }
     }
 
-    public void getYogaCourse(YogaCourse yogaCourse) {
 
-    }
+
     public void updateYogaCourse(YogaCourse yogaCourse) {
-        databaseReference.child("yogaCourses").push().setValue(yogaCourse);
+        _databaseReference.child("yogaCourses").push().setValue(yogaCourse);
     }
 
     public void deleteYogaCourse(YogaCourse yogaCourse) {
-        databaseReference.child("yogaCourses").push().setValue(yogaCourse);
+        _databaseReference.child("yogaCourses").push().setValue(yogaCourse);
     }
 
 

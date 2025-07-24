@@ -8,6 +8,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -20,10 +21,12 @@ import java.util.ArrayList;
 public class ScheduleActivity extends AppCompatActivity {
     private EditText _editTextScheduleSearchBar;
     private ListView _listViewSchedule;
+    private RelativeLayout _panelNoScheduleMessage, _panelLoading;
     private ScheduleAdapter _scheduleAdapter;
     private ArrayList<Schedule> _scheduleList, _filteredScheduleList;
-    private DatabaseHelper DB;
-    private Context context;
+    private DatabaseHelper _dbHelper;
+    private Context _context;
+
 
 
     @Override
@@ -39,9 +42,11 @@ public class ScheduleActivity extends AppCompatActivity {
 
         _editTextScheduleSearchBar = findViewById(R.id.editTextSearchBar);
         _listViewSchedule = findViewById(R.id.listViewSchedule);
+        _panelNoScheduleMessage = findViewById(R.id.panelNoYogaCourseMessage);
+        _panelLoading = findViewById(R.id.panelLoading);
         _scheduleList = new ArrayList<>();
         _filteredScheduleList = new ArrayList<>();
-        context = this;
+        _context = this;
     }
 
     @Override
@@ -51,9 +56,16 @@ public class ScheduleActivity extends AppCompatActivity {
     }
 
     private void getAllScheduleList(){
+        _panelLoading.setVisibility(View.VISIBLE);
         Thread getScheduleListThread = new Thread(new getScheduleListThread());
         getScheduleListThread.start();
         while(getScheduleListThread.isAlive()){}
+        _panelLoading.setVisibility(View.GONE);
+        if(_scheduleList.isEmpty()){
+            _panelNoScheduleMessage.setVisibility(View.VISIBLE);
+        }else{
+            _panelNoScheduleMessage.setVisibility(View.GONE);
+        }
         _scheduleAdapter = new ScheduleAdapter(this, _scheduleList);
         _listViewSchedule.setAdapter((ListAdapter) _scheduleAdapter);
         _listViewSchedule.setOnItemClickListener((new AdapterView.OnItemClickListener() {
@@ -76,12 +88,12 @@ public class ScheduleActivity extends AppCompatActivity {
         @Override
         public void run() {
             try {
-                DB = new DatabaseHelper(context);
-                _scheduleList =  DB.getYogaCourseJoinScheduleList();
+                _dbHelper = new DatabaseHelper(_context);
+                _scheduleList =  _dbHelper.getYogaCourseJoinScheduleList();
             } catch (Exception e){
                 e.printStackTrace();
             }
-            DB.close();
+            _dbHelper.close();
         }
     }
 
@@ -140,13 +152,13 @@ public class ScheduleActivity extends AppCompatActivity {
         @Override
         public void run() {
             _filteredScheduleList.clear();
-            DB = new DatabaseHelper(context);
+            _dbHelper = new DatabaseHelper(_context);
             if(keyWord.isEmpty()){
-                _filteredScheduleList = DB.getYogaCourseJoinScheduleList();
+                _filteredScheduleList = _dbHelper.getYogaCourseJoinScheduleList();
                 return;
             }
-            _filteredScheduleList = DB.getYogaCourseJoinScheduleFilteredTeacherList(keyWord);
-            DB.close();
+            _filteredScheduleList = _dbHelper.getYogaCourseJoinScheduleFilteredTeacherList(keyWord);
+            _dbHelper.close();
         }
     }
 }
