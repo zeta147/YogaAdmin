@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,7 +17,6 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 public class YogaCourseDetailsActivity extends AppCompatActivity {
     private YogaCourse yogaCourseDetails;
@@ -41,6 +41,13 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
             textViewCourseDuration,
             textViewCourseType;
 
+    Button buttonEdit,
+            buttonSave,
+            buttonCancel,
+            buttonDelete,
+            buttonAddSchedule
+                    ;
+
     ArrayAdapter<String> adapterDayOfWeek,
             adapterTime,
             adapterDuration,
@@ -60,8 +67,7 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
             return insets;
         });
         assignYogaCourseDetailsValue();
-        getYogaCourseDetailsInputWidget();
-        getYogaCourseDetailsErrorMessageWidget();
+        InitializeWidget();
         initializeSetErrorMessageInvisible();
         yogaCourseDetails = new YogaCourse(
                 _course_id,
@@ -88,29 +94,34 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
                 getResources().getStringArray(R.array.type));
 
         setYogaCourseDetailsValue();
-        disableCourseDetailsInputField();
+        disableInputField();
     }
 
-    private void getYogaCourseDetailsInputWidget() {
-        textViewCourseName = findViewById(R.id.textViewCourseDetailNameValue);
-        textViewCourseDayOfWeek = findViewById(R.id.textViewCourseDetailDayOfWeekValue);
-        textViewCourseTime = findViewById(R.id.textViewCourseDetailTimeValue);
-        textViewCourseCapacity = findViewById(R.id.textViewCourseDetailCapacityValue);
-        textViewCourseDuration = findViewById(R.id.textViewCourseDetailDurationValue);
-        textViewCoursePrice = findViewById(R.id.textViewCourseDetailPriceValue);
-        textViewCourseType = findViewById(R.id.textViewCourseDetailTypeValue);
-        textViewCourseDescription = findViewById(R.id.textViewCourseDetailDescriptionValue);
+    private void InitializeWidget() {
+        textViewCourseName = findViewById(R.id.textViewCourseNameValue);
+        textViewCourseDayOfWeek = findViewById(R.id.textViewCourseDayOfWeekValue);
+        textViewCourseTime = findViewById(R.id.textViewCourseTimeValue);
+        textViewCourseCapacity = findViewById(R.id.textViewCourseCapacityValue);
+        textViewCourseDuration = findViewById(R.id.textViewCourseDurationValue);
+        textViewCoursePrice = findViewById(R.id.textViewCoursePriceValue);
+        textViewCourseType = findViewById(R.id.textViewCourseTypeValue);
+        textViewCourseDescription = findViewById(R.id.textViewCourseDescriptionValue);
+
+        textViewNameErrorMessage = findViewById(R.id.textViewCourseNameErrorMessage);
+        textViewDayOfWeekErrorMessage = findViewById(R.id.textViewCourseDayOfWeekErrorMessage);
+        textViewTimeErrorMessage = findViewById(R.id.textViewCourseTimeErrorMessage);
+        textViewCapacityErrorMessage = findViewById(R.id.textViewCourseCapacityErrorMessage);
+        textViewDurationErrorMessage = findViewById(R.id.textViewCourseDurationErrorMessage);
+        textViewPriceErrorMessage = findViewById(R.id.textViewCoursePriceErrorMessage);
+        textViewTypeErrorMessage = findViewById(R.id.textViewCourseTypeErrorMessage);
+
+        buttonEdit = findViewById(R.id.buttonEdit);
+        buttonSave = findViewById(R.id.buttonSave);
+        buttonCancel = findViewById(R.id.buttonCancel);
+        buttonDelete = findViewById(R.id.buttonDelete);
+        buttonAddSchedule = findViewById(R.id.buttonAddSchedule);
     }
 
-    private void getYogaCourseDetailsErrorMessageWidget() {
-        textViewNameErrorMessage = findViewById(R.id.textViewCourseDetailNameErrorMessage);
-        textViewDayOfWeekErrorMessage = findViewById(R.id.textViewCourseDetailDayOfWeekErrorMessage);
-        textViewTimeErrorMessage = findViewById(R.id.textViewCourseDetailTimeErrorMessage);
-        textViewCapacityErrorMessage = findViewById(R.id.textViewCourseDetailCapacityErrorMessage);
-        textViewDurationErrorMessage = findViewById(R.id.textViewCourseDetailDurationErrorMessage);
-        textViewPriceErrorMessage = findViewById(R.id.textViewCourseDetailPriceErrorMessage);
-        textViewTypeErrorMessage = findViewById(R.id.textViewCourseDetailTypeErrorMessage);
-    }
 
     private void assignYogaCourseDetailsValue() {
         _course_id = getIntent().getStringExtra("course_id");
@@ -151,7 +162,7 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
         _description = textViewCourseDescription.getText().toString();
     }
 
-    private void disableCourseDetailsInputField() {
+    private void disableInputField() {
         textViewCourseName.setEnabled(false);
         textViewCourseDayOfWeek.setEnabled(false);
         textViewCourseTime.setEnabled(false);
@@ -162,7 +173,7 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
         textViewCourseDescription.setEnabled(false);
     }
 
-    private void enableCourseDetailsInputField() {
+    private void enableInputField() {
         textViewCourseName.setEnabled(true);
         textViewCourseDayOfWeek.setEnabled(true);
         textViewCourseTime.setEnabled(true);
@@ -173,9 +184,25 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
         textViewCourseDescription.setEnabled(true);
     }
 
+    private void viewMode() {
+        buttonSave.setVisibility(View.INVISIBLE);
+        buttonCancel.setVisibility(View.INVISIBLE);
+        buttonEdit.setVisibility(View.VISIBLE);
+        buttonDelete.setVisibility(View.VISIBLE);
+        disableInputField();
+    }
+
+    private void editMode(){
+        buttonSave.setVisibility(View.VISIBLE);
+        buttonCancel.setVisibility(View.VISIBLE);
+        buttonEdit.setVisibility(View.INVISIBLE);
+        buttonDelete.setVisibility(View.INVISIBLE);
+        enableInputField();
+    }
+
     public void onClickSaveYogaCourse(View view) {
         if(!isEditing){
-            Toast.makeText(this, "Please edit course details first", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Please press edit button to edit course details first", Toast.LENGTH_SHORT).show();
             return;
         }
         boolean canUpdate;
@@ -234,13 +261,12 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
     }
 
     public void onClickEditYogaCourse(View view) {
-        enableCourseDetailsInputField();
+        editMode();
         isEditing = true;
     }
 
     public void onClickCancelYogaCourse(View view) {
-        setYogaCourseDetailsValue();
-        disableCourseDetailsInputField();
+        viewMode();
         isEditing = false;
     }
 

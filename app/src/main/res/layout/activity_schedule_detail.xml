@@ -147,10 +147,10 @@
     </ScrollView>
 
     <Button
-        android:id="@+id/buttonSaveScheduleDetail"
+        android:id="@+id/buttonSaveSchedule"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
+        android:layout_marginStart="75dp"
         android:layout_marginBottom="50dp"
         android:onClick="onClickUpdateSchedule"
         android:text="@string/save"
@@ -158,10 +158,10 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/buttonEditScheduleDetail"
+        android:id="@+id/buttonEditSchedule"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="115dp"
+        android:layout_marginStart="75dp"
         android:layout_marginBottom="50dp"
         android:onClick="onClickEditSchedule"
         android:text="@string/edit"
@@ -169,10 +169,10 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/buttonCancelScheduleDetail"
+        android:id="@+id/buttonCancelSchedule"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="215dp"
+        android:layout_marginStart="225dp"
         android:layout_marginBottom="50dp"
         android:onClick="onClickCancelSchedule"
         android:text="@string/cancel"
@@ -180,10 +180,10 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/buttonDeleteScheduleDetail"
+        android:id="@+id/buttonDeleteSchedule"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="315dp"
+        android:layout_marginStart="225dp"
         android:layout_marginBottom="50dp"
         android:onClick="onClickDeleteSchedule"
         android:text="@string/delete"

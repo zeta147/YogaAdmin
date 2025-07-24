@@ -6,7 +6,7 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/textViewCourseName"
+        android:id="@+id/textViewCourseNameItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
@@ -24,27 +24,27 @@
         app:layout_constraintGuide_begin="97dp" />
 
     <TextView
-        android:id="@+id/textViewCourseTime"
+        android:id="@+id/textViewCourseTimeItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginTop="8dp"
         android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewCourseName" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewCourseNameItem" />
 
     <TextView
-        android:id="@+id/textViewCourseDayOfWeek"
+        android:id="@+id/textViewCourseDayOfWeekItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="100dp"
         android:layout_marginTop="8dp"
         android:text="TextView"
-        app:layout_constraintStart_toEndOf="@+id/textViewCourseTime"
-        app:layout_constraintTop_toBottomOf="@+id/textViewCourseName" />
+        app:layout_constraintStart_toEndOf="@+id/textViewCourseTimeItem"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCourseNameItem" />
 
     <TextView
-        android:id="@+id/textViewCoursePrice"
+        android:id="@+id/textViewCoursePriceItem"
         android:layout_width="102dp"
         android:layout_height="18dp"
         android:layout_marginStart="304dp"
@@ -55,13 +55,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textViewCourseType"
+        android:id="@+id/textViewCourseTypeItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
         android:layout_marginTop="16dp"
         android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewCourseTime" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewCourseTimeItem" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

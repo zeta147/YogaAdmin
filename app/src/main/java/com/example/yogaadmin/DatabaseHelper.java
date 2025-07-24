@@ -37,7 +37,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private final SQLiteDatabase database;
 
     private static final String DATABASE_YOGA_COURSE_CREATE_QUERY = String.format(
-            "CREATE TABLE %s (" +                                   //YOGA_COURSE_TABLE_NAME
+            "CREATE TABLE IF NOT EXISTS %s (" +                     //YOGA_COURSE_TABLE_NAME
                     "%s INTEGER PRIMARY KEY AUTOINCREMENT, " +      //COURSE_ID_COLUMN_NAME
                     "%s TEXT NOT NULL, " +                          //NAME_COLUMN_NAME
                     "%s TEXT NOT NULL, " +                          //DAY_OF_WEEK_COLUMN_NAME
@@ -54,7 +54,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     );
 
     private static final String DATABASE_YOGA_COURSE_SCHEDULE_CREATE_QUERY = String.format(
-            "CREATE TABLE %s (" +                                   //YOGA_COURSE_SCHEDULE_TABLE_NAME
+            "CREATE TABLE IF NOT EXISTS %s (" +                     //YOGA_COURSE_SCHEDULE_TABLE_NAME
                     "%s INTEGER PRIMARY KEY AUTOINCREMENT, " +      //YOGA_COURSE_SCHEDULE_ID_COLUMN_NAME
                     "%s INTEGER NOT NULL, " +                       //YOGA_COURSE_ID_COLUMN_NAME
                     "%s TEXT NOT NULL, " +                          //DATE_COLUMN_NAME
@@ -67,20 +67,17 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     );
 
     private static final String COURSE_JOIN_SCHEDULE_QUERY =
-            "SELECT " + YOGA_COURSE_TABLE_NAME + "." + COURSE_ID_COLUMN_NAME + ", " +
-                        YOGA_COURSE_TABLE_NAME + "." + NAME_COLUMN_NAME + ", " +
-                        YOGA_COURSE_TABLE_NAME + "." + DAY_OF_WEEK_COLUMN_NAME + ", " +
-                        COURSE_SCHEDULE_TABLE_NAME + "." + COURSE_SCHEDULE_ID_COLUMN_NAME+ ", " +
-                        COURSE_SCHEDULE_TABLE_NAME + "." + DATE_COLUMN_NAME + ", " +
-                        COURSE_SCHEDULE_TABLE_NAME + "." + TEACHER_NAME_COLUMN_NAME + ", " +
-                        COURSE_SCHEDULE_TABLE_NAME + "." + COMMENT_COLUMN_NAME + " " +
-            "FROM "  +  YOGA_COURSE_TABLE_NAME + " " +
-            "JOIN "  +  COURSE_SCHEDULE_TABLE_NAME + " " +
-            "ON" + " "+ YOGA_COURSE_TABLE_NAME + "." + COURSE_ID_COLUMN_NAME + " = " + COURSE_SCHEDULE_TABLE_NAME + "." + YOGA_COURSE_ID_COLUMN_NAME + " "+
-            "ORDER BY " + COURSE_SCHEDULE_TABLE_NAME + "." + DATE_COLUMN_NAME + " ASC";
-
-
-
+            "SELECT " + "y" + "." + COURSE_ID_COLUMN_NAME + ", " +
+                        "y" + "." + NAME_COLUMN_NAME + ", " +
+                        "y" + "." + DAY_OF_WEEK_COLUMN_NAME + ", " +
+                        "s" + "." + COURSE_SCHEDULE_ID_COLUMN_NAME+ ", " +
+                        "s" + "." + DATE_COLUMN_NAME + ", " +
+                        "s" + "." + TEACHER_NAME_COLUMN_NAME + ", " +
+                        "s" + "." + COMMENT_COLUMN_NAME + " " +
+            "FROM "  +  YOGA_COURSE_TABLE_NAME + " y " +
+            "JOIN "  +  COURSE_SCHEDULE_TABLE_NAME + " s " +
+            "ON "    +  "y" + "." + COURSE_ID_COLUMN_NAME + " = " + "s" + "." + YOGA_COURSE_ID_COLUMN_NAME + " "+
+            "ORDER BY " + "s" + "." + DATE_COLUMN_NAME + " ASC";
 
 
     public DatabaseHelper(Context context){

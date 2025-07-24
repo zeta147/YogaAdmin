@@ -1,10 +1,9 @@
 package com.example.yogaadmin;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.CalendarView;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -30,9 +29,14 @@ public class ScheduleDetailActivity extends AppCompatActivity {
     private Calendar calendar;
     private EditText editTextTeacherName;
     private EditText editTextComment;
-    private TextView textViewDateScheduleErrorMessage;
-    private TextView textViewTeacherNameErrorMessage;
-    private TextView textViewCommentErrorMessage;
+    private TextView textViewDateScheduleErrorMessage,
+                    textViewTeacherNameErrorMessage,
+                    textViewCommentErrorMessage;
+
+    private Button buttonEdit,
+            buttonSave,
+            buttonCancel,
+            buttonDelete;
     private DatabaseHelper DB;
     private Context context;
     private DayOfWeekEnum[] dayOfWeekEnum = DayOfWeekEnum.values();
@@ -49,24 +53,37 @@ public class ScheduleDetailActivity extends AppCompatActivity {
             return insets;
         });
 
-
-        getScheduleDetailWidget();
+        initializeWidget();
         assignScheduleDetailValue();
         setScheduleDetailValue();
-        initializeSetErrorMessageInvisible();
         disableInputWidget();
         getCalendarCurrentDate();
         isEditing = false;
         context = this;
         schedule = new Schedule(_scheduleId, _courseId, _year + "-" + _month + "-" + _dayOfMonth, _courseTeacherName, _courseComment);
+
     }
 
-    private void getScheduleDetailWidget(){
+    private void initializeWidget(){
         textViewYogaCourseName = findViewById(R.id.textViewCourseScheduleName);
         calendarView = findViewById(R.id.calendarViewSchedule);
         editTextTeacherName = findViewById(R.id.editTextTeacherName);
         editTextComment = findViewById(R.id.editTextComment);
+
+        textViewDateScheduleErrorMessage = findViewById(R.id.textViewDateScheduleErrorMessage);
+        textViewTeacherNameErrorMessage = findViewById(R.id.textViewTeacherNameErrorMessage);
+        textViewCommentErrorMessage = findViewById(R.id.textViewCommentErrorMessage);
+
+        buttonEdit = findViewById(R.id.buttonEdit);
+        buttonSave = findViewById(R.id.buttonSave);
+        buttonCancel = findViewById(R.id.buttonCancel);
+        buttonDelete = findViewById(R.id.buttonDelete);
+
+        buttonSave.setVisibility(View.INVISIBLE);
+        buttonCancel.setVisibility(View.INVISIBLE);
     }
+
+
 
     private void assignScheduleDetailValue(){
         _scheduleId = getIntent().getStringExtra("schedule_id");
@@ -95,11 +112,6 @@ public class ScheduleDetailActivity extends AppCompatActivity {
         editTextComment.setText(_courseComment);
     }
 
-    private void initializeSetErrorMessageInvisible(){
-        textViewDateScheduleErrorMessage = findViewById(R.id.textViewDateScheduleErrorMessage);
-        textViewTeacherNameErrorMessage = findViewById(R.id.textViewTeacherNameErrorMessage);
-        textViewCommentErrorMessage = findViewById(R.id.textViewCommentErrorMessage);
-    }
 
     private void disableInputWidget(){
         calendarView.setEnabled(false);
@@ -132,6 +144,24 @@ public class ScheduleDetailActivity extends AppCompatActivity {
             }
         });
     }
+
+    /// when press cancel button call viewMode method
+    private void viewMode(){
+        buttonSave.setVisibility(View.INVISIBLE);
+        buttonCancel.setVisibility(View.INVISIBLE);
+        buttonEdit.setVisibility(View.VISIBLE);
+        buttonDelete.setVisibility(View.VISIBLE);
+        disableInputWidget();
+    }
+
+    private void editMode(){
+        buttonSave.setVisibility(View.VISIBLE);
+        buttonCancel.setVisibility(View.VISIBLE);
+        buttonEdit.setVisibility(View.INVISIBLE);
+        buttonDelete.setVisibility(View.INVISIBLE);
+        enableInputWidget();
+    }
+
 
     public void onClickUpdateSchedule(View view){
         if(!isEditing) {
@@ -176,12 +206,12 @@ public class ScheduleDetailActivity extends AppCompatActivity {
     }
 
     public void onClickEditSchedule(View view){
-        enableInputWidget();
+        editMode();
         isEditing = true;
     }
 
     public void onClickCancelSchedule(View view){
-        disableInputWidget();
+        viewMode();
         isEditing = false;
     }
 

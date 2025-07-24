@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:scrollbars="vertical"
-    tools:context=".MainActivity">
+    tools:context=".YogaCourseActivity">
 
     <TextView
         android:id="@+id/textViewYogaCourseLabel"
@@ -45,6 +45,37 @@
         app:layout_constraintStart_toEndOf="@+id/buttonAddYogaCourse"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/ic_menu_my_calendar" />
+
+    <RelativeLayout
+        android:id="@+id/panelNoYogaCourseMessage"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            android:text="@string/no_yoga_course_message" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/panelLoading"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ProgressBar
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp" />
+    </RelativeLayout>
 
     <ListView
         android:id="@+id/listViewYogaCourse"

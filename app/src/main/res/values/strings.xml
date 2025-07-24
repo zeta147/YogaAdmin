@@ -74,4 +74,6 @@
     <string name="yoga_course_schedule_details_label">Course Schedule Details</string>
 
     <string name="search">Search</string>
+    
+    <string name="no_yoga_course_message">No yoga course found</string>"
 </resources>

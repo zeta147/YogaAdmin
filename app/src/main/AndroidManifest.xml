@@ -28,7 +28,7 @@
             android:name=".YogaCourseCreateActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".YogaCourseActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -25,7 +25,7 @@
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="100dp"
         android:layout_marginBottom="150dp"
         android:scrollbars="vertical"
@@ -39,7 +39,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/textViewCourseDetailNameLabel"
+                android:id="@+id/textViewCourseNameLabel"
                 android:layout_width="350dp"
                 android:layout_height="29dp"
                 android:layout_marginStart="0dp"
@@ -52,7 +52,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <EditText
-                android:id="@+id/textViewCourseDetailNameValue"
+                android:id="@+id/textViewCourseNameValue"
                 android:layout_width="350dp"
                 android:layout_height="48dp"
                 android:ems="10"
@@ -60,23 +60,23 @@
                 android:inputType="text"
                 android:text="TextView"
                 android:textSize="20sp"
-                app:layout_constraintStart_toStartOf="@+id/textViewCourseDetailNameLabel"
-                app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailNameLabel" />
+                app:layout_constraintStart_toStartOf="@+id/textViewCourseNameLabel"
+                app:layout_constraintTop_toBottomOf="@+id/textViewCourseNameLabel" />
 
 
             <TextView
-                android:id="@+id/textViewCourseDetailNameErrorMessage"
+                android:id="@+id/textViewCourseNameErrorMessage"
                 android:layout_width="350dp"
                 android:layout_height="24dp"
                 android:text="TextView"
                 android:textColor="@color/design_default_color_error"
                 android:textSize="16sp"
                 android:visibility="invisible"
-                app:layout_constraintStart_toStartOf="@+id/textViewCourseDetailNameValue"
-                app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailNameValue" />
+                app:layout_constraintStart_toStartOf="@+id/textViewCourseNameValue"
+                app:layout_constraintTop_toBottomOf="@+id/textViewCourseNameValue" />
 
             <TextView
-                android:id="@+id/textViewCourseDetailDayOfWeekLabel"
+                android:id="@+id/textViewCourseDayOfWeekLabel"
                 android:layout_width="350dp"
                 android:layout_height="29dp"
                 android:layout_marginStart="0dp"
@@ -86,30 +86,30 @@
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/textViewCourseDetailNameValue" />
+                app:layout_constraintTop_toTopOf="@+id/textViewCourseNameValue" />
 
             <Spinner
-                android:id="@+id/textViewCourseDetailDayOfWeekValue"
+                android:id="@+id/textViewCourseDayOfWeekValue"
                 android:layout_width="350dp"
                 android:layout_height="48dp"
                 android:enabled="false"
                 android:entries="@array/day_of_week"
-                app:layout_constraintStart_toStartOf="@+id/textViewCourseDetailDayOfWeekLabel"
-                app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailDayOfWeekLabel" />
+                app:layout_constraintStart_toStartOf="@+id/textViewCourseDayOfWeekLabel"
+                app:layout_constraintTop_toBottomOf="@+id/textViewCourseDayOfWeekLabel" />
 
             <TextView
-                android:id="@+id/textViewCourseDetailDayOfWeekErrorMessage"
+                android:id="@+id/textViewCourseDayOfWeekErrorMessage"
                 android:layout_width="350dp"
                 android:layout_height="24dp"
                 android:text="TextView"
                 android:textColor="@color/design_default_color_error"
                 android:textSize="16sp"
                 android:visibility="invisible"
-                app:layout_constraintStart_toStartOf="@+id/textViewCourseDetailDayOfWeekValue"
-                app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailDayOfWeekValue" />
+                app:layout_constraintStart_toStartOf="@+id/textViewCourseDayOfWeekValue"
+                app:layout_constraintTop_toBottomOf="@+id/textViewCourseDayOfWeekValue" />
 
             <TextView
-                android:id="@+id/textViewCourseDetailTimeLabel"
+                android:id="@+id/textViewCourseTimeLabel"
                 android:layout_width="350dp"
                 android:layout_height="29dp"
                 android:layout_marginStart="0dp"
@@ -119,30 +119,30 @@
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailDayOfWeekLabel" />
+                app:layout_constraintTop_toBottomOf="@+id/textViewCourseDayOfWeekLabel" />
 
             <Spinner
-                android:id="@+id/textViewCourseDetailTimeValue"
+                android:id="@+id/textViewCourseTimeValue"
                 android:layout_width="350dp"
                 android:layout_height="48dp"
                 android:enabled="false"
                 android:entries="@array/time"
-                app:layout_constraintStart_toStartOf="@+id/textViewCourseDetailTimeLabel"
-                app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailTimeLabel" />
+                app:layout_constraintStart_toStartOf="@+id/textViewCourseTimeLabel"
+                app:layout_constraintTop_toBottomOf="@+id/textViewCourseTimeLabel" />
 
             <TextView
-                android:id="@+id/textViewCourseDetailTimeErrorMessage"
+                android:id="@+id/textViewCourseTimeErrorMessage"
                 android:layout_width="350dp"
                 android:layout_height="24dp"
                 android:text="TextView"
                 android:textColor="@color/design_default_color_error"
                 android:textSize="16sp"
                 android:visibility="invisible"
-                app:layout_constraintStart_toStartOf="@+id/textViewCourseDetailTimeValue"
-                app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailTimeValue" />
+                app:layout_constraintStart_toStartOf="@+id/textViewCourseTimeValue"
+                app:layout_constraintTop_toBottomOf="@+id/textViewCourseTimeValue" />
 
             <TextView
-                android:id="@+id/textViewCourseDetailCapacityLabel"
+                android:id="@+id/textViewCourseCapacityLabel"
                 android:layout_width="350dp"
                 android:layout_height="29dp"
                 android:layout_marginStart="0dp"
@@ -152,32 +152,32 @@
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailTimeLabel" />
+                app:layout_constraintTop_toBottomOf="@+id/textViewCourseTimeLabel" />
 
             <EditText
-                android:id="@+id/textViewCourseDetailCapacityValue"
+                android:id="@+id/textViewCourseCapacityValue"
                 android:layout_width="350dp"
                 android:layout_height="48dp"
                 android:enabled="false"
                 android:inputType="number"
                 android:text="TextView"
                 android:textSize="20sp"
-                app:layout_constraintStart_toStartOf="@+id/textViewCourseDetailCapacityLabel"
-                app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailCapacityLabel" />
+                app:layout_constraintStart_toStartOf="@+id/textViewCourseCapacityLabel"
+                app:layout_constraintTop_toBottomOf="@+id/textViewCourseCapacityLabel" />
 
             <TextView
-                android:id="@+id/textViewCourseDetailCapacityErrorMessage"
+                android:id="@+id/textViewCourseCapacityErrorMessage"
                 android:layout_width="350dp"
                 android:layout_height="24dp"
                 android:text="TextView"
                 android:textColor="@color/design_default_color_error"
                 android:textSize="16sp"
                 android:visibility="invisible"
-                app:layout_constraintStart_toStartOf="@+id/textViewCourseDetailCapacityValue"
-                app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailCapacityValue" />
+                app:layout_constraintStart_toStartOf="@+id/textViewCourseCapacityValue"
+                app:layout_constraintTop_toBottomOf="@+id/textViewCourseCapacityValue" />
 
             <TextView
-                android:id="@+id/textViewCourseDetailDurationLabel"
+                android:id="@+id/textViewCourseDurationLabel"
                 android:layout_width="350dp"
                 android:layout_height="29dp"
                 android:layout_marginStart="0dp"
@@ -187,30 +187,30 @@
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailCapacityLabel" />
+                app:layout_constraintTop_toBottomOf="@+id/textViewCourseCapacityLabel" />
 
             <Spinner
-                android:id="@+id/textViewCourseDetailDurationValue"
+                android:id="@+id/textViewCourseDurationValue"
                 android:layout_width="350dp"
                 android:layout_height="48dp"
                 android:enabled="false"
                 android:entries="@array/duration"
-                app:layout_constraintStart_toStartOf="@+id/textViewCourseDetailDurationLabel"
-                app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailDurationLabel" />
+                app:layout_constraintStart_toStartOf="@+id/textViewCourseDurationLabel"
+                app:layout_constraintTop_toBottomOf="@+id/textViewCourseDurationLabel" />
 
             <TextView
-                android:id="@+id/textViewCourseDetailDurationErrorMessage"
+                android:id="@+id/textViewCourseDurationErrorMessage"
                 android:layout_width="350dp"
                 android:layout_height="24dp"
                 android:text="TextView"
                 android:textColor="@color/design_default_color_error"
                 android:textSize="16sp"
                 android:visibility="invisible"
-                app:layout_constraintStart_toStartOf="@+id/textViewCourseDetailDurationValue"
-                app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailDurationValue" />
+                app:layout_constraintStart_toStartOf="@+id/textViewCourseDurationValue"
+                app:layout_constraintTop_toBottomOf="@+id/textViewCourseDurationValue" />
 
             <TextView
-                android:id="@+id/textViewCourseDetailPriceLabel"
+                android:id="@+id/textViewCoursePriceLabel"
                 android:layout_width="350dp"
                 android:layout_height="29dp"
                 android:layout_marginStart="0dp"
@@ -220,10 +220,10 @@
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailDurationLabel" />
+                app:layout_constraintTop_toBottomOf="@+id/textViewCourseDurationLabel" />
 
             <EditText
-                android:id="@+id/textViewCourseDetailPriceValue"
+                android:id="@+id/textViewCoursePriceValue"
                 android:layout_width="350dp"
                 android:layout_height="48dp"
                 android:ems="20"
@@ -231,22 +231,22 @@
                 android:inputType="numberDecimal"
                 android:text="TextView"
                 android:textSize="20sp"
-                app:layout_constraintStart_toStartOf="@+id/textViewCourseDetailPriceLabel"
-                app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailPriceLabel" />
+                app:layout_constraintStart_toStartOf="@+id/textViewCoursePriceLabel"
+                app:layout_constraintTop_toBottomOf="@+id/textViewCoursePriceLabel" />
 
             <TextView
-                android:id="@+id/textViewCourseDetailPriceErrorMessage"
+                android:id="@+id/textViewCoursePriceErrorMessage"
                 android:layout_width="350dp"
                 android:layout_height="24dp"
                 android:text="TextView"
                 android:textColor="@color/design_default_color_error"
                 android:textSize="16sp"
                 android:visibility="invisible"
-                app:layout_constraintStart_toStartOf="@+id/textViewCourseDetailPriceValue"
-                app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailPriceValue" />
+                app:layout_constraintStart_toStartOf="@+id/textViewCoursePriceValue"
+                app:layout_constraintTop_toBottomOf="@+id/textViewCoursePriceValue" />
 
             <TextView
-                android:id="@+id/textViewCourseDetailTypeLabel"
+                android:id="@+id/textViewCourseTypeLabel"
                 android:layout_width="350dp"
                 android:layout_height="29dp"
                 android:layout_marginStart="0dp"
@@ -256,30 +256,30 @@
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailPriceLabel" />
+                app:layout_constraintTop_toBottomOf="@+id/textViewCoursePriceLabel" />
 
             <Spinner
-                android:id="@+id/textViewCourseDetailTypeValue"
+                android:id="@+id/textViewCourseTypeValue"
                 android:layout_width="350dp"
                 android:layout_height="48dp"
                 android:enabled="false"
                 android:entries="@array/type"
-                app:layout_constraintStart_toStartOf="@+id/textViewCourseDetailTypeLabel"
-                app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailTypeLabel" />
+                app:layout_constraintStart_toStartOf="@+id/textViewCourseTypeLabel"
+                app:layout_constraintTop_toBottomOf="@+id/textViewCourseTypeLabel" />
 
             <TextView
-                android:id="@+id/textViewCourseDetailTypeErrorMessage"
+                android:id="@+id/textViewCourseTypeErrorMessage"
                 android:layout_width="350dp"
                 android:layout_height="24dp"
                 android:text="TextView"
                 android:textColor="@color/design_default_color_error"
                 android:textSize="16sp"
                 android:visibility="invisible"
-                app:layout_constraintStart_toStartOf="@+id/textViewCourseDetailTypeValue"
-                app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailTypeValue" />
+                app:layout_constraintStart_toStartOf="@+id/textViewCourseTypeValue"
+                app:layout_constraintTop_toBottomOf="@+id/textViewCourseTypeValue" />
 
             <TextView
-                android:id="@+id/textViewCourseDetailDescriptionLabel"
+                android:id="@+id/textViewCourseDescriptionLabel"
                 android:layout_width="350dp"
                 android:layout_height="29dp"
                 android:layout_marginStart="0dp"
@@ -289,26 +289,37 @@
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailTypeLabel" />
+                app:layout_constraintTop_toBottomOf="@+id/textViewCourseTypeLabel" />
 
             <EditText
-                android:id="@+id/textViewCourseDetailDescriptionValue"
+                android:id="@+id/textViewCourseDescriptionValue"
                 android:layout_width="348dp"
                 android:layout_height="154dp"
                 android:enabled="false"
                 android:gravity="start|top"
                 android:inputType="textMultiLine"
                 android:textSize="20sp"
-                app:layout_constraintStart_toStartOf="@+id/textViewCourseDetailDescriptionLabel"
-                app:layout_constraintTop_toBottomOf="@+id/textViewCourseDetailDescriptionLabel" />
+                app:layout_constraintStart_toStartOf="@+id/textViewCourseDescriptionLabel"
+                app:layout_constraintTop_toBottomOf="@+id/textViewCourseDescriptionLabel" />
         </LinearLayout>
     </ScrollView>
 
     <Button
-        android:id="@+id/buttonCourseDetailSave"
+        android:id="@+id/buttonEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
+        android:layout_marginStart="75dp"
+        android:layout_marginBottom="100dp"
+        android:onClick="onClickEditYogaCourse"
+        android:text="@string/edit"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/buttonSave"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="75dp"
         android:layout_marginBottom="100dp"
         android:onClick="onClickSaveYogaCourse"
         android:text="@string/save"
@@ -316,33 +327,22 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/buttonCourseDetailEdit"
+        android:id="@+id/buttonDelete"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="50dp"
-        android:layout_marginBottom="100dp"
-        android:onClick="onClickEditYogaCourse"
-        android:text="@string/edit"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/buttonCourseDetailSave" />
-
-    <Button
-        android:id="@+id/buttonCourseDetailDelete"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
+        android:layout_marginStart="225dp"
         android:layout_marginBottom="100dp"
         android:onClick="onClickDeleteYogaCourse"
         android:text="@string/delete"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/buttonCourseDetailEdit" />
+        app:layout_constraintStart_toEndOf="parent" />
 
     <Button
-        android:id="@+id/buttonCourseDetailCancel"
+        android:id="@+id/buttonCancel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:layout_marginBottom="50dp"
+        android:layout_marginStart="225dp"
+        android:layout_marginBottom="100dp"
         android:onClick="onClickCancelYogaCourse"
         android:text="@string/cancel"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -352,7 +352,7 @@
         android:id="@+id/buttonAddSchedule"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="150dp"
+        android:layout_marginStart="100dp"
         android:layout_marginBottom="50dp"
         android:onClick="onClickAddSchedule"
         android:text="@string/add_schedule_yoga_course"

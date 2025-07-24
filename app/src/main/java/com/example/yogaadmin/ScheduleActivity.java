@@ -3,7 +3,6 @@ package com.example.yogaadmin;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -23,7 +22,6 @@ public class ScheduleActivity extends AppCompatActivity {
     private ListView _listViewSchedule;
     private ScheduleAdapter _scheduleAdapter;
     private ArrayList<Schedule> _scheduleList, _filteredScheduleList;
-
     private DatabaseHelper DB;
     private Context context;
 
@@ -39,7 +37,7 @@ public class ScheduleActivity extends AppCompatActivity {
             return insets;
         });
 
-        _editTextScheduleSearchBar = findViewById(R.id.editTextCourseScheduleSearchBar);
+        _editTextScheduleSearchBar = findViewById(R.id.editTextSearchBar);
         _listViewSchedule = findViewById(R.id.listViewSchedule);
         _scheduleList = new ArrayList<>();
         _filteredScheduleList = new ArrayList<>();

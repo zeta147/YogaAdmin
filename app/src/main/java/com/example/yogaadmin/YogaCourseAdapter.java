@@ -40,11 +40,11 @@ public class YogaCourseAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         convertView = _layoutInflater.inflate(R.layout.yoga_course_item, parent, false);
-        TextView textViewCourseName = convertView.findViewById(R.id.textViewCourseName);
-        TextView textViewCourseTime = convertView.findViewById(R.id.textViewCourseTime);
-        TextView textViewCourseDayOfWeek = convertView.findViewById(R.id.textViewCourseDayOfWeek);
-        TextView textViewCoursePrice = convertView.findViewById(R.id.textViewCoursePrice);
-        TextView textViewCourseType = convertView.findViewById(R.id.textViewCourseType);
+        TextView textViewCourseName = convertView.findViewById(R.id.textViewCourseNameItem);
+        TextView textViewCourseTime = convertView.findViewById(R.id.textViewCourseTimeItem);
+        TextView textViewCourseDayOfWeek = convertView.findViewById(R.id.textViewCourseDayOfWeekItem);
+        TextView textViewCoursePrice = convertView.findViewById(R.id.textViewCoursePriceItem);
+        TextView textViewCourseType = convertView.findViewById(R.id.textViewCourseTypeItem);
 
         textViewCourseName.setText(_yogaCoursesList.get(position).getName());
         textViewCourseTime.setText("Time: " + _yogaCoursesList.get(position).getTime());
