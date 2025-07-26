@@ -26,8 +26,6 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
             _textViewDurationErrorMessage,
             _textViewPriceErrorMessage,
             _textViewTypeErrorMessage;
-    private EditText _editText;
-    private Spinner _spinner;
     private DatabaseHelper _dbHelper;
     private FirebaseHelper _firebaseHelper;
 
@@ -50,8 +48,10 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
     }
 
 
+    /// call when click view add yoga course to insert new course to database
     public void onCLickAddCourse(View view){
         boolean canAdd;
+        // check all input value, return false if any input value is empty
         canAdd = checkInputName()
                 && checkInputDayOfWeek()
                 && checkInputTime()
@@ -66,7 +66,7 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
         }
         Thread t = new Thread(new AddYogaCourseThread());
         t.start();
-        while(t.isAlive()){}
+        while(t.isAlive()){} // wait for thread to finish
         if(!_isSuccessfulAdded){
             Toast.makeText(this, "Course create failed", Toast.LENGTH_SHORT).show();
         }
@@ -75,6 +75,8 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
         }
     }
 
+
+    /// insert new course to database method
     private void addNewCourse(){
         YogaCourse newCourse = new YogaCourse(null,
                 _name,
@@ -99,6 +101,7 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
         _isSuccessfulAdded = true;
     }
 
+    /// this is a thread to insert new course to database
     private class AddYogaCourseThread extends Thread {
         @Override
         public void run() {
@@ -110,6 +113,8 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
         }
     }
 
+
+    /// call when click view clear to clear all value on input fields
     public void onClickClear(View view){
         EditText editTextName = findViewById(R.id.editTextCourseName);
         editTextName.setText("");
@@ -131,6 +136,7 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
     }
 
 
+    /// set error message invisible when this activity is created
     private void InitializeSetErrorMessageInvisible(){
         _textViewNameErrorMessage = findViewById(R.id.textViewNameErrorMessage);
         _textViewDayOfWeekErrorMessage = findViewById(R.id.textViewDayOfWeekErrorMessage);
@@ -149,15 +155,18 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
         _textViewTypeErrorMessage.setVisibility(View.INVISIBLE);
     }
 
+    /// set invisible error message
     private void setErrorMessageInvisible(TextView textView){
         textView.setVisibility(View.INVISIBLE);
     }
 
+    /// set visible error message and set error message to the text view error message
     private void setErrorMessageVisible(TextView textView, String message){
         textView.setText(message);
         textView.setVisibility(View.VISIBLE);
     }
 
+    /// check input name is empty and return false, return true if name is not empty
     private boolean checkInputName(){
         EditText editTextName = findViewById(R.id.editTextCourseName);
         String nameTemp = editTextName.getText().toString();
@@ -172,6 +181,7 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
         return true;
     }
 
+    /// check input day of week is empty and return false, return true if day of week is not empty
     private boolean checkInputDayOfWeek() {
         Spinner spinnerDayOfWeek = findViewById(R.id.spinnerDayOfWeek);
         String dayOfWeekTemp = spinnerDayOfWeek.getSelectedItem().toString();
@@ -186,6 +196,7 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
         return true;
     }
 
+    /// check input time is empty and return false, return true if time is not empty
     private boolean checkInputTime() {
         Spinner spinnerTime = findViewById(R.id.spinnerTime);
         String timeTemp = spinnerTime.getSelectedItem().toString();
@@ -200,6 +211,7 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
         return true;
     }
 
+    /// check input capacity is empty and return false, return true if capacity is not empty
     private boolean checkInputCapacity(){
         EditText editTextCapacity = findViewById(R.id.editTextCapacity);
         String capacityTemp = editTextCapacity.getText().toString();
@@ -219,6 +231,7 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
         return true;
     }
 
+    /// check input duration is empty and return false, return true if duration is not empty
     private boolean checkInputDuration() {
         Spinner spinnerDuration = findViewById(R.id.spinnerDuration);
         String durationTemp = spinnerDuration.getSelectedItem().toString();
@@ -232,6 +245,7 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
         return true;
     }
 
+    /// check input price is empty and return false, return true if price is not empty
     private boolean checkInputPrice(){
         EditText editTextPrice = findViewById(R.id.editTextPrice);
         String priceTemp = editTextPrice.getText().toString();
@@ -251,6 +265,7 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
         return true;
     }
 
+    /// check input type is empty and return false, return true if type is not empty
     private boolean checkInputType() {
         Spinner spinnerType = findViewById(R.id.spinnerType);
         String typeTemp = spinnerType.getSelectedItem().toString();
@@ -265,6 +280,7 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
         return true;
     }
 
+    /// check input description has more than 255 characters and return false, return true if description has less than 255 characters
     private boolean checkInputDescription(){
         EditText editTextDescription = findViewById(R.id.editTextDescription);
         String descriptionTemp = editTextDescription.getText().toString();

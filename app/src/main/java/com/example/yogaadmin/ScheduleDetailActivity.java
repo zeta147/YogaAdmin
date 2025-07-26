@@ -37,7 +37,6 @@ public class ScheduleDetailActivity extends AppCompatActivity {
             _buttonSave,
             _buttonCancel,
             _buttonDelete;
-    private DatabaseHelper _dbHelper;
     private Context _context;
     private DayOfWeekEnum[] _dayOfWeekEnum = DayOfWeekEnum.values();
     private boolean _isEditing;
@@ -64,20 +63,21 @@ public class ScheduleDetailActivity extends AppCompatActivity {
 
     }
 
+    /// initialize widget input, button, and error message
     private void initializeWidget(){
         _textViewYogaCourseName = findViewById(R.id.textViewCourseScheduleName);
         _calendarView = findViewById(R.id.calendarViewSchedule);
         _editTextTeacherName = findViewById(R.id.editTextTeacherName);
         _editTextComment = findViewById(R.id.editTextComment);
 
-        _textViewDateScheduleErrorMessage = findViewById(R.id.textViewDateScheduleErrorMessage);
-        _textViewTeacherNameErrorMessage = findViewById(R.id.textViewTeacherNameErrorMessage);
-        _textViewCommentErrorMessage = findViewById(R.id.textViewCommentErrorMessage);
-
         _buttonEdit = findViewById(R.id.buttonEdit);
         _buttonSave = findViewById(R.id.buttonSave);
         _buttonCancel = findViewById(R.id.buttonCancel);
         _buttonDelete = findViewById(R.id.buttonDelete);
+
+        _textViewDateScheduleErrorMessage = findViewById(R.id.textViewDateScheduleErrorMessage);
+        _textViewTeacherNameErrorMessage = findViewById(R.id.textViewTeacherNameErrorMessage);
+        _textViewCommentErrorMessage = findViewById(R.id.textViewCommentErrorMessage);
 
         _buttonSave.setVisibility(View.INVISIBLE);
         _buttonCancel.setVisibility(View.INVISIBLE);
@@ -85,6 +85,7 @@ public class ScheduleDetailActivity extends AppCompatActivity {
 
 
 
+    /// assign schedule detail value from intent
     private void assignScheduleDetailValue(){
         _scheduleId = getIntent().getStringExtra("schedule_id");
         _courseId = getIntent().getStringExtra("course_id");
@@ -103,6 +104,7 @@ public class ScheduleDetailActivity extends AppCompatActivity {
         _dayOfWeek = _calendar.get(Calendar.DAY_OF_WEEK); //Calendar.DAY_OF_WEEK is one based (Sunday = 1)
     }
 
+    /// set schedule detail value to widget
     private void setScheduleDetailValue(){
         _textViewYogaCourseName.setText(_courseName);
         _calendar = Calendar.getInstance();
@@ -113,18 +115,21 @@ public class ScheduleDetailActivity extends AppCompatActivity {
     }
 
 
+    /// disable input widget not allow to edit
     private void disableInputWidget(){
         _calendarView.setEnabled(false);
         _editTextTeacherName.setEnabled(false);
         _editTextComment.setEnabled(false);
     }
 
+    /// enable input widget allow to edit
     private void enableInputWidget(){
         _calendarView.setEnabled(true);
         _editTextTeacherName.setEnabled(true);
         _editTextComment.setEnabled(true);
     }
 
+    /// get current date
     private void getCalendarCurrentDate(){
         _calendar = Calendar.getInstance();
         _yearCurrent = _calendar.get(Calendar.YEAR);
@@ -132,6 +137,7 @@ public class ScheduleDetailActivity extends AppCompatActivity {
         _dayOfMonthCurrent = _calendar.get(Calendar.DAY_OF_MONTH);
     }
 
+    /// get date from calendar view
     private void getCalendarViewDate(){
         _calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
@@ -145,7 +151,7 @@ public class ScheduleDetailActivity extends AppCompatActivity {
         });
     }
 
-    /// when press cancel button call viewMode method
+    /// call when click view button
     private void viewMode(){
         _buttonSave.setVisibility(View.INVISIBLE);
         _buttonCancel.setVisibility(View.INVISIBLE);
@@ -154,6 +160,7 @@ public class ScheduleDetailActivity extends AppCompatActivity {
         disableInputWidget();
     }
 
+    /// call when click edit button
     private void editMode(){
         _buttonSave.setVisibility(View.VISIBLE);
         _buttonCancel.setVisibility(View.VISIBLE);
@@ -163,6 +170,7 @@ public class ScheduleDetailActivity extends AppCompatActivity {
     }
 
 
+    /// call when click update schedule
     public void onClickUpdateSchedule(View view){
         if(!_isEditing) {
             Toast.makeText(_context, "Please click edit button to update _schedule", Toast.LENGTH_SHORT).show();
@@ -188,12 +196,16 @@ public class ScheduleDetailActivity extends AppCompatActivity {
         alertDialog.create().show();
     }
 
+    /// update schedule to database
     private void updateSchedule(){
+        DatabaseHelper dbHelper = new DatabaseHelper(_context);
+        FirebaseHelper firebaseHelper = new FirebaseHelper();
         _schedule = new Schedule(_scheduleId, _courseId, _year + "-" + _month + "-" + _dayOfMonth, _courseTeacherName, _courseComment);
-        _dbHelper = new DatabaseHelper(getApplicationContext());
-        _dbHelper.updateSchedule(_schedule);
+        dbHelper.updateSchedule(_schedule);
+        firebaseHelper.updateSchedule(_schedule);
     }
 
+    /// this is a thread to update schedule to database
     private class UpdateScheduleThread extends Thread {
         @Override
         public void run() {
@@ -205,36 +217,60 @@ public class ScheduleDetailActivity extends AppCompatActivity {
         }
     }
 
+    /// call when click edit schedule
     public void onClickEditSchedule(View view){
         editMode();
         _isEditing = true;
     }
 
+    /// call when click cancel schedule
     public void onClickCancelSchedule(View view){
         viewMode();
         _isEditing = false;
     }
 
+    /// call when click delete schedule
     public void onClickDeleteSchedule(View view){
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(_context);
         alertDialog.setTitle("Delete Schedule");
         alertDialog.setMessage("Are you sure you want to delete this _schedule?");
         alertDialog.setNegativeButton("No", (dialog, which) -> {});
         alertDialog.setPositiveButton("Yes", (dialog, which) -> {
-            _dbHelper = new DatabaseHelper(getApplicationContext());
-            try {
-                _dbHelper.deleteSchedule(_schedule);
-            } catch (RuntimeException e) {
-                e.printStackTrace();
-                Toast.makeText(this, "Delete _schedule failed", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            Toast.makeText(this, "Delete _schedule successfully", Toast.LENGTH_SHORT).show();
+            Thread t = new Thread(new DeleteScheduleThread());
+            t.start();
+            while(t.isAlive()){}
+            Toast.makeText(_context, "Delete _schedule successfully", Toast.LENGTH_SHORT).show();
             finish();
         });
         alertDialog.create().show();
     }
 
+    /// delete schedule from database
+    private void deleteSchedule(){
+        DatabaseHelper dbHelper = new DatabaseHelper(getApplicationContext());
+        FirebaseHelper firebaseHelper = new FirebaseHelper();
+        dbHelper.deleteSchedule(_schedule);
+        firebaseHelper.deleteSchedule(_schedule);
+    }
+
+    /// this is a thread to delete schedule from database
+    private class DeleteScheduleThread implements Runnable {
+        @Override
+        public void run() {
+            try {
+                deleteSchedule();
+            } catch (RuntimeException e) {
+                Toast.makeText(_context, "Delete _schedule failed", Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+        }
+    }
+
+
+
+
+
+    /// check valid date having a current or future date
     private boolean checkValidDate(){
         boolean isValid;
         isValid = checkScheduleYear()
@@ -244,6 +280,7 @@ public class ScheduleDetailActivity extends AppCompatActivity {
         return isValid;
     }
 
+    /// check valid input having a teacher name and a comment
     private boolean checkValidInput(){
         boolean isValid;
         isValid = checkScheduleTeacherName()
@@ -251,6 +288,7 @@ public class ScheduleDetailActivity extends AppCompatActivity {
         return isValid;
     }
 
+    /// check schedule year having a current or future year
     private boolean checkScheduleYear(){
         if(_year < _yearCurrent){
             setErrorMessageVisible(_textViewDateScheduleErrorMessage, "Please select a current or future year");
@@ -262,6 +300,7 @@ public class ScheduleDetailActivity extends AppCompatActivity {
         return true;
     }
 
+    /// check schedule month having a current or future month
     private boolean checkScheduleMonth(){
         if(_month < _monthCurrent){
             setErrorMessageVisible(_textViewDateScheduleErrorMessage, "Please select a current or future month");
@@ -273,6 +312,7 @@ public class ScheduleDetailActivity extends AppCompatActivity {
         return true;
     }
 
+    /// check schedule day of month having a current or future day of month
     private boolean checkScheduleDayOfMonth(){
         if(_dayOfMonth < _dayOfMonthCurrent){
             setErrorMessageVisible(_textViewDateScheduleErrorMessage, "Please select a current or future date");
@@ -284,6 +324,7 @@ public class ScheduleDetailActivity extends AppCompatActivity {
         return true;
     }
 
+    /// check schedule day of week having a correct day of week
     private boolean checkScheduleDayOfWeek(){
         //compare method 1
 //        if(DayOfWeekEnum.valueOf(_courseDayOfWeek).ordinal()+1 != _dayOfWeek){
@@ -300,6 +341,7 @@ public class ScheduleDetailActivity extends AppCompatActivity {
         return true;
     }
 
+    /// check schedule teacher name is not empty
     private boolean checkScheduleTeacherName(){
         String teacherNameTemp = _editTextTeacherName.getText().toString();
         if(teacherNameTemp.isEmpty()){
@@ -313,6 +355,7 @@ public class ScheduleDetailActivity extends AppCompatActivity {
         return true;
     }
 
+    /// check schedule comment having less than 255 characters
     private boolean checkScheduleComment(){
         String commentTemp = _editTextComment.getText().toString();
         if(commentTemp.length() > 255){
@@ -326,11 +369,12 @@ public class ScheduleDetailActivity extends AppCompatActivity {
         return true;
     }
 
-
+    /// set error message invisible
     private void setErrorMessageInvisible(TextView textView){
         textView.setVisibility(View.INVISIBLE);
     }
 
+    /// set error message visible and set error message
     private void setErrorMessageVisible(TextView textView, String message){
         textView.setText(message);
         textView.setVisibility(View.VISIBLE);

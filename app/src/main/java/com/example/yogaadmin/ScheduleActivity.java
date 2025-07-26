@@ -52,9 +52,10 @@ public class ScheduleActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        getAllScheduleList();
+        getAllScheduleList(); // call this method to refresh the list
     }
 
+    /// get schedule list from database
     private void getAllScheduleList(){
         _panelLoading.setVisibility(View.VISIBLE);
         Thread getScheduleListThread = new Thread(new getScheduleListThread());
@@ -72,7 +73,7 @@ public class ScheduleActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent i = new Intent(getApplicationContext(), ScheduleDetailActivity.class);
-                i.putExtra("schedule_id", _scheduleList.get(position).getYogaCourseScheduleId());
+                i.putExtra("schedule_id", _scheduleList.get(position).getScheduleId());
                 i.putExtra("course_id", _scheduleList.get(position).getYogaCourseId());
                 i.putExtra("course_name", _scheduleList.get(position).getCourseName());
                 i.putExtra("course_dayOfWeek", _scheduleList.get(position).getDayOfWeek());
@@ -84,6 +85,7 @@ public class ScheduleActivity extends AppCompatActivity {
         }));
     }
 
+    /// this is a thread to get yoga course schedule list from database
     private class getScheduleListThread implements Runnable{
         @Override
         public void run() {
@@ -97,6 +99,7 @@ public class ScheduleActivity extends AppCompatActivity {
         }
     }
 
+    /// call when click search schedule to search teacher name of the schedule
     public void onClickSearchSchedule(View view){
         String keyWord = _editTextScheduleSearchBar.getText().toString();
 
@@ -109,7 +112,7 @@ public class ScheduleActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent i = new Intent(getApplicationContext(), ScheduleDetailActivity.class);
-                i.putExtra("schedule_id", _filteredScheduleList.get(position).getYogaCourseScheduleId());
+                i.putExtra("schedule_id", _filteredScheduleList.get(position).getScheduleId());
                 i.putExtra("course_id", _filteredScheduleList.get(position).getYogaCourseId());
                 i.putExtra("course_name", _filteredScheduleList.get(position).getCourseName());
                 i.putExtra("course_dayOfWeek", _filteredScheduleList.get(position).getDayOfWeek());
@@ -144,6 +147,7 @@ public class ScheduleActivity extends AppCompatActivity {
 //        }
 //    }
 
+    /// this is a thread to get schedule list having a searching teacher name from database
     private class searchScheduleThread implements Runnable{
         private final String keyWord;
         public searchScheduleThread(String searchText){

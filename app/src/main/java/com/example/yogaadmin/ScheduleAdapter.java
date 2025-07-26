@@ -10,7 +10,6 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Locale;
 
 public class ScheduleAdapter extends BaseAdapter {
     private final ArrayList<Schedule> _scheduleList;
@@ -18,7 +17,6 @@ public class ScheduleAdapter extends BaseAdapter {
     private final LayoutInflater _layoutInflater;
 
     public ScheduleAdapter(Context context, ArrayList<Schedule> scheduleList){
-
         this._context = context;
         this._layoutInflater = LayoutInflater.from(context);
         this._scheduleList = scheduleList;

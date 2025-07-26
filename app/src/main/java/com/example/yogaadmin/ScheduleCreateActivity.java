@@ -1,8 +1,8 @@
 package com.example.yogaadmin;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.CalendarView;
 import android.widget.EditText;
@@ -18,12 +18,10 @@ import androidx.core.view.WindowInsetsCompat;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashMap;
 
 public class ScheduleCreateActivity extends AppCompatActivity {
     private Schedule _schedule;
     private String _courseId, _courseName, _courseDayOfWeek;
-    private Date _date;
     private int _year, _month, _dayOfMonth, _dayOfWeek;
 
     private TextView _textViewCourseScheduleName;
@@ -37,7 +35,7 @@ public class ScheduleCreateActivity extends AppCompatActivity {
 
     private int _dayOfMonthCurrent, _monthCurrent, _yearCurrent;
     private DayOfWeekEnum[] _dayOfWeekEnum;
-    private DatabaseHelper _dbHelper;
+    private Context _context;
 
 
     @Override
@@ -56,9 +54,8 @@ public class ScheduleCreateActivity extends AppCompatActivity {
         getScheduleErrorMessageWidget();
         initializeSetErrorMessageInvisible();
         initializeCalendarView();
-        _dbHelper = new DatabaseHelper(this);
-        _dbHelper.checkAvailableTable();
         _dayOfWeekEnum = DayOfWeekEnum.values();
+        _context = this;
 
     }
 
@@ -98,6 +95,7 @@ public class ScheduleCreateActivity extends AppCompatActivity {
         _dayOfWeek = _calendar.get(Calendar.DAY_OF_WEEK); //Calendar.DAY_OF_WEEK is one based (Sunday = 1)
     }
 
+    ///get date from calendar view
     private void getCalendarViewDate(){
         _calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
@@ -112,16 +110,16 @@ public class ScheduleCreateActivity extends AppCompatActivity {
         });
     }
 
+    /// get current date
     private void getCalendarCurrentDate(){
         _calendar = Calendar.getInstance();
         _yearCurrent = _calendar.get(Calendar.YEAR);
         _monthCurrent = _calendar.get(Calendar.MONTH)+1; //Calendar.MONTH is zero based
         _dayOfMonthCurrent = _calendar.get(Calendar.DAY_OF_MONTH);
-
     }
 
 
-    @SuppressLint("SimpleDateFormat")
+    /// call when click add schedule
     public void onClickAddSchedule(View view) {
         boolean canAddSchedule;
         getCalendarViewDate();
@@ -133,21 +131,30 @@ public class ScheduleCreateActivity extends AppCompatActivity {
         Thread thread = new Thread(new addScheduleThread());
         thread.start();
         while (thread.isAlive()){}
-        Toast.makeText(this, "Schedule added successfully", Toast.LENGTH_SHORT).show();
+        Toast.makeText(_context, "Schedule added successfully", Toast.LENGTH_SHORT).show();
     }
 
+    private void addSchedule(){
+        DatabaseHelper dbHelper = new DatabaseHelper(getApplicationContext());
+        FirebaseHelper firebaseHelper = new FirebaseHelper();
+        String dateString = _year +"-"+ _month +"-"+ _dayOfMonth;
+        _schedule = new Schedule(
+                _courseId,
+                dateString,
+                _editTextTeacherName.getText().toString(),
+                editTextComment.getText().toString());
+        dbHelper.insertYogaCourseSchedule(_schedule);
+        firebaseHelper.insertSchedule(_schedule,_context);
+
+
+    }
+
+    /// this is a thread to add schedule to database
     private class addScheduleThread implements Runnable {
         @Override
         public void run() {
-            String dateString = _year +"-"+ _month +"-"+ _dayOfMonth;
-            _schedule = new Schedule(
-                    _courseId,
-                    dateString,
-                    _editTextTeacherName.getText().toString(),
-                    editTextComment.getText().toString()
-            );
             try {
-                _dbHelper.insertYogaCourseSchedule(_schedule);
+                addSchedule();
             } catch (Exception e){
                 e.printStackTrace();
             }
@@ -155,6 +162,7 @@ public class ScheduleCreateActivity extends AppCompatActivity {
     }
 
 
+    /// check valid date having a current or future date
     private boolean checkValidDate(){
         boolean isValid;
         isValid = checkScheduleYear()
@@ -164,6 +172,7 @@ public class ScheduleCreateActivity extends AppCompatActivity {
         return isValid;
     }
 
+    /// check valid input having a teacher name and a comment
     private boolean checkValidInput(){
         boolean isValid;
         isValid = checkScheduleTeacherName()
@@ -171,6 +180,7 @@ public class ScheduleCreateActivity extends AppCompatActivity {
         return isValid;
     }
 
+    /// check schedule year having a current or future year
     private boolean checkScheduleYear() {
         if(_year < _yearCurrent){
             setErrorMessageVisible(_textViewDateErrorMessage, "Please select a current or future year");
@@ -182,6 +192,7 @@ public class ScheduleCreateActivity extends AppCompatActivity {
         return true;
     }
 
+    /// check schedule month having a current or future month
     private boolean checkScheduleMonth() {
         if (_month < _monthCurrent) {
             setErrorMessageVisible(_textViewDateErrorMessage, "Please select a current or future month");
@@ -193,6 +204,7 @@ public class ScheduleCreateActivity extends AppCompatActivity {
         return true;
     }
 
+    /// check schedule day of month having a current or future day of month
     private boolean checkScheduleDayOfMonth() {
         if (_dayOfMonth < _dayOfMonthCurrent) {
             setErrorMessageVisible(_textViewDateErrorMessage, "Please select a current or future _date");
@@ -204,6 +216,7 @@ public class ScheduleCreateActivity extends AppCompatActivity {
         return true;
     }
 
+    /// check schedule day of week having a correct day of week
     private boolean checkScheduleDayOfWeek() {
         //compare method 1
 //        if(DayOfWeekEnum.valueOf(_courseDayOfWeek).ordinal()+1 != _dayOfWeek){
@@ -220,6 +233,7 @@ public class ScheduleCreateActivity extends AppCompatActivity {
         return true;
     }
 
+    /// check schedule teacher name is not empty
     private boolean checkScheduleTeacherName() {
         String teacherNameTemp = _editTextTeacherName.getText().toString();
         if (teacherNameTemp.isEmpty()) {
@@ -231,6 +245,7 @@ public class ScheduleCreateActivity extends AppCompatActivity {
         return true;
     }
 
+    /// check schedule comment having less than 255 characters
     private boolean checkScheduleComment() {
         String commentTemp = editTextComment.getText().toString();
         if (commentTemp.length() > 255) {
@@ -242,11 +257,13 @@ public class ScheduleCreateActivity extends AppCompatActivity {
         return true;
     }
 
+    /// set error message visible and set error message
     private void setErrorMessageVisible(TextView textViewErrorMessage, String message){
         textViewErrorMessage.setText(message);
         textViewErrorMessage.setVisibility(View.VISIBLE);
     }
 
+    /// set error message invisible
     private void setErrorMessageInvisible(TextView textViewErrorMessage){
         textViewErrorMessage.setVisibility(View.INVISIBLE);
     }

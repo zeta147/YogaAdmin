@@ -45,7 +45,7 @@ public class Schedule {
         _comment = comment;
     }
 
-    public String getYogaCourseScheduleId() {return _yogaCourseScheduleId;}
+    public String getScheduleId() {return _yogaCourseScheduleId;}
     public String getYogaCourseId() {return _yogaCourseId;}
     public String getCourseName() {return _courseName;} // for listing schedule
     public String getDate() {return _date;}

@@ -1,7 +1,4 @@
 package com.example.yogaadmin;
-
-import android.annotation.SuppressLint;
-
 public class YogaCourse {
     private String _yogaCourseId;
     private String _name;

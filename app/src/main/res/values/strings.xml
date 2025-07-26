@@ -67,13 +67,17 @@
     <string name="comment_label">Comment (Optional)</string>
 
     <string name="yoga_course_label">Yoga Course</string>
-    <string name="create_course_label">Create Course</string>"
+    <string name="create_course_label">Create Yoga Course</string>"
     <string name="yoga_course_details_label">Yoga Course Details</string>
     <string name="yoga_course_schedule_label">Yoga Course Schedule</string>
     <string name="schedule_create_label">Create Schedule</string>
     <string name="yoga_course_schedule_details_label">Course Schedule Details</string>
 
     <string name="search">Search</string>
-    
+
     <string name="no_yoga_course_message">No yoga course found</string>"
+
+    <string name="no_schedule_message">No schedule found</string>
+
+
 </resources>

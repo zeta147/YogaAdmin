@@ -42,17 +42,24 @@
 
     <ImageButton
         android:id="@+id/imageButtonSearch"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:background="@drawable/button_background"
+        android:clickable="true"
+        android:focusable="true"
         android:onClick="onClickSearchSchedule"
-        android:src="@android:drawable/ic_menu_search"
+        android:padding="5dp"
+        android:scaleType="centerInside"
         app:layout_constraintStart_toEndOf="@+id/editTextSearchBar"
-        app:layout_constraintTop_toTopOf="@+id/editTextSearchBar" />
+        app:layout_constraintTop_toTopOf="@+id/editTextSearchBar"
+        app:srcCompat="@drawable/button_search" />
 
     <RelativeLayout
         android:id="@+id/panelNoYogaCourseMessage"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="75dp"
+        android:layout_marginTop="300dp"
         android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -62,14 +69,16 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
-            android:text="@string/no_yoga_course_message"
+            android:text="@string/no_schedule_message"
             android:textSize="24sp" />
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/panelLoading"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="150dp"
+        android:layout_marginTop="300dp"
         android:gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">

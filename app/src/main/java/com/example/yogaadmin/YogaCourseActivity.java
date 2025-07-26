@@ -11,6 +11,7 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -26,6 +27,8 @@ public class YogaCourseActivity extends AppCompatActivity {
     private ArrayList<YogaCourse> _yogaCoursesList;
     private DatabaseHelper _dbHelper;
     private Context _context;
+    private DatabaseSynchronization _dbSync;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,6 +42,7 @@ public class YogaCourseActivity extends AppCompatActivity {
         });
 
         _listViewYogaCourse = findViewById(R.id.listViewYogaCourse);
+        _dbSync = new DatabaseSynchronization(this);
         _panelNoYogaCourseMessage = findViewById(R.id.panelNoYogaCourseMessage);
         _panelLoading = findViewById(R.id.panelLoading);
         _yogaCoursesList = new ArrayList<YogaCourse>();
@@ -48,9 +52,8 @@ public class YogaCourseActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        getYogaCoursesList();
+        getYogaCoursesList(); // Call this method to refresh the list
     }
-
 
 
     private void getYogaCoursesList(){
@@ -62,7 +65,12 @@ public class YogaCourseActivity extends AppCompatActivity {
         _panelLoading.setVisibility(View.GONE);
         if(_yogaCoursesList.isEmpty()){
             _panelNoYogaCourseMessage.setVisibility(View.VISIBLE);
+            return;
         }
+        setListViewYogaCourse();
+    }
+
+    private void setListViewYogaCourse(){
         _yogaCourseAdapter = new YogaCourseAdapter(this, _yogaCoursesList);
         _listViewYogaCourse.setAdapter((ListAdapter) _yogaCourseAdapter);
         _listViewYogaCourse.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -81,19 +89,9 @@ public class YogaCourseActivity extends AppCompatActivity {
                 startActivity(i);
             }
         });
-
     }
 
-    public void onClickViewAddYogaCourse(View view){
-        Intent i = new Intent(this, YogaCourseCreateActivity.class);
-        startActivity(i);
-    }
-
-    public void onClickViewYogaCourseSchedule(View view){
-        Intent i = new Intent(this, ScheduleActivity.class);
-        startActivity(i);
-    }
-
+    /// this is a thread to get yoga course list from database
     private class GetDatabaseYogaCourseListThread implements Runnable {
         @Override
         public void run() {
@@ -102,6 +100,61 @@ public class YogaCourseActivity extends AppCompatActivity {
         }
     }
 
+    /// call when click view add yoga course to navigate to yoga course create activity
+    public void onClickViewAddYogaCourse(View view){
+        Intent i = new Intent(this, YogaCourseCreateActivity.class);
+        startActivity(i);
+    }
 
+    /// call when click view yoga course schedule to navigate to yoga course schedule activity
+    public void onClickViewYogaCourseSchedule(View view){
+        Intent i = new Intent(this, ScheduleActivity.class);
+        startActivity(i);
+    }
 
+    public void onClickUploadFirebase(View view){
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle("Upload to Firebase");
+        alertDialog.setMessage("Are you sure you want to upload to Firebase?\n" +
+                "This will overwrite the existing data in Firebase.");
+        alertDialog.setNegativeButton("No", (dialog, which) -> {
+            dialog.dismiss();});
+        alertDialog.setPositiveButton("Yes", (dialog, which) -> {
+            Thread uploadToFireBaseThread = new Thread(new UploadToFireBaseThread());
+            uploadToFireBaseThread.start();
+            while(uploadToFireBaseThread.isAlive()){}
+            setListViewYogaCourse();
+        });
+        alertDialog.create().show();
+    }
+
+    private class UploadToFireBaseThread implements Runnable {
+        @Override
+        public void run() {
+            _dbSync.uploadToFireBase();
+        }
+    }
+
+    public void onClickDownloadFirebase(View view){
+        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        alertDialog.setTitle("Download from Firebase");
+        alertDialog.setMessage("Are you sure you want to download from Firebase?\n" +
+                "This will overwrite the existing data in the local database.");
+        alertDialog.setNegativeButton("No", (dialog, which) -> {
+            dialog.dismiss();});
+        alertDialog.setPositiveButton("Yes", (dialog, which) -> {
+            Thread downloadFromFireBaseThread = new Thread(new DownloadFromFireBaseThread());
+            downloadFromFireBaseThread.start();
+            while(downloadFromFireBaseThread.isAlive()){}
+            setListViewYogaCourse();
+        });
+        alertDialog.create().show();
+    }
+
+    private class DownloadFromFireBaseThread implements Runnable {
+        @Override
+        public void run() {
+            _dbSync.downloadFromFireBase();
+        }
+    }
 }

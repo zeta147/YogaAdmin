@@ -34,7 +34,9 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
             _textViewCapacityErrorMessage,
             _textViewDurationErrorMessage,
             _textViewPriceErrorMessage,
-            _textViewTypeErrorMessage;
+            _textViewTypeErrorMessage,
+            _textViewDescriptionErrorMessage;
+
 
     Spinner _textViewCourseDayOfWeek,
             _textViewCourseTime,
@@ -113,6 +115,7 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
         _textViewDurationErrorMessage = findViewById(R.id.textViewDurationErrorMessage);
         _textViewPriceErrorMessage = findViewById(R.id.textViewPriceErrorMessage);
         _textViewTypeErrorMessage = findViewById(R.id.textViewTypeErrorMessage);
+        _textViewDescriptionErrorMessage = findViewById(R.id.textViewDescriptionErrorMessage);
 
         _buttonEdit = findViewById(R.id.buttonEdit);
         _buttonSave = findViewById(R.id.buttonSave);
@@ -121,6 +124,17 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
         _buttonAddSchedule = findViewById(R.id.buttonAddSchedule);
         _buttonSave.setVisibility(View.INVISIBLE);
         _buttonCancel.setVisibility(View.INVISIBLE);
+    }
+
+    private void initializeSetErrorMessageInvisible() {
+        _textViewNameErrorMessage.setVisibility(View.INVISIBLE);
+        _textViewDayOfWeekErrorMessage.setVisibility(View.INVISIBLE);
+        _textViewTimeErrorMessage.setVisibility(View.INVISIBLE);
+        _textViewCapacityErrorMessage.setVisibility(View.INVISIBLE);
+        _textViewDurationErrorMessage.setVisibility(View.INVISIBLE);
+        _textViewPriceErrorMessage.setVisibility(View.INVISIBLE);
+        _textViewTypeErrorMessage.setVisibility(View.INVISIBLE);
+        _textViewDescriptionErrorMessage.setVisibility(View.INVISIBLE);
     }
 
 
@@ -235,7 +249,8 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
     }
 
     private void updateYogaCourseDetails() {
-        DatabaseHelper db = new DatabaseHelper(getApplicationContext());
+        DatabaseHelper dbHelper = new DatabaseHelper(getApplicationContext());
+        FirebaseHelper firebaseHelper = new FirebaseHelper();
         getYogaCourseDetailsValue();
         _yogaCourse = new YogaCourse(
                 _course_id,
@@ -247,7 +262,8 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
                 _price,
                 _type,
                 _description);
-        db.updateYogaCourse(_yogaCourse);
+        dbHelper.updateYogaCourse(_yogaCourse);
+        firebaseHelper.updateYogaCourse(_yogaCourse);
     }
 
     private class UpdateDatabaseYogaCourse implements Runnable {
@@ -261,16 +277,19 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
         }
     }
 
+    /// call when click view edit yoga course to turn to edit mode
     public void onClickEditYogaCourse(View view) {
         editMode();
         _isEditing = true;
     }
 
+    /// call when click view cancel yoga course to turn to view mode
     public void onClickCancelYogaCourse(View view) {
         viewMode();
         _isEditing = false;
     }
 
+    /// call when click view delete yoga course to delete yoga course
     public void onClickDeleteYogaCourse(View view) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle("Delete course");
@@ -287,11 +306,17 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
         alertDialog.create().show();
     }
 
+
+    /// delete yoga course method
     private void deleteYogaCourse() {
         DatabaseHelper db = new DatabaseHelper(getApplicationContext());
+        FirebaseHelper firebaseHelper = new FirebaseHelper();
         db.deleteYogaCourse(_yogaCourse);
+        firebaseHelper.deleteYogaCourse(_yogaCourse);
+
     }
 
+    /// this is a thread to delete yoga course
     private class DeleteDatabaseYogaCourseThread implements Runnable {
         @Override
         public void run() {
@@ -303,6 +328,7 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
         }
     }
 
+    /// call when click view add schedule to navigate to add schedule activity
     public void onClickAddSchedule(View view){
         Intent i = new Intent(this, ScheduleCreateActivity.class);
         i.putExtra("course_id", _course_id);
@@ -311,25 +337,18 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
         startActivity(i);
     }
 
-    private void initializeSetErrorMessageInvisible() {
-        _textViewNameErrorMessage.setVisibility(View.INVISIBLE);
-        _textViewDayOfWeekErrorMessage.setVisibility(View.INVISIBLE);
-        _textViewTimeErrorMessage.setVisibility(View.INVISIBLE);
-        _textViewCapacityErrorMessage.setVisibility(View.INVISIBLE);
-        _textViewDurationErrorMessage.setVisibility(View.INVISIBLE);
-        _textViewPriceErrorMessage.setVisibility(View.INVISIBLE);
-        _textViewTypeErrorMessage.setVisibility(View.INVISIBLE);
-    }
-
+    /// set error message invisible when this activity is created
     private void setErrorMessageInvisible(TextView textView) {
         textView.setVisibility(View.INVISIBLE);
     }
 
+    /// set invisible error message and set error message to the text view error message
     private void setErrorMessageVisible(TextView textView, String message) {
         textView.setText(message);
         textView.setVisibility(View.VISIBLE);
     }
 
+    /// check input name is empty and return false, return true if name is not empty
     private boolean checkYogaCourseDetailsName() {
         String nameTemp = _textViewCourseName.getText().toString();
         if (nameTemp.isEmpty()) {
@@ -342,6 +361,7 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
         return true;
     }
 
+    /// check input day of week is empty and return false, return true if day of week is not empty
     private boolean checkYogaCourseDetailsDayOfWeek() {
         String dayOfWeekTemp = _textViewCourseDayOfWeek.getSelectedItem().toString();
         if (dayOfWeekTemp.isEmpty()) {
@@ -354,6 +374,7 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
         return true;
     }
 
+    /// check input time is empty and return false, return true if time is not empty
     private boolean checkYogaCourseDetailsTime() {
         String timeTemp = _textViewCourseTime.getSelectedItem().toString();
         if (timeTemp.isEmpty()) {
@@ -366,6 +387,7 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
         return true;
     }
 
+    /// check input capacity is empty and return false, return true if capacity is not empty
     private boolean checkYogaCourseDetailsCapacity() {
         String capacityTemp = _textViewCourseCapacity.getText().toString();
         if (capacityTemp.isEmpty()) {
@@ -379,6 +401,7 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
 
     }
 
+    /// check input duration is empty and return false, return true if duration is not empty
     private boolean checkYogaCourseDetailsDuration() {
         String durationTemp = _textViewCourseDuration.getSelectedItem().toString();
         if (durationTemp.isEmpty()) {
@@ -391,6 +414,7 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
         return true;
     }
 
+    /// check input price is empty and return false, return true if price is not empty
     private boolean checkYogaCourseDetailsPrice() {
         String priceTemp = _textViewCoursePrice.getText().toString();
         if (priceTemp.isEmpty()) {
@@ -403,6 +427,7 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
         return true;
     }
 
+    /// check input type is empty and return false, return true if type is not empty
     private boolean checkYogaCourseDetailsType() {
         String typeTemp = _textViewCourseType.getSelectedItem().toString();
         if (typeTemp.isEmpty()) {
@@ -415,13 +440,14 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
         return true;
     }
 
+    /// check input description has more than 255 characters and return false, return true if description has less than 255 characters
     private boolean checkYogaCourseDetailsDescription() {
         String descriptionTemp = _textViewCourseDescription.getText().toString();
         if (descriptionTemp.length() > 255) {
-            setErrorMessageVisible(_textViewTypeErrorMessage, "Description cannot be more than 255 characters");
+            setErrorMessageVisible(_textViewDescriptionErrorMessage, "Description cannot be more than 255 characters");
             return false;
         } else {
-            setErrorMessageInvisible(_textViewTypeErrorMessage);
+            setErrorMessageInvisible(_textViewDescriptionErrorMessage);
         }
         _description = descriptionTemp;
         return true;

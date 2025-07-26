@@ -22,9 +22,11 @@
 
     <ScrollView
         android:layout_width="411dp"
-        android:layout_height="400dp"
-        android:layout_marginTop="100dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="75dp"
+        android:layout_marginBottom="125dp"
         android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -42,6 +44,7 @@
                 android:layout_height="29dp"
                 android:layout_marginStart="0dp"
                 android:layout_marginTop="0dp"
+                android:fontFamily="sans-serif-black"
                 android:text="@string/course_name_label"
                 android:textColor="@color/black"
                 android:textSize="20sp"
@@ -57,7 +60,7 @@
                 android:layout_marginTop="0dp"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="@id/textViewCourseScheduleNameLabel"
-                app:layout_constraintTop_toBottomOf="@id/textViewCourseScheduleNameLabel"/>
+                app:layout_constraintTop_toBottomOf="@id/textViewCourseScheduleNameLabel" />
 
 
             <TextView
@@ -66,6 +69,7 @@
                 android:layout_height="29dp"
                 android:layout_marginStart="0dp"
                 android:layout_marginTop="25dp"
+                android:fontFamily="sans-serif-black"
                 android:text="@string/date_label"
                 android:textColor="@color/black"
                 android:textSize="20sp"
@@ -97,6 +101,7 @@
                 android:layout_height="29dp"
                 android:layout_marginStart="0dp"
                 android:layout_marginTop="25dp"
+                android:fontFamily="sans-serif-black"
                 android:text="@string/teacher_name_label"
                 android:textColor="@color/black"
                 android:textSize="20sp"
@@ -112,7 +117,7 @@
                 android:layout_marginTop="0dp"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="@id/textViewTeacherNameLabel"
-                app:layout_constraintTop_toBottomOf="@id/textViewTeacherNameLabel"/>
+                app:layout_constraintTop_toBottomOf="@id/textViewTeacherNameLabel" />
 
             <TextView
                 android:id="@+id/textViewTeacherNameErrorMessage"
@@ -125,7 +130,7 @@
                 android:textSize="16sp"
                 android:visibility="invisible"
                 app:layout_constraintStart_toStartOf="@id/editTextTeacherName"
-                app:layout_constraintTop_toBottomOf="@id/editTextTeacherName"/>
+                app:layout_constraintTop_toBottomOf="@id/editTextTeacherName" />
 
             <TextView
                 android:id="@+id/textViewCommentLabel"
@@ -133,12 +138,12 @@
                 android:layout_height="29dp"
                 android:layout_marginStart="0dp"
                 android:layout_marginTop="25dp"
+                android:fontFamily="sans-serif-black"
                 android:text="@string/comment_label"
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="@id/textViewTeacherNameLabel"
-                app:layout_constraintTop_toBottomOf="@id/textViewTeacherNameLabel"
-                />
+                app:layout_constraintTop_toBottomOf="@id/textViewTeacherNameLabel" />
 
             <EditText
                 android:id="@+id/editTextComment"
@@ -148,8 +153,7 @@
                 android:layout_marginTop="0dp"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="@id/textViewCommentLabel"
-                app:layout_constraintTop_toBottomOf="@id/textViewCommentLabel"
-                />
+                app:layout_constraintTop_toBottomOf="@id/textViewCommentLabel" />
 
             <TextView
                 android:id="@+id/textViewCommentErrorMessage"
@@ -162,18 +166,21 @@
                 android:textSize="16sp"
                 android:visibility="invisible"
                 app:layout_constraintStart_toStartOf="@id/editTextComment"
-                app:layout_constraintTop_toBottomOf="@id/editTextComment"
-                />
+                app:layout_constraintTop_toBottomOf="@id/editTextComment" />
         </LinearLayout>
     </ScrollView>
 
 
     <Button
-        android:id="@+id/buttonEditSchedule"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="160dp"
+        android:id="@+id/buttonCreateSchedule"
+        android:layout_width="130dp"
+        android:layout_height="65dp"
+        android:layout_marginStart="135dp"
         android:layout_marginBottom="50dp"
+        android:backgroundTint="#FF4CAF50"
+        android:fontFamily="sans-serif-black"
+        android:textColor="@color/black"
+        android:textSize="16sp"
         android:onClick="onClickAddSchedule"
         android:text="@string/create"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -143,6 +143,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         database.delete(COURSE_SCHEDULE_TABLE_NAME, YOGA_COURSE_ID_COLUMN_NAME + "=" + course.getYogaCourseId(), null);
     }
 
+    public void deleteAllYogaCoursesAndSchedules(){
+        database.execSQL("PRAGMA foreign_keys=OFF");
+        database.delete(YOGA_COURSE_TABLE_NAME, null, null);
+        database.delete(COURSE_SCHEDULE_TABLE_NAME, null, null);
+    }
+
+    public long getYogaCourseCount(){
+        return database.query(YOGA_COURSE_TABLE_NAME, null, null, null, null, null, null).getCount();
+    }
+
     public ArrayList<YogaCourse> getAllYogaCourses(){
         Cursor results = database.query("yoga_courses",
                 new String[]{"course_id",
@@ -196,14 +206,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         rowValues.put(DATE_COLUMN_NAME,schedule.getDate());
         rowValues.put(TEACHER_NAME_COLUMN_NAME,schedule.getTeacherName());
         rowValues.put(COMMENT_COLUMN_NAME,schedule.getComment());
-        database.update(COURSE_SCHEDULE_TABLE_NAME, rowValues, COURSE_SCHEDULE_ID_COLUMN_NAME + "=" + schedule.getYogaCourseScheduleId(), null);
+        database.update(COURSE_SCHEDULE_TABLE_NAME, rowValues, COURSE_SCHEDULE_ID_COLUMN_NAME + "=" + schedule.getScheduleId(), null);
     }
 
     public void deleteSchedule(Schedule schedule){
-        database.delete(COURSE_SCHEDULE_TABLE_NAME, COURSE_SCHEDULE_ID_COLUMN_NAME + "=" + schedule.getYogaCourseScheduleId(), null);
+        database.delete(COURSE_SCHEDULE_TABLE_NAME, COURSE_SCHEDULE_ID_COLUMN_NAME + "=" + schedule.getScheduleId(), null);
     }
 
-    public ArrayList<Schedule> getAllYogaCourseSchedules() {
+
+
+    public long getScheduleCount(){
+        return database.query(COURSE_SCHEDULE_TABLE_NAME, null, null, null, null, null, null).getCount();
+    }
+
+    public ArrayList<Schedule> getAllSchedules() {
         Cursor results = database.query("yoga_course_schedules",
                 new String[]{"yoga_course_schedule_id",
                         "yoga_course_id",
