@@ -8,83 +8,70 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class Schedule {
-    private String _yogaCourseScheduleId;
-    private String _yogaCourseId;
-    private String _courseName;
-    private String _dayOfWeek;
-    private String _date;
-    private String _teacherName;
-    private String _comment;
+    private String scheduleId;
+    private String yogaCourseId;
+    private String courseName; // for listing schedule
+    private String dayOfWeek; // for checking correct day of week
+    private String date;
+    private String teacherName;
+    private String comment;
+    private int isUploaded;
     private static final DayOfWeekEnum[] _dayOfWeekList = DayOfWeekEnum.values();
+
+    /// constructors for creating schedule with default value
+    public Schedule(){
+        yogaCourseId = null;
+        date = null;
+        teacherName = null;
+        comment = null;
+        isUploaded = 0;
+    }
 
     /// constructors for creating schedule
     public Schedule(String yogaCourseId, String date, String teacherName, String comment) {
-        _yogaCourseId = yogaCourseId;
-        _date = date;
-        _teacherName = teacherName;
-        _comment = comment;
+        this.yogaCourseId = yogaCourseId;
+        this.date = date;
+        this.teacherName = teacherName;
+        this.comment = comment;
+        this.isUploaded = 0;
     }
 
     /// constructors for updating schedule
     public Schedule(String yogaCourseScheduleId, String yogaCourseId, String date, String teacherName, String comment) {
-        if(yogaCourseScheduleId != null){this._yogaCourseScheduleId = yogaCourseScheduleId;}
-        _yogaCourseId = yogaCourseId;
-        _date = date;
-        _teacherName = teacherName;
-        _comment = comment;
+        if(yogaCourseScheduleId != null){this.scheduleId = yogaCourseScheduleId;}
+        this.yogaCourseId = yogaCourseId;
+        this.date = date;
+        this.teacherName = teacherName;
+        this.comment = comment;
     }
 
     /// constructors for listing schedule
     public Schedule(String yogaCourseScheduleId, String yogaCourseId, String courseName, String dayOfWeek, String date, String teacherName, String comment){
-        _yogaCourseScheduleId = yogaCourseScheduleId;
-        _yogaCourseId = yogaCourseId;
-        _courseName = courseName;
-        _dayOfWeek = dayOfWeek;
-        _date = date;
-        _teacherName = teacherName;
-        _comment = comment;
+        this.scheduleId = yogaCourseScheduleId;
+        this.yogaCourseId = yogaCourseId;
+        this.courseName = courseName;
+        this.dayOfWeek = dayOfWeek;
+        this.date = date;
+        this.teacherName = teacherName;
+        this.comment = comment;
     }
 
-    public String getScheduleId() {return _yogaCourseScheduleId;}
-    public String getYogaCourseId() {return _yogaCourseId;}
-    public String getCourseName() {return _courseName;} // for listing schedule
-    public String getDate() {return _date;}
-    public String getDayOfWeek() {return _dayOfWeek;} // for listing schedule
-    public String getTeacherName() {return _teacherName;}
-    public String getComment() {return _comment;}
+    public String getScheduleId() {return this.scheduleId;}
+    public String getYogaCourseId() {return this.yogaCourseId;}
+    public String getCourseName() {return this.courseName;} // for listing schedule
+    public String getDate() {return this.date;}
+    public String getDayOfWeek() {return this.dayOfWeek;} // for listing schedule
+    public String getTeacherName() {return this.teacherName;}
+    public String getComment() {return comment;}
+    public int getIsUploaded() {return isUploaded;}
 
-    public String getDateForListView(){
-        String dateString = _date;
-        String[] dateStringArray = dateString.split("-");
-        int year = Integer.parseInt(dateStringArray[0]);
-        int month = Integer.parseInt(dateStringArray[1]);
-        int day = Integer.parseInt(dateStringArray[2]);
-        return day + "-" + month + "-" + year;
-    }
+    public void setScheduleId(String yogaCourseScheduleId) {this.scheduleId = yogaCourseScheduleId;}
+    public void setYogaCourseId(String yogaCourseId) {this.yogaCourseId = yogaCourseId;}
+    public void setCourseName(String courseName) {this.courseName = courseName;} // for listing schedule
+    public void setDate(String date) {this.date = date;}
+    public void setDayOfWeek(String dayOfWeek) {this.dayOfWeek = dayOfWeek;} // for listing schedule
+    public void setTeacherName(String teacherName) {this.teacherName = teacherName;}
+    public void setComment(String comment) {this.comment = comment;}
+    public void setIsUploaded(int isUploaded) {this.isUploaded = isUploaded;}
 
-    @SuppressLint("SimpleDateFormat")
-    public static Date parseDateStringToDate(String dateString){
-        Date date = new Date();
-        try {
-            date = new SimpleDateFormat("yyyy-MM-dd").parse(dateString);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return date;
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    public static String parseDateToString(Date date){
-        if(date == null){return null;}
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        int year = calendar.get(Calendar.YEAR);
-        int month = calendar.get(Calendar.MONTH);
-        int day = calendar.get(Calendar.DAY_OF_MONTH);
-        return year + "-" + month + "-" + day;
-    }
-
-    public static String getDayOfWeek(int dayOfWeekInt){
-        return _dayOfWeekList[dayOfWeekInt-1].toString();
-    }
 }

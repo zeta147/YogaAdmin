@@ -52,6 +52,11 @@
         <item>Intermediate</item>
         <item>Advanced</item>
     </string-array>
+    <string-array name="search_type">
+        <item>teacher name</item>
+        <item>course name</item>
+        <item>date</item>
+    </string-array>
 
     <string name="course_name_label">Course Name</string>
     <string name="day_of_week_label">Day of Week</string>

@@ -1,7 +1,9 @@
 package com.example.yogaadmin;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -54,6 +56,7 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
             _durationAdapter,
             _typeAdapter;
 
+    private Context _context;
     private boolean _isEditing;
 
 
@@ -70,6 +73,8 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
         assignYogaCourseDetailsValue();
         InitializeWidget();
         initializeSetErrorMessageInvisible();
+        _context = this;
+        _isEditing = false;
         _yogaCourse = new YogaCourse(
                 _course_id,
                 _name,
@@ -262,8 +267,16 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
                 _price,
                 _type,
                 _description);
+
+        if(!NetworkConnection.isConnected(_context)){
+            _yogaCourse.setIsUploaded(0);
+        }
+        else {
+            _yogaCourse.setIsUploaded(1);
+            firebaseHelper.updateYogaCourse(_yogaCourse);
+        }
         dbHelper.updateYogaCourse(_yogaCourse);
-        firebaseHelper.updateYogaCourse(_yogaCourse);
+        dbHelper.close();
     }
 
     private class UpdateDatabaseYogaCourse implements Runnable {
@@ -272,7 +285,7 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
             try {
                 updateYogaCourseDetails();
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e("UpdateDatabaseYogaCourse", "Error: " + e.getMessage());
             }
         }
     }
@@ -313,7 +326,6 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
         FirebaseHelper firebaseHelper = new FirebaseHelper();
         db.deleteYogaCourse(_yogaCourse);
         firebaseHelper.deleteYogaCourse(_yogaCourse);
-
     }
 
     /// this is a thread to delete yoga course
@@ -323,7 +335,7 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
             try {
                 deleteYogaCourse();
             } catch (Exception e) {
-                e.printStackTrace();
+                Log.e("DeleteDatabaseYogaCourseThread", "Error:" + e.getMessage());
             }
         }
     }

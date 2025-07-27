@@ -3,6 +3,7 @@ package com.example.yogaadmin;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
@@ -42,11 +43,12 @@ public class YogaCourseActivity extends AppCompatActivity {
         });
 
         _listViewYogaCourse = findViewById(R.id.listViewYogaCourse);
-        _dbSync = new DatabaseSynchronization(this);
         _panelNoYogaCourseMessage = findViewById(R.id.panelNoYogaCourseMessage);
         _panelLoading = findViewById(R.id.panelLoading);
         _yogaCoursesList = new ArrayList<YogaCourse>();
         _context = this;
+        _dbSync = new DatabaseSynchronization(_context);
+        _dbSync.uploadToFireBase();
     }
 
     @Override
@@ -54,7 +56,6 @@ public class YogaCourseActivity extends AppCompatActivity {
         super.onResume();
         getYogaCoursesList(); // Call this method to refresh the list
     }
-
 
     private void getYogaCoursesList(){
         _panelNoYogaCourseMessage.setVisibility(View.GONE);
@@ -65,7 +66,6 @@ public class YogaCourseActivity extends AppCompatActivity {
         _panelLoading.setVisibility(View.GONE);
         if(_yogaCoursesList.isEmpty()){
             _panelNoYogaCourseMessage.setVisibility(View.VISIBLE);
-            return;
         }
         setListViewYogaCourse();
     }
@@ -95,8 +95,15 @@ public class YogaCourseActivity extends AppCompatActivity {
     private class GetDatabaseYogaCourseListThread implements Runnable {
         @Override
         public void run() {
-            _dbHelper = new DatabaseHelper(_context);
-            _yogaCoursesList = _dbHelper.getAllYogaCourses();
+            try {
+                _dbHelper = new DatabaseHelper(_context);
+                _yogaCoursesList = _dbHelper.getAllYogaCourses();
+                _dbHelper.close();
+            }
+            catch (Exception e){
+                Log.e("YogaCourseActivity", "Error getting yoga course list:" + e.getMessage());
+            }
+
         }
     }
 
@@ -110,51 +117,5 @@ public class YogaCourseActivity extends AppCompatActivity {
     public void onClickViewYogaCourseSchedule(View view){
         Intent i = new Intent(this, ScheduleActivity.class);
         startActivity(i);
-    }
-
-    public void onClickUploadFirebase(View view){
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-        alertDialog.setTitle("Upload to Firebase");
-        alertDialog.setMessage("Are you sure you want to upload to Firebase?\n" +
-                "This will overwrite the existing data in Firebase.");
-        alertDialog.setNegativeButton("No", (dialog, which) -> {
-            dialog.dismiss();});
-        alertDialog.setPositiveButton("Yes", (dialog, which) -> {
-            Thread uploadToFireBaseThread = new Thread(new UploadToFireBaseThread());
-            uploadToFireBaseThread.start();
-            while(uploadToFireBaseThread.isAlive()){}
-            setListViewYogaCourse();
-        });
-        alertDialog.create().show();
-    }
-
-    private class UploadToFireBaseThread implements Runnable {
-        @Override
-        public void run() {
-            _dbSync.uploadToFireBase();
-        }
-    }
-
-    public void onClickDownloadFirebase(View view){
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-        alertDialog.setTitle("Download from Firebase");
-        alertDialog.setMessage("Are you sure you want to download from Firebase?\n" +
-                "This will overwrite the existing data in the local database.");
-        alertDialog.setNegativeButton("No", (dialog, which) -> {
-            dialog.dismiss();});
-        alertDialog.setPositiveButton("Yes", (dialog, which) -> {
-            Thread downloadFromFireBaseThread = new Thread(new DownloadFromFireBaseThread());
-            downloadFromFireBaseThread.start();
-            while(downloadFromFireBaseThread.isAlive()){}
-            setListViewYogaCourse();
-        });
-        alertDialog.create().show();
-    }
-
-    private class DownloadFromFireBaseThread implements Runnable {
-        @Override
-        public void run() {
-            _dbSync.downloadFromFireBase();
-        }
     }
 }

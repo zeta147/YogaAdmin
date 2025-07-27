@@ -154,7 +154,7 @@
     </ScrollView>
 
     <Button
-        android:id="@+id/buttonSaveSchedule"
+        android:id="@+id/buttonSave"
         android:layout_width="130dp"
         android:layout_height="65dp"
         android:layout_marginStart="50dp"
@@ -163,13 +163,13 @@
         android:fontFamily="sans-serif-black"
         android:onClick="onClickUpdateSchedule"
         android:text="@string/save"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/buttonCreateSchedule"
+        android:id="@+id/buttonEdit"
         android:layout_width="130dp"
         android:layout_height="65dp"
         android:layout_marginStart="50dp"
@@ -178,13 +178,13 @@
         android:fontFamily="sans-serif-black"
         android:onClick="onClickEditSchedule"
         android:text="@string/edit"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/buttonCancelSchedule"
+        android:id="@+id/buttonCancel"
         android:layout_width="130dp"
         android:layout_height="65dp"
         android:layout_marginStart="225dp"
@@ -199,14 +199,14 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/buttonDeleteSchedule"
+        android:id="@+id/buttonDelete"
         android:layout_width="130dp"
         android:layout_height="65dp"
         android:layout_marginStart="225dp"
         android:layout_marginBottom="50dp"
         android:backgroundTint="#FF3B30"
         android:fontFamily="sans-serif-black"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="16sp"
         android:onClick="onClickDeleteSchedule"
         android:text="@string/delete"

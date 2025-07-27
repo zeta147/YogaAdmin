@@ -1,47 +1,64 @@
 package com.example.yogaadmin;
 public class YogaCourse {
-    private String _yogaCourseId;
-    private String _name;
-    private String _dayOfWeek;
-    private String _time;
-    private int _capacity;
-    private String _duration;
-    private float _price;
-    private String _type;
-    private String _description;
+    private String yogaCourseId;
+    private String name;
+    private String dayOfWeek;
+    private String time;
+    private int capacity;
+    private String duration;
+    private float price;
+    private String type;
+    private String description;
+    private int isUploaded;
 
 
-    public YogaCourse(String course_id, String name, String dayOfWeek, String time, int capacity, String duration, float price, String type, String description){
-        if(course_id != null){this._yogaCourseId = course_id;}
-        this._name = name;
-        this._dayOfWeek = dayOfWeek;
-        this._time = time;
-        this._capacity = capacity;
-        this._duration = duration;
-        this._price = price;
-//        this._price = Float.parseFloat(String.format("%.2f", price));
-        this._type = type;
-        if(description != null){this._description = description;}
+    public YogaCourse(){
+        this.yogaCourseId = null;
+        this.name = null;
+        this.dayOfWeek = null;
+        this.time = null;
+        this.capacity = 0;
+        this.duration = null;
+        this.price = 0;
+        this.type = null;
+        this.description = null;
+        this.isUploaded = 0;
     }
 
-    public String getYogaCourseId(){return this._yogaCourseId;}
-    public String getName(){return this._name;}
-    public String getDayOfWeek(){return this._dayOfWeek;}
-    public String getTime(){return this._time;}
-    public int getCapacity(){return this._capacity;}
-    public String getDuration(){return this._duration;}
-    public float getPrice(){return this._price;}
-    public String getType(){return this._type;}
-    public String getDescription(){return this._description;}
+    public YogaCourse(String course_id, String name, String dayOfWeek, String time, int capacity, String duration, float price, String type, String description){
+        if(course_id != null){this.yogaCourseId = course_id;}
+        this.name = name;
+        this.dayOfWeek = dayOfWeek;
+        this.time = time;
+        this.capacity = capacity;
+        this.duration = duration;
+        this.price = price;
+//        this._price = Float.parseFloat(String.format("%.2f", price));
+        this.type = type;
+        if(description != null){this.description = description;}
+        this.isUploaded = 0;
+    }
+
+    public String getYogaCourseId(){return this.yogaCourseId;}
+    public String getName(){return this.name;}
+    public String getDayOfWeek(){return this.dayOfWeek;}
+    public String getTime(){return this.time;}
+    public int getCapacity(){return this.capacity;}
+    public String getDuration(){return this.duration;}
+    public float getPrice(){return this.price;}
+    public String getType(){return this.type;}
+    public String getDescription(){return this.description;}
+    public int getIsUploaded(){return this.isUploaded;}
 
 
-    public void setYogaCourseId(String course_id){this._yogaCourseId = course_id;}
-    public void setName(String name){this._name = name;}
-    public void setDayOfWeek(String dayOfWeek){this._dayOfWeek = dayOfWeek;}
-    public void setTime(String time){this._time = time;}
-    public void setCapacity(int capacity){this._capacity = capacity;}
-    public void setDuration(String duration){this._duration = duration;}
-    public void setPrice(float price){this._price = price;}
-    public void setType(String type){this._type = type;}
-    public void setDescription(String description){this._description = description;}
+    public void setYogaCourseId(String course_id){this.yogaCourseId = course_id;}
+    public void setName(String name){this.name = name;}
+    public void setDayOfWeek(String dayOfWeek){this.dayOfWeek = dayOfWeek;}
+    public void setTime(String time){this.time = time;}
+    public void setCapacity(int capacity){this.capacity = capacity;}
+    public void setDuration(String duration){this.duration = duration;}
+    public void setPrice(float price){this.price = price;}
+    public void setType(String type){this.type = type;}
+    public void setDescription(String description){this.description = description;}
+    public void setIsUploaded(int isUploaded){this.isUploaded = isUploaded;}
 }

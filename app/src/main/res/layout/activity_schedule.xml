@@ -11,6 +11,7 @@
         android:id="@+id/listViewSchedule"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginTop="25dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextSearchBar" />
@@ -32,13 +33,11 @@
         android:id="@+id/editTextSearchBar"
         android:layout_width="250dp"
         android:layout_height="48dp"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="4dp"
         android:ems="10"
         android:hint="@string/search"
         android:inputType="text"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewScheduleListLabel" />
+        app:layout_constraintStart_toEndOf="@+id/spinnerSearchType"
+        app:layout_constraintTop_toTopOf="@+id/spinnerSearchType" />
 
     <ImageButton
         android:id="@+id/imageButtonSearch"
@@ -89,5 +88,14 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp" />
     </RelativeLayout>
+
+    <Spinner
+        android:id="@+id/spinnerSearchType"
+        android:layout_width="109dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="64dp"
+        android:entries="@array/search_type"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

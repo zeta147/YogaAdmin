@@ -2,6 +2,7 @@ package com.example.yogaadmin;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
@@ -24,7 +25,7 @@ public class ScheduleDetailActivity extends AppCompatActivity {
     private String _scheduleId, _courseId, _courseName, _courseDayOfWeek, _courseDate, _courseTeacherName, _courseComment;
     private int _year, _month, _dayOfMonth, _dayOfWeek;
     private int _dayOfMonthCurrent, _monthCurrent, _yearCurrent;
-    private TextView _textViewYogaCourseName;
+    private TextView _textViewCourseName;
     private CalendarView _calendarView;
     private Calendar _calendar;
     private EditText _editTextTeacherName;
@@ -38,7 +39,7 @@ public class ScheduleDetailActivity extends AppCompatActivity {
             _buttonCancel,
             _buttonDelete;
     private Context _context;
-    private DayOfWeekEnum[] _dayOfWeekEnum = DayOfWeekEnum.values();
+    private final DayOfWeekEnum[] _dayOfWeekEnum = DayOfWeekEnum.values();
     private boolean _isEditing;
 
     @Override
@@ -54,7 +55,6 @@ public class ScheduleDetailActivity extends AppCompatActivity {
 
         initializeWidget();
         assignScheduleDetailValue();
-        setScheduleDetailValue();
         disableInputWidget();
         getCalendarCurrentDate();
         _isEditing = false;
@@ -65,7 +65,7 @@ public class ScheduleDetailActivity extends AppCompatActivity {
 
     /// initialize widget input, button, and error message
     private void initializeWidget(){
-        _textViewYogaCourseName = findViewById(R.id.textViewCourseScheduleName);
+        _textViewCourseName = findViewById(R.id.textViewCourseScheduleName);
         _calendarView = findViewById(R.id.calendarViewSchedule);
         _editTextTeacherName = findViewById(R.id.editTextTeacherName);
         _editTextComment = findViewById(R.id.editTextComment);
@@ -95,25 +95,20 @@ public class ScheduleDetailActivity extends AppCompatActivity {
         _courseTeacherName = getIntent().getStringExtra("course_teacherName");
         _courseComment = getIntent().getStringExtra("course_comment");
 
-        String[] date = _courseDate.split("-");
-        _year = Integer.parseInt(date[0]);
-        _month = Integer.parseInt(date[1]);
-        _dayOfMonth = Integer.parseInt(date[2]);
+        String[] date = _courseDate.split("-");  // split into dd, mm, yyyy
+        _dayOfMonth = Integer.parseInt(date[0]); // index 0 is dd
+        _month = Integer.parseInt(date[1]); // index 1 is mm
+        _year = Integer.parseInt(date[2]); // index 2 is yyyy
         _calendar = Calendar.getInstance();
         _calendar.set(_year, _month-1, _dayOfMonth); //Calendar.MONTH is zero based
         _dayOfWeek = _calendar.get(Calendar.DAY_OF_WEEK); //Calendar.DAY_OF_WEEK is one based (Sunday = 1)
-    }
 
-    /// set schedule detail value to widget
-    private void setScheduleDetailValue(){
-        _textViewYogaCourseName.setText(_courseName);
-        _calendar = Calendar.getInstance();
-        _calendar.set(_year, _month-1, _dayOfMonth); //Calendar.MONTH is zero based
-        _calendarView.setDate(_calendar.getTimeInMillis());
+
+        _calendarView.setDate(_calendar.getTimeInMillis()); // set data for calender view
+        _textViewCourseName.setText(_courseName);
         _editTextTeacherName.setText(_courseTeacherName);
         _editTextComment.setText(_courseComment);
     }
-
 
     /// disable input widget not allow to edit
     private void disableInputWidget(){
@@ -200,7 +195,7 @@ public class ScheduleDetailActivity extends AppCompatActivity {
     private void updateSchedule(){
         DatabaseHelper dbHelper = new DatabaseHelper(_context);
         FirebaseHelper firebaseHelper = new FirebaseHelper();
-        _schedule = new Schedule(_scheduleId, _courseId, _year + "-" + _month + "-" + _dayOfMonth, _courseTeacherName, _courseComment);
+        _schedule = new Schedule(_scheduleId, _courseId, _dayOfMonth + "-" + _month + "-" + _year, _courseTeacherName, _courseComment);
         dbHelper.updateSchedule(_schedule);
         firebaseHelper.updateSchedule(_schedule);
     }
@@ -212,7 +207,7 @@ public class ScheduleDetailActivity extends AppCompatActivity {
             try {
                 updateSchedule();
             } catch (RuntimeException e) {
-                e.printStackTrace();
+                Log.e("UpdateScheduleThread", "Error: " + e.getMessage());
             }
         }
     }
@@ -260,8 +255,7 @@ public class ScheduleDetailActivity extends AppCompatActivity {
             try {
                 deleteSchedule();
             } catch (RuntimeException e) {
-                Toast.makeText(_context, "Delete _schedule failed", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
+                Log.e("DeleteScheduleThread", "Error: " + e.getMessage());
             }
         }
     }
@@ -283,8 +277,7 @@ public class ScheduleDetailActivity extends AppCompatActivity {
     /// check valid input having a teacher name and a comment
     private boolean checkValidInput(){
         boolean isValid;
-        isValid = checkScheduleTeacherName()
-                && checkScheduleComment();
+        isValid = checkScheduleTeacherName() && checkScheduleComment();
         return isValid;
     }
 

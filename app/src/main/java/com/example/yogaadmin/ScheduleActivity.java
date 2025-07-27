@@ -9,6 +9,7 @@ import android.widget.EditText;
 import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -21,9 +22,10 @@ import java.util.ArrayList;
 public class ScheduleActivity extends AppCompatActivity {
     private EditText _editTextScheduleSearchBar;
     private ListView _listViewSchedule;
+    private Spinner _spinnerSearchType;
     private RelativeLayout _panelNoScheduleMessage, _panelLoading;
     private ScheduleAdapter _scheduleAdapter;
-    private ArrayList<Schedule> _scheduleList, _filteredScheduleList;
+    private ArrayList<Schedule> _scheduleList;
     private DatabaseHelper _dbHelper;
     private Context _context;
 
@@ -42,10 +44,10 @@ public class ScheduleActivity extends AppCompatActivity {
 
         _editTextScheduleSearchBar = findViewById(R.id.editTextSearchBar);
         _listViewSchedule = findViewById(R.id.listViewSchedule);
+        _spinnerSearchType = findViewById(R.id.spinnerSearchType);
         _panelNoScheduleMessage = findViewById(R.id.panelNoYogaCourseMessage);
         _panelLoading = findViewById(R.id.panelLoading);
-        _scheduleList = new ArrayList<>();
-        _filteredScheduleList = new ArrayList<>();
+        _scheduleList = new ArrayList<Schedule>();
         _context = this;
     }
 
@@ -101,67 +103,50 @@ public class ScheduleActivity extends AppCompatActivity {
 
     /// call when click search schedule to search teacher name of the schedule
     public void onClickSearchSchedule(View view){
+        String searchType = _spinnerSearchType.getSelectedItem().toString();
         String keyWord = _editTextScheduleSearchBar.getText().toString();
-
-        Thread searchScheduleThread = new Thread(new searchScheduleThread(keyWord));
+        Thread searchScheduleThread = new Thread(new searchScheduleThread(keyWord, searchType));
         searchScheduleThread.start();
         while(searchScheduleThread.isAlive()){}
-        _scheduleAdapter = new ScheduleAdapter(this, _filteredScheduleList);
+        _scheduleAdapter = new ScheduleAdapter(this, _scheduleList);
         _listViewSchedule.setAdapter((ListAdapter) _scheduleAdapter);
-        _listViewSchedule.setOnItemClickListener((new AdapterView.OnItemClickListener() {
+        _listViewSchedule.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent i = new Intent(getApplicationContext(), ScheduleDetailActivity.class);
-                i.putExtra("schedule_id", _filteredScheduleList.get(position).getScheduleId());
-                i.putExtra("course_id", _filteredScheduleList.get(position).getYogaCourseId());
-                i.putExtra("course_name", _filteredScheduleList.get(position).getCourseName());
-                i.putExtra("course_dayOfWeek", _filteredScheduleList.get(position).getDayOfWeek());
-                i.putExtra("course_date", _filteredScheduleList.get(position).getDate());
-                i.putExtra("course_teacherName", _filteredScheduleList.get(position).getTeacherName());
-                i.putExtra("course_comment", _filteredScheduleList.get(position).getComment());
+                i.putExtra("schedule_id", _scheduleList.get(position).getScheduleId());
+                i.putExtra("course_id", _scheduleList.get(position).getYogaCourseId());
+                i.putExtra("course_name", _scheduleList.get(position).getCourseName());
+                i.putExtra("course_dayOfWeek", _scheduleList.get(position).getDayOfWeek());
+                i.putExtra("course_date", _scheduleList.get(position).getDate());
+                i.putExtra("course_teacherName", _scheduleList.get(position).getTeacherName());
+                i.putExtra("course_comment", _scheduleList.get(position).getComment());
                 startActivity(i);
             }
-        }));
+        });
     }
 
-
-    /// Search method 1
-//    private class searchScheduleThread1 implements Runnable{
-//        private final String keyWord;
-//        public searchScheduleThread(String searchText){
-//            this.keyWord = searchText;
-//        }
-//
-//        @Override
-//        public void run(){
-//            _filteredScheduleList.clear();
-//            if(keyWord.isEmpty()){
-//                _filteredScheduleList.addAll(_scheduleList);
-//                return;
-//            }
-//            for(Schedule schedule : _scheduleList){
-//                if(schedule.getTeacherName().toLowerCase().contains(keyWord.toLowerCase())){
-//                    _filteredScheduleList.add(schedule);
-//                }
-//            }
-//        }
-//    }
 
     /// this is a thread to get schedule list having a searching teacher name from database
     private class searchScheduleThread implements Runnable{
         private final String keyWord;
-        public searchScheduleThread(String searchText){
+        private final String searchType;
+        public searchScheduleThread(String searchText, String searchType){
+            this.searchType = searchType;
             this.keyWord = searchText;
         }
         @Override
         public void run() {
-            _filteredScheduleList.clear();
+            _scheduleList.clear();
             _dbHelper = new DatabaseHelper(_context);
             if(keyWord.isEmpty()){
-                _filteredScheduleList = _dbHelper.getYogaCourseJoinScheduleList();
+                _scheduleList = _dbHelper.getYogaCourseJoinScheduleList();
+                _dbHelper.close();
                 return;
             }
-            _filteredScheduleList = _dbHelper.getYogaCourseJoinScheduleFilteredTeacherList(keyWord);
+            else {
+                _scheduleList = _dbHelper.getScheduleSearchList(keyWord, searchType);
+            }
             _dbHelper.close();
         }
     }

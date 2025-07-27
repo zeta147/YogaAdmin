@@ -1,8 +1,8 @@
 package com.example.yogaadmin;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.CalendarView;
 import android.widget.EditText;
@@ -17,14 +17,12 @@ import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 import java.util.Calendar;
-import java.util.Date;
 
 public class ScheduleCreateActivity extends AppCompatActivity {
-    private Schedule _schedule;
-    private String _courseId, _courseName, _courseDayOfWeek;
+    private String _scheduleId, _courseId, _courseName, _courseDayOfWeek;
     private int _year, _month, _dayOfMonth, _dayOfWeek;
 
-    private TextView _textViewCourseScheduleName;
+    private TextView _textViewCourseName;
     private CalendarView _calendarView;
     private Calendar _calendar;
     private EditText _editTextTeacherName, editTextComment;
@@ -34,7 +32,7 @@ public class ScheduleCreateActivity extends AppCompatActivity {
             _textViewCommentErrorMessage;
 
     private int _dayOfMonthCurrent, _monthCurrent, _yearCurrent;
-    private DayOfWeekEnum[] _dayOfWeekEnum;
+    private final DayOfWeekEnum[] _dayOfWeekEnum = DayOfWeekEnum.values();;
     private Context _context;
 
 
@@ -54,15 +52,14 @@ public class ScheduleCreateActivity extends AppCompatActivity {
         getScheduleErrorMessageWidget();
         initializeSetErrorMessageInvisible();
         initializeCalendarView();
-        _dayOfWeekEnum = DayOfWeekEnum.values();
         _context = this;
 
     }
 
 
     private void getScheduleInputWidget() {
-        _textViewCourseScheduleName = findViewById(R.id.textViewCourseScheduleName);
-        _textViewCourseScheduleName.setText(_courseName);
+        _textViewCourseName = findViewById(R.id.textViewCourseScheduleName);
+        _textViewCourseName.setText(_courseName);
         _calendarView = findViewById(R.id.calendarViewSchedule);
         _editTextTeacherName = findViewById(R.id.editTextTeacherName);
         editTextComment = findViewById(R.id.editTextComment);
@@ -135,18 +132,24 @@ public class ScheduleCreateActivity extends AppCompatActivity {
     }
 
     private void addSchedule(){
-        DatabaseHelper dbHelper = new DatabaseHelper(getApplicationContext());
-        FirebaseHelper firebaseHelper = new FirebaseHelper();
-        String dateString = _year +"-"+ _month +"-"+ _dayOfMonth;
-        _schedule = new Schedule(
+        String dateString = _dayOfMonth + "-" + _month + "-" + _year;
+        Schedule newSchedule = new Schedule(
                 _courseId,
                 dateString,
                 _editTextTeacherName.getText().toString(),
                 editTextComment.getText().toString());
-        dbHelper.insertYogaCourseSchedule(_schedule);
-        firebaseHelper.insertSchedule(_schedule,_context);
+        boolean canUploadOnFirebase = NetworkConnection.isConnected(_context);
+        if(canUploadOnFirebase){
+            newSchedule.setIsUploaded(1);
+        }
+        DatabaseHelper dbHelper = new DatabaseHelper(getApplicationContext());
+        _scheduleId = String.valueOf(dbHelper.insertSchedule(newSchedule));
 
-
+        if(!canUploadOnFirebase)
+            return;
+        newSchedule.setScheduleId(_scheduleId);
+        FirebaseHelper firebaseHelper = new FirebaseHelper();
+        firebaseHelper.insertSchedule(newSchedule);
     }
 
     /// this is a thread to add schedule to database
@@ -156,7 +159,7 @@ public class ScheduleCreateActivity extends AppCompatActivity {
             try {
                 addSchedule();
             } catch (Exception e){
-                e.printStackTrace();
+                Log.e("addScheduleThread", "Error: " + e.getMessage());
             }
         }
     }
@@ -167,7 +170,7 @@ public class ScheduleCreateActivity extends AppCompatActivity {
         boolean isValid;
         isValid = checkScheduleYear()
                 && checkScheduleMonth()
-                && checkScheduleDayOfMonth()
+//                && checkScheduleDayOfMonth()
                 && checkScheduleDayOfWeek();
         return isValid;
     }
@@ -205,16 +208,16 @@ public class ScheduleCreateActivity extends AppCompatActivity {
     }
 
     /// check schedule day of month having a current or future day of month
-    private boolean checkScheduleDayOfMonth() {
-        if (_dayOfMonth < _dayOfMonthCurrent) {
-            setErrorMessageVisible(_textViewDateErrorMessage, "Please select a current or future _date");
-            return false;
-        }
-        else{
-            setErrorMessageInvisible(_textViewDateErrorMessage);
-        }
-        return true;
-    }
+//    private boolean checkScheduleDayOfMonth() {
+//        if (_dayOfMonth < _dayOfMonthCurrent) {
+//            setErrorMessageVisible(_textViewDateErrorMessage, "Please select a current or future date");
+//            return false;
+//        }
+//        else{
+//            setErrorMessageInvisible(_textViewDateErrorMessage);
+//        }
+//        return true;
+//    }
 
     /// check schedule day of week having a correct day of week
     private boolean checkScheduleDayOfWeek() {
@@ -222,6 +225,8 @@ public class ScheduleCreateActivity extends AppCompatActivity {
 //        if(DayOfWeekEnum.valueOf(_courseDayOfWeek).ordinal()+1 != _dayOfWeek){
 //
 //        }
+
+        //compare method 2
         if (_dayOfWeekEnum[_dayOfWeek - 1] != DayOfWeekEnum.valueOf(_courseDayOfWeek)) {
             setErrorMessageVisible(_textViewDateErrorMessage, "Please select the correct day of week");
             return false;

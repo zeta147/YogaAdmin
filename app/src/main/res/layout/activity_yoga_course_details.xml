@@ -325,7 +325,7 @@
         android:fontFamily="sans-serif-black"
         android:onClick="onClickEditYogaCourse"
         android:text="@string/edit"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -340,7 +340,7 @@
         android:fontFamily="sans-serif-black"
         android:onClick="onClickSaveYogaCourse"
         android:text="@string/save"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="16sp"
 
         app:layout_constraintBottom_toBottomOf="parent"
@@ -371,7 +371,7 @@
         android:fontFamily="sans-serif-black"
         android:onClick="onClickDeleteYogaCourse"
         android:text="@string/delete"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -387,7 +387,7 @@
         android:fontFamily="sans-serif-black"
         android:onClick="onClickAddSchedule"
         android:text="@string/add_schedule_yoga_course"
-        android:textColor="@color/black"
+        android:textColor="@color/white"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

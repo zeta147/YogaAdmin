@@ -1,8 +1,8 @@
 package com.example.yogaadmin;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
+
 
 public class YogaCourseCreateActivity extends AppCompatActivity {
     private String _course_id, _name, _dayOfWeek, _time, _duration, _type, _description;
@@ -28,7 +29,6 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
             _textViewTypeErrorMessage;
     private DatabaseHelper _dbHelper;
     private FirebaseHelper _firebaseHelper;
-
     private Context _context;
     private boolean _isSuccessfulAdded;
 
@@ -47,6 +47,24 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
         _context = this;
     }
 
+    /// set error message invisible when this activity is created
+    private void InitializeSetErrorMessageInvisible(){
+        _textViewNameErrorMessage = findViewById(R.id.textViewNameErrorMessage);
+        _textViewDayOfWeekErrorMessage = findViewById(R.id.textViewDayOfWeekErrorMessage);
+        _textViewTimeErrorMessage = findViewById(R.id.textViewTimeErrorMessage);
+        _textViewCapacityErrorMessage = findViewById(R.id.textViewCapacityErrorMessage);
+        _textViewDurationErrorMessage = findViewById(R.id.textViewDurationErrorMessage);
+        _textViewPriceErrorMessage = findViewById(R.id.textViewPriceErrorMessage);
+        _textViewTypeErrorMessage = findViewById(R.id.textViewTypeErrorMessage);
+
+        _textViewNameErrorMessage.setVisibility(View.INVISIBLE);
+        _textViewDayOfWeekErrorMessage.setVisibility(View.INVISIBLE);
+        _textViewTimeErrorMessage.setVisibility(View.INVISIBLE);
+        _textViewCapacityErrorMessage.setVisibility(View.INVISIBLE);
+        _textViewDurationErrorMessage.setVisibility(View.INVISIBLE);
+        _textViewPriceErrorMessage.setVisibility(View.INVISIBLE);
+        _textViewTypeErrorMessage.setVisibility(View.INVISIBLE);
+    }
 
     /// call when click view add yoga course to insert new course to database
     public void onCLickAddCourse(View view){
@@ -75,7 +93,6 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
         }
     }
 
-
     /// insert new course to database method
     private void addNewCourse(){
         YogaCourse newCourse = new YogaCourse(null,
@@ -87,18 +104,20 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
                 _price,
                 _type,
                 _description);
-        try {
-            _dbHelper = new DatabaseHelper(getApplicationContext());
-            _course_id = String.valueOf(_dbHelper.insertYogaCourse(newCourse));
-            newCourse.setYogaCourseId(_course_id);
-            _firebaseHelper = new FirebaseHelper();
-            _firebaseHelper.insertYogaCourse(newCourse, _context);
-        } catch (RuntimeException e) {
-            _isSuccessfulAdded = false;
-            return;
+
+        boolean canUploadOnFirebase = NetworkConnection.isConnected(_context);
+        if(canUploadOnFirebase){
+            newCourse.setIsUploaded(1);
         }
-        _dbHelper.close();
+        _dbHelper = new DatabaseHelper(getApplicationContext());
+        _course_id = String.valueOf(_dbHelper.insertYogaCourse(newCourse));
         _isSuccessfulAdded = true;
+        _dbHelper.close();
+        if(!canUploadOnFirebase)
+            return;
+        newCourse.setYogaCourseId(_course_id);
+        _firebaseHelper = new FirebaseHelper();
+        _firebaseHelper.insertYogaCourse(newCourse);
     }
 
     /// this is a thread to insert new course to database
@@ -107,8 +126,8 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
         public void run() {
             try {
                 addNewCourse();
-            }catch (RuntimeException e){
-                e.printStackTrace();
+            }catch (Exception e){
+                Log.e("AddYogaCourseThread", "Error: " + e.getMessage());
             }
         }
     }
@@ -135,25 +154,6 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
         InitializeSetErrorMessageInvisible();
     }
 
-
-    /// set error message invisible when this activity is created
-    private void InitializeSetErrorMessageInvisible(){
-        _textViewNameErrorMessage = findViewById(R.id.textViewNameErrorMessage);
-        _textViewDayOfWeekErrorMessage = findViewById(R.id.textViewDayOfWeekErrorMessage);
-        _textViewTimeErrorMessage = findViewById(R.id.textViewTimeErrorMessage);
-        _textViewCapacityErrorMessage = findViewById(R.id.textViewCapacityErrorMessage);
-        _textViewDurationErrorMessage = findViewById(R.id.textViewDurationErrorMessage);
-        _textViewPriceErrorMessage = findViewById(R.id.textViewPriceErrorMessage);
-        _textViewTypeErrorMessage = findViewById(R.id.textViewTypeErrorMessage);
-
-        _textViewNameErrorMessage.setVisibility(View.INVISIBLE);
-        _textViewDayOfWeekErrorMessage.setVisibility(View.INVISIBLE);
-        _textViewTimeErrorMessage.setVisibility(View.INVISIBLE);
-        _textViewCapacityErrorMessage.setVisibility(View.INVISIBLE);
-        _textViewDurationErrorMessage.setVisibility(View.INVISIBLE);
-        _textViewPriceErrorMessage.setVisibility(View.INVISIBLE);
-        _textViewTypeErrorMessage.setVisibility(View.INVISIBLE);
-    }
 
     /// set invisible error message
     private void setErrorMessageInvisible(TextView textView){

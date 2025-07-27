@@ -1,8 +1,6 @@
 package com.example.yogaadmin;
 
-import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 
@@ -12,7 +10,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
+
 
 public class FirebaseHelper {
     private final DatabaseReference _databaseReference;
@@ -22,8 +20,7 @@ public class FirebaseHelper {
         _databaseReference = _firebaseDatabase.getReference();
     }
 
-
-    public void insertYogaCourse(YogaCourse yogaCourse, Context context) {
+    public void insertYogaCourse(YogaCourse yogaCourse) {
         try{
             _databaseReference
             .child("yogaCourses")
@@ -31,24 +28,23 @@ public class FirebaseHelper {
             .setValue(yogaCourse)
             .addOnSuccessListener(taskSnapshot -> {
                 // Handle success
-                Toast.makeText(context, "Yoga course added to firebase successfully", Toast.LENGTH_SHORT).show();
+                Log.d("Firebase", "Yoga course added to firebase successfully");
             })
             .addOnFailureListener(e -> {
                 // Handle failure
-                Toast.makeText(context, "Failed to add yoga course to firebase", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
+                Log.w("Firebase", "Failed to add yoga course to firebase");
             });
         }catch (Exception e){
-            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
         }
     }
 
     public void updateYogaCourse(YogaCourse yogaCourse) {
-        _databaseReference.child("yogaCourses").push().setValue(yogaCourse);
+        _databaseReference.child("yogaCourses").child(yogaCourse.getYogaCourseId()).setValue(yogaCourse);
     }
 
     public void deleteYogaCourse(YogaCourse yogaCourse) {
-        _databaseReference.child("yogaCourses").push().setValue(yogaCourse);
+        _databaseReference.child("yogaCourses").child(yogaCourse.getYogaCourseId()).removeValue();
     }
 
     public void deleteAllYogaCourses() {
@@ -69,51 +65,30 @@ public class FirebaseHelper {
         return count[0];
     }
 
-    public ArrayList<YogaCourse> getAllYogaCourses() {
-        ArrayList<YogaCourse> yogaCourses = new ArrayList<>();
-        _databaseReference.child("yogaCourses").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                yogaCourses.clear();
-                for (DataSnapshot yogaCourseSnapshot : dataSnapshot.getChildren()) {
-                    YogaCourse yogaCourse = yogaCourseSnapshot.getValue(YogaCourse.class);
-                    yogaCourses.add(yogaCourse);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.d("Firebase", "Failed to read value.", error.toException());
-            }
-        });
-        return yogaCourses;
-    }
-
-    public void insertSchedule(Schedule schedule, Context context) {
+    public void insertSchedule(Schedule schedule) {
         try {
             _databaseReference.child("schedules")
             .child(String.valueOf(schedule.getScheduleId()))
             .setValue(schedule).addOnSuccessListener(taskSnapshot -> {
                 // Handle success
-                Toast.makeText(context, "Schedule added to firebase successfully", Toast.LENGTH_SHORT).show();
+                Log.d("Firebase", "Schedule added to firebase successfully");
             })
             .addOnFailureListener(e -> {
                 // Handle failure
-                Toast.makeText(context, "Failed to add schedule to firebase", Toast.LENGTH_SHORT).show();
-                e.printStackTrace();
+                Log.w("Firebase", "Failed to add schedule to firebase");
             });
         }
         catch (Exception e){
-            e.printStackTrace();
+            throw new RuntimeException(e.getMessage());
         }
     }
 
     public void updateSchedule(Schedule schedule) {
-        _databaseReference.child("schedules").push().setValue(schedule);
+        _databaseReference.child("schedules").child(schedule.getScheduleId()).setValue(schedule);
     }
 
     public void deleteSchedule(Schedule schedule) {
-        _databaseReference.child("schedules").push().setValue(schedule);
+        _databaseReference.child("schedules").child(schedule.getScheduleId()).removeValue();
     }
 
     public void deleteAllSchedules() {
@@ -134,23 +109,4 @@ public class FirebaseHelper {
         return count[0];
     }
 
-    public ArrayList<Schedule> getAllSchedules() {
-        ArrayList<Schedule> schedules = new ArrayList<>();
-        _databaseReference.child("schedules").addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                schedules.clear();
-                for (DataSnapshot scheduleSnapshot : snapshot.getChildren()) {
-                    Schedule schedule = scheduleSnapshot.getValue(Schedule.class);
-                    schedules.add(schedule);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-                Log.d("Firebase", "Failed to read value.", error.toException());
-            }
-        });
-        return schedules;
-    }
 }
