@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.AdapterView;
@@ -12,7 +14,6 @@ import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import androidx.activity.EdgeToEdge;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -48,13 +49,40 @@ public class YogaCourseActivity extends AppCompatActivity {
         _yogaCoursesList = new ArrayList<YogaCourse>();
         _context = this;
         _dbSync = new DatabaseSynchronization(_context);
-        _dbSync.uploadToFireBase();
+        _dbSync.syncSQLiteFirebase();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
         getYogaCoursesList(); // Call this method to refresh the list
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_item, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.navigate_homepage) {
+            if(_context.getClass() == YogaCourseActivity.class)
+                return true;
+            Intent i = new Intent(this, YogaCourseActivity.class);
+            startActivity(i);
+            return true;
+        }
+        else if (id == R.id.navigate_schedules) {
+            if(_context.getClass() == ScheduleActivity.class)
+                return true;
+            Intent i = new Intent(this, ScheduleActivity.class);
+            startActivity(i);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void getYogaCoursesList(){

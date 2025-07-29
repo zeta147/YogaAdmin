@@ -10,6 +10,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="12dp"
+        android:fontFamily="sans-serif-medium"
         android:text="TextView"
         android:textColor="@color/black"
         android:textSize="20sp"
@@ -37,8 +38,9 @@
         android:id="@+id/textViewCourseDayOfWeekItem"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="100dp"
+        android:layout_marginStart="92dp"
         android:layout_marginTop="8dp"
+        android:gravity="right"
         android:text="TextView"
         app:layout_constraintStart_toEndOf="@+id/textViewCourseTimeItem"
         app:layout_constraintTop_toBottomOf="@+id/textViewCourseNameItem" />
@@ -47,10 +49,13 @@
         android:id="@+id/textViewCoursePriceItem"
         android:layout_width="102dp"
         android:layout_height="18dp"
-        android:layout_marginStart="304dp"
+        android:layout_marginStart="256dp"
         android:layout_marginTop="68dp"
+        android:fontFamily="sans-serif-black"
+        android:gravity="right"
         android:text="TextView"
         android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

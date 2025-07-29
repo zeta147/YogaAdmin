@@ -1,8 +1,11 @@
 package com.example.yogaadmin;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.CalendarView;
@@ -59,8 +62,35 @@ public class ScheduleDetailActivity extends AppCompatActivity {
         getCalendarCurrentDate();
         _isEditing = false;
         _context = this;
-        _schedule = new Schedule(_scheduleId, _courseId, _year + "-" + _month + "-" + _dayOfMonth, _courseTeacherName, _courseComment);
+        _schedule = new Schedule(_scheduleId, _courseId, _year + "-" + _month + "-" + _dayOfMonth, _courseTeacherName, _courseComment, 0, 0);
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_item, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.navigate_homepage) {
+            if(_context.getClass() == YogaCourseActivity.class)
+                return true;
+            Intent i = new Intent(this, YogaCourseActivity.class);
+            startActivity(i);
+            return true;
+        }
+        else if (id == R.id.navigate_schedules) {
+            if(_context.getClass() == ScheduleActivity.class)
+                return true;
+            Intent i = new Intent(this, ScheduleActivity.class);
+            startActivity(i);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /// initialize widget input, button, and error message
@@ -195,9 +225,20 @@ public class ScheduleDetailActivity extends AppCompatActivity {
     private void updateSchedule(){
         DatabaseHelper dbHelper = new DatabaseHelper(_context);
         FirebaseHelper firebaseHelper = new FirebaseHelper();
-        _schedule = new Schedule(_scheduleId, _courseId, _dayOfMonth + "-" + _month + "-" + _year, _courseTeacherName, _courseComment);
+        _schedule = new Schedule(_scheduleId,
+                _courseId,
+                _dayOfMonth + "-" + _month + "-" + _year,
+                _courseTeacherName,
+                _courseComment,
+                0,
+                0);
+
+        if(NetworkConnection.isConnected(_context)){
+            _schedule.setIsUploaded(1);
+            firebaseHelper.updateSchedule(_schedule);
+        }
         dbHelper.updateSchedule(_schedule);
-        firebaseHelper.updateSchedule(_schedule);
+        dbHelper.close();
     }
 
     /// this is a thread to update schedule to database
@@ -244,8 +285,15 @@ public class ScheduleDetailActivity extends AppCompatActivity {
     private void deleteSchedule(){
         DatabaseHelper dbHelper = new DatabaseHelper(getApplicationContext());
         FirebaseHelper firebaseHelper = new FirebaseHelper();
-        dbHelper.deleteSchedule(_schedule);
-        firebaseHelper.deleteSchedule(_schedule);
+
+        _schedule.setIsDeleted(1);
+        if(!NetworkConnection.isConnected(_context)){
+            dbHelper.updateSchedule(_schedule);
+        }
+        else {
+            dbHelper.deleteSchedule(_schedule);
+            firebaseHelper.deleteSchedule(_schedule);
+        }
     }
 
     /// this is a thread to delete schedule from database
@@ -259,10 +307,6 @@ public class ScheduleDetailActivity extends AppCompatActivity {
             }
         }
     }
-
-
-
-
 
     /// check valid date having a current or future date
     private boolean checkValidDate(){

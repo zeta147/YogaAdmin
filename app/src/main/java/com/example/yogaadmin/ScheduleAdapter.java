@@ -45,6 +45,4 @@ public class ScheduleAdapter extends BaseAdapter {
         textViewTeacherNameScheduleItem.setText(_scheduleList.get(position).getTeacherName());
         return convertView;
     }
-
-
 }

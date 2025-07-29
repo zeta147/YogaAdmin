@@ -1,12 +1,5 @@
 package com.example.yogaadmin;
 
-import android.annotation.SuppressLint;
-
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-
 public class Schedule {
     private String scheduleId;
     private String yogaCourseId;
@@ -16,6 +9,8 @@ public class Schedule {
     private String teacherName;
     private String comment;
     private int isUploaded;
+    private int isDeleted;
+
     private static final DayOfWeekEnum[] _dayOfWeekList = DayOfWeekEnum.values();
 
     /// constructors for creating schedule with default value
@@ -25,6 +20,7 @@ public class Schedule {
         teacherName = null;
         comment = null;
         isUploaded = 0;
+        isDeleted = 0;
     }
 
     /// constructors for creating schedule
@@ -34,15 +30,18 @@ public class Schedule {
         this.teacherName = teacherName;
         this.comment = comment;
         this.isUploaded = 0;
+        this.isDeleted = 0;
     }
 
     /// constructors for updating schedule
-    public Schedule(String yogaCourseScheduleId, String yogaCourseId, String date, String teacherName, String comment) {
-        if(yogaCourseScheduleId != null){this.scheduleId = yogaCourseScheduleId;}
+    public Schedule(String yogaCourseScheduleId, String yogaCourseId, String date, String teacherName, String comment, int isUploaded, int isDeleted) {
+        this.scheduleId = yogaCourseScheduleId;
         this.yogaCourseId = yogaCourseId;
         this.date = date;
         this.teacherName = teacherName;
         this.comment = comment;
+        this.isUploaded = isUploaded;
+        this.isDeleted = isDeleted;
     }
 
     /// constructors for listing schedule
@@ -64,6 +63,7 @@ public class Schedule {
     public String getTeacherName() {return this.teacherName;}
     public String getComment() {return comment;}
     public int getIsUploaded() {return isUploaded;}
+    public int getIsDeleted() {return isDeleted;}
 
     public void setScheduleId(String yogaCourseScheduleId) {this.scheduleId = yogaCourseScheduleId;}
     public void setYogaCourseId(String yogaCourseId) {this.yogaCourseId = yogaCourseId;}
@@ -73,5 +73,6 @@ public class Schedule {
     public void setTeacherName(String teacherName) {this.teacherName = teacherName;}
     public void setComment(String comment) {this.comment = comment;}
     public void setIsUploaded(int isUploaded) {this.isUploaded = isUploaded;}
+    public void setIsDeleted(int isDeleted) {this.isDeleted = isDeleted;}
 
 }

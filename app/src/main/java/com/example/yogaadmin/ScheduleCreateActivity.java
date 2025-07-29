@@ -1,8 +1,11 @@
 package com.example.yogaadmin;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.CalendarView;
 import android.widget.EditText;
@@ -25,7 +28,7 @@ public class ScheduleCreateActivity extends AppCompatActivity {
     private TextView _textViewCourseName;
     private CalendarView _calendarView;
     private Calendar _calendar;
-    private EditText _editTextTeacherName, editTextComment;
+    private EditText _editTextTeacherName, _editTextComment;
 
     private TextView _textViewDateErrorMessage,
             _textViewTeacherNameErrorMessage,
@@ -53,7 +56,33 @@ public class ScheduleCreateActivity extends AppCompatActivity {
         initializeSetErrorMessageInvisible();
         initializeCalendarView();
         _context = this;
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_item, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.navigate_homepage) {
+            if(_context.getClass() == YogaCourseActivity.class)
+                return true;
+            Intent i = new Intent(this, YogaCourseActivity.class);
+            startActivity(i);
+            return true;
+        }
+        else if (id == R.id.navigate_schedules) {
+            if(_context.getClass() == ScheduleActivity.class)
+                return true;
+            Intent i = new Intent(this, ScheduleActivity.class);
+            startActivity(i);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
 
@@ -62,7 +91,7 @@ public class ScheduleCreateActivity extends AppCompatActivity {
         _textViewCourseName.setText(_courseName);
         _calendarView = findViewById(R.id.calendarViewSchedule);
         _editTextTeacherName = findViewById(R.id.editTextTeacherName);
-        editTextComment = findViewById(R.id.editTextComment);
+        _editTextComment = findViewById(R.id.editTextComment);
     }
 
     private void getScheduleErrorMessageWidget() {
@@ -132,24 +161,26 @@ public class ScheduleCreateActivity extends AppCompatActivity {
     }
 
     private void addSchedule(){
+        DatabaseHelper dbHelper = new DatabaseHelper(getApplicationContext());
+        FirebaseHelper firebaseHelper = new FirebaseHelper();
         String dateString = _dayOfMonth + "-" + _month + "-" + _year;
         Schedule newSchedule = new Schedule(
                 _courseId,
                 dateString,
                 _editTextTeacherName.getText().toString(),
-                editTextComment.getText().toString());
-        boolean canUploadOnFirebase = NetworkConnection.isConnected(_context);
-        if(canUploadOnFirebase){
-            newSchedule.setIsUploaded(1);
-        }
-        DatabaseHelper dbHelper = new DatabaseHelper(getApplicationContext());
-        _scheduleId = String.valueOf(dbHelper.insertSchedule(newSchedule));
+                _editTextComment.getText().toString()
+        );
 
-        if(!canUploadOnFirebase)
+        if(!NetworkConnection.isConnected(_context)){
+            dbHelper.insertSchedule(newSchedule);
+            dbHelper.close();
             return;
+        }
+        newSchedule.setIsUploaded(1);
+        _scheduleId = String.valueOf(dbHelper.insertSchedule(newSchedule));
         newSchedule.setScheduleId(_scheduleId);
-        FirebaseHelper firebaseHelper = new FirebaseHelper();
         firebaseHelper.insertSchedule(newSchedule);
+        dbHelper.close();
     }
 
     /// this is a thread to add schedule to database
@@ -252,7 +283,7 @@ public class ScheduleCreateActivity extends AppCompatActivity {
 
     /// check schedule comment having less than 255 characters
     private boolean checkScheduleComment() {
-        String commentTemp = editTextComment.getText().toString();
+        String commentTemp = _editTextComment.getText().toString();
         if (commentTemp.length() > 255) {
             setErrorMessageVisible(_textViewCommentErrorMessage, "Please enter a comment less than 255 characters");
             return false;

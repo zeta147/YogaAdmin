@@ -10,6 +10,7 @@ public class YogaCourse {
     private String type;
     private String description;
     private int isUploaded;
+    private int isDeleted;
 
 
     public YogaCourse(){
@@ -23,9 +24,10 @@ public class YogaCourse {
         this.type = null;
         this.description = null;
         this.isUploaded = 0;
+        this.isDeleted = 0;
     }
 
-    public YogaCourse(String course_id, String name, String dayOfWeek, String time, int capacity, String duration, float price, String type, String description){
+    public YogaCourse(String course_id, String name, String dayOfWeek, String time, int capacity, String duration, float price, String type, String description, int isUploaded, int isDeleted){
         if(course_id != null){this.yogaCourseId = course_id;}
         this.name = name;
         this.dayOfWeek = dayOfWeek;
@@ -33,10 +35,10 @@ public class YogaCourse {
         this.capacity = capacity;
         this.duration = duration;
         this.price = price;
-//        this._price = Float.parseFloat(String.format("%.2f", price));
         this.type = type;
         if(description != null){this.description = description;}
-        this.isUploaded = 0;
+        this.isUploaded = isUploaded;
+        this.isDeleted = isDeleted;
     }
 
     public String getYogaCourseId(){return this.yogaCourseId;}
@@ -49,6 +51,7 @@ public class YogaCourse {
     public String getType(){return this.type;}
     public String getDescription(){return this.description;}
     public int getIsUploaded(){return this.isUploaded;}
+    public int getIsDeleted(){return this.isDeleted;}
 
 
     public void setYogaCourseId(String course_id){this.yogaCourseId = course_id;}
@@ -61,4 +64,5 @@ public class YogaCourse {
     public void setType(String type){this.type = type;}
     public void setDescription(String description){this.description = description;}
     public void setIsUploaded(int isUploaded){this.isUploaded = isUploaded;}
+    public void setIsDeleted(int isDeleted){this.isDeleted = isDeleted;}
 }

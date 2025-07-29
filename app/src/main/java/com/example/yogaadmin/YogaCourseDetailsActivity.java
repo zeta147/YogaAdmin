@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -18,6 +20,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class YogaCourseDetailsActivity extends AppCompatActivity {
@@ -84,7 +87,9 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
                 _duration,
                 _price,
                 _type,
-                _description);
+                _description,
+                0,
+                0);
 
         _dayOfWeekAdapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_spinner_item,
@@ -101,6 +106,33 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
 
         setYogaCourseDetailsValue();
         disableInputField();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_item, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.navigate_homepage) {
+            if(_context.getClass() == YogaCourseActivity.class)
+                return true;
+            Intent i = new Intent(this, YogaCourseActivity.class);
+            startActivity(i);
+            return true;
+        }
+        else if (id == R.id.navigate_schedules) {
+            if(_context.getClass() == ScheduleActivity.class)
+                return true;
+            Intent i = new Intent(this, ScheduleActivity.class);
+            startActivity(i);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private void InitializeWidget() {
@@ -266,12 +298,11 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
                 _duration,
                 _price,
                 _type,
-                _description);
+                _description,
+                0,
+                0);
 
-        if(!NetworkConnection.isConnected(_context)){
-            _yogaCourse.setIsUploaded(0);
-        }
-        else {
+        if(NetworkConnection.isConnected(_context)){
             _yogaCourse.setIsUploaded(1);
             firebaseHelper.updateYogaCourse(_yogaCourse);
         }
@@ -322,10 +353,25 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
 
     /// delete yoga course method
     private void deleteYogaCourse() {
-        DatabaseHelper db = new DatabaseHelper(getApplicationContext());
+        Log.d("Check network connection: ", String.valueOf(NetworkConnection.isConnected(_context)));
+        DatabaseHelper dbHelper = new DatabaseHelper(_context);
         FirebaseHelper firebaseHelper = new FirebaseHelper();
-        db.deleteYogaCourse(_yogaCourse);
-        firebaseHelper.deleteYogaCourse(_yogaCourse);
+
+        _yogaCourse.setIsDeleted(1);
+        if(!NetworkConnection.isConnected(_context)){
+            _yogaCourse.setIsUploaded(0);
+            dbHelper.updateYogaCourse(_yogaCourse);
+            ArrayList<Schedule> schedules = dbHelper.getSchedulesByCourseId(_yogaCourse.getYogaCourseId());
+            for (Schedule schedule : schedules) {
+                schedule.setIsDeleted(1);
+                dbHelper.updateSchedule(schedule);
+            }
+        }
+        else {
+            dbHelper.deleteYogaCourse(_yogaCourse);
+            firebaseHelper.deleteYogaCourse(_yogaCourse);
+        }
+        dbHelper.close();
     }
 
     /// this is a thread to delete yoga course

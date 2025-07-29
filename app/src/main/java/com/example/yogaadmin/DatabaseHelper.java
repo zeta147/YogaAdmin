@@ -26,15 +26,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     private static final String TYPE_COLUMN_NAME = "type";
     private static final String DESCRIPTION_COLUMN_NAME = "description";
     private static final String IS_UPLOADED_COURSE_COLUMN_NAME = "is_uploaded";
+    private static final String IS_DELETED_COURSE_COLUMN_NAME = "is_deleted";
 
     /// Table yoga course schedule
-    private static final String COURSE_SCHEDULE_TABLE_NAME = "yoga_course_schedules";
+    private static final String COURSE_SCHEDULE_TABLE_NAME = "schedules";
     private static final String COURSE_SCHEDULE_ID_COLUMN_NAME = "schedule_id";
     private static final String YOGA_COURSE_ID_COLUMN_NAME = "yoga_course_id";
     private static final String DATE_COLUMN_NAME = "date";
     private static final String TEACHER_NAME_COLUMN_NAME = "teacher_name";
     private static final String COMMENT_COLUMN_NAME = "comment";
     private static final String IS_UPLOADED_SCHEDULE_COLUMN_NAME = "is_uploaded";
+    private static final String IS_DELETED_SCHEDULE_COLUMN_NAME = "is_deleted";
+
     private final SQLiteDatabase database;
     private static final String DATABASE_YOGA_COURSE_CREATE_QUERY = String.format(
             "CREATE TABLE IF NOT EXISTS %s (" +                     //YOGA_COURSE_TABLE_NAME
@@ -47,11 +50,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "%s TEXT NOT NULL, " +                          //PRICE_COLUMN_NAME
                     "%s TEXT NOT NULL, " +                          //TYPE_COLUMN_NAME
                     "%s TEXT, " +                                   //DESCRIPTION_COLUMN_NAME
-                    "%s TINYINT NOT NULL)",                         //IS_UPLOADED_COURSE_COLUMN_NAME
-            YOGA_COURSE_TABLE_NAME, COURSE_ID_COLUMN_NAME, NAME_COLUMN_NAME,
-            DAY_OF_WEEK_COLUMN_NAME, TIME_COLUMN_NAME, CAPACITY_COLUMN_NAME,
-            DURATION_COLUMN_NAME, PRICE_COLUMN_NAME, TYPE_COLUMN_NAME,
-            DESCRIPTION_COLUMN_NAME, IS_UPLOADED_COURSE_COLUMN_NAME
+                    "%s TINYINT NOT NULL, "+                        //IS_UPLOADED_COURSE_COLUMN_NAME
+                    "%s TINYINT NOT NULL) ",                        //IS_DELETED_COURSE_COLUMN_NAME
+                    YOGA_COURSE_TABLE_NAME,
+                    COURSE_ID_COLUMN_NAME,
+                    NAME_COLUMN_NAME,
+                    DAY_OF_WEEK_COLUMN_NAME,
+                    TIME_COLUMN_NAME,
+                    CAPACITY_COLUMN_NAME,
+                    DURATION_COLUMN_NAME,
+                    PRICE_COLUMN_NAME,
+                    TYPE_COLUMN_NAME,
+                    DESCRIPTION_COLUMN_NAME,
+                    IS_UPLOADED_COURSE_COLUMN_NAME,
+                    IS_DELETED_COURSE_COLUMN_NAME
     );
 
     private static final String DATABASE_YOGA_COURSE_SCHEDULE_CREATE_QUERY = String.format(
@@ -62,31 +74,20 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                     "%s TEXT NOT NULL, " +                          //TEACHER_NAME_COLUMN_NAME
                     "%s TEXT, " +                                   //COMMENT_COLUMN_NAME
                     "%s TINYINT NOT NULL, " +                       //IS_UPLOADED_SCHEDULE_COLUMN_NAME
+                    "%s TINYINT NOT NULL, " +                       //IS_DELETED_SCHEDULE_COLUMN_NAME
                     "FOREIGN KEY(%s) REFERENCES %s(%s))",           //YOGA_COURSE_ID_COLUMN_NAME, YOGA_COURSE_TABLE_NAME, COURSE_ID_COLUMN_NAME
-            COURSE_SCHEDULE_TABLE_NAME,
-            COURSE_SCHEDULE_ID_COLUMN_NAME,
-            YOGA_COURSE_ID_COLUMN_NAME,
-            DATE_COLUMN_NAME,
-            TEACHER_NAME_COLUMN_NAME,
-            COMMENT_COLUMN_NAME,
-            IS_UPLOADED_SCHEDULE_COLUMN_NAME,
-            YOGA_COURSE_ID_COLUMN_NAME,
-            YOGA_COURSE_TABLE_NAME,
-            COURSE_ID_COLUMN_NAME
+                    COURSE_SCHEDULE_TABLE_NAME,
+                    COURSE_SCHEDULE_ID_COLUMN_NAME,
+                    YOGA_COURSE_ID_COLUMN_NAME,
+                    DATE_COLUMN_NAME,
+                    TEACHER_NAME_COLUMN_NAME,
+                    COMMENT_COLUMN_NAME,
+                    IS_UPLOADED_SCHEDULE_COLUMN_NAME,
+                    IS_DELETED_SCHEDULE_COLUMN_NAME,
+                    YOGA_COURSE_ID_COLUMN_NAME, YOGA_COURSE_TABLE_NAME, COURSE_ID_COLUMN_NAME
     );
 
-    private static final String COURSE_JOIN_SCHEDULE_QUERY =
-            "SELECT " + "y" + "." + COURSE_ID_COLUMN_NAME + ", " +
-                        "y" + "." + NAME_COLUMN_NAME + ", " +
-                        "y" + "." + DAY_OF_WEEK_COLUMN_NAME + ", " +
-                        "s" + "." + COURSE_SCHEDULE_ID_COLUMN_NAME+ ", " +
-                        "s" + "." + DATE_COLUMN_NAME + ", " +
-                        "s" + "." + TEACHER_NAME_COLUMN_NAME + ", " +
-                        "s" + "." + COMMENT_COLUMN_NAME + " " +
-            "FROM "  +  YOGA_COURSE_TABLE_NAME + " y " +                    // y stand for yoga courses
-            "JOIN "  +  COURSE_SCHEDULE_TABLE_NAME + " s " +                // s stand for schedule
-            "ON "    +  "y" + "." + COURSE_ID_COLUMN_NAME + " = " + "s" + "." + YOGA_COURSE_ID_COLUMN_NAME + " "+
-            "ORDER BY " + "s" + "." + DATE_COLUMN_NAME + " ASC";
+
 
 
     public DatabaseHelper(Context context){
@@ -131,6 +132,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         rowValues.put(TYPE_COLUMN_NAME,course.getType());
         rowValues.put(DESCRIPTION_COLUMN_NAME,course.getDescription());
         rowValues.put(IS_UPLOADED_COURSE_COLUMN_NAME,course.getIsUploaded());
+        rowValues.put(IS_DELETED_COURSE_COLUMN_NAME,course.getIsDeleted());
         return database.insertOrThrow(YOGA_COURSE_TABLE_NAME, null, rowValues);
     }
 
@@ -145,6 +147,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         rowValues.put(TYPE_COLUMN_NAME,course.getType());
         rowValues.put(DESCRIPTION_COLUMN_NAME,course.getDescription());
         rowValues.put(IS_UPLOADED_COURSE_COLUMN_NAME,course.getIsUploaded());
+        rowValues.put(IS_DELETED_COURSE_COLUMN_NAME,course.getIsDeleted());
         database.update(YOGA_COURSE_TABLE_NAME, rowValues, COURSE_ID_COLUMN_NAME + "=" + course.getYogaCourseId(), null);
     }
 
@@ -165,6 +168,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public ArrayList<YogaCourse> getAllYogaCourses(){
+        ArrayList<YogaCourse> arrayListCourse = new ArrayList<YogaCourse>();
         Cursor results = database.query("yoga_courses",
                 new String[]{"course_id",
                         "name",
@@ -174,37 +178,11 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                         "duration",
                         "price",
                         "type",
-                        "description"},
-                null, null, null, null, "name");
+                        "description",
+                        "is_uploaded",
+                        "is_deleted"},
+                "is_deleted = 0", null, null, null, "name");
 
-        ArrayList<YogaCourse> arrayListCourse = new ArrayList<YogaCourse>();
-
-        results.moveToFirst();
-        while(!results.isAfterLast()){
-            int course_id = results.getInt(0);
-            String name = results.getString(1);
-            String day_of_week = results.getString(2);
-            String time = results.getString(3);
-            int capacity = results.getInt(4);
-            String duration = results.getString(5);
-            float price = results.getFloat(6);
-            String type = results.getString(7);
-            String description = results.getString(8);
-
-            String idStr = String.valueOf(course_id);
-            YogaCourse course = new YogaCourse(idStr, name, day_of_week, time, capacity, duration, price, type, description);
-            arrayListCourse.add(course);
-
-            results.moveToNext();
-        }
-        results.close();
-        return arrayListCourse;
-    }
-
-    public ArrayList<YogaCourse> getYogaCourseNotUpload(){
-        String QUERY = "SELECT * FROM yoga_courses WHERE is_uploaded = 0";
-        ArrayList<YogaCourse> arrayListCourse = new ArrayList<YogaCourse>();
-        Cursor results = database.rawQuery(QUERY, null);
 
         results.moveToFirst();
         while(!results.isAfterLast()){
@@ -218,6 +196,64 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             course.setPrice(results.getFloat(6));
             course.setType(results.getString(7));
             course.setDescription(results.getString(8));
+            course.setIsUploaded(results.getInt(9));
+            course.setIsDeleted(results.getInt(10));
+            arrayListCourse.add(course);
+            results.moveToNext();
+        }
+        results.close();
+        return arrayListCourse;
+    }
+
+    public ArrayList<YogaCourse> getYogaCoursesNotUpload(){
+        ArrayList<YogaCourse> arrayListCourse = new ArrayList<YogaCourse>();
+        Cursor results = database.query(
+                "yoga_courses",
+                new String[]{"course_id",
+                        "name",
+                        "day_of_week",
+                        "time",
+                        "capacity",
+                        "duration",
+                        "price",
+                        "type",
+                        "description",
+                        "is_uploaded",
+                        "is_deleted"},
+                "is_uploaded = 0 AND is_deleted = 0", null, null, null, "name");
+
+        results.moveToFirst();
+        while(!results.isAfterLast()){
+            YogaCourse course = new YogaCourse();
+            course.setYogaCourseId(results.getString(0));
+            course.setName(results.getString(1));
+            course.setDayOfWeek(results.getString(2));
+            course.setTime(results.getString(3));
+            course.setCapacity(results.getInt(4));
+            course.setDuration(results.getString(5));
+            course.setPrice(results.getFloat(6));
+            course.setType(results.getString(7));
+            course.setDescription(results.getString(8));
+            course.setIsUploaded(results.getInt(9));
+            course.setIsDeleted(results.getInt(10));
+            arrayListCourse.add(course);
+            results.moveToNext();
+        }
+        results.close();
+        return arrayListCourse;
+    }
+
+    public ArrayList<YogaCourse> getYogaCoursesDeleted(){
+        ArrayList<YogaCourse> arrayListCourse = new ArrayList<YogaCourse>();
+        Cursor results = database.query(
+                "yoga_courses",
+                new String[]{"course_id"},
+                "is_deleted = 1", null, null, null, null);
+
+        results.moveToFirst();
+        while(!results.isAfterLast()){
+            YogaCourse course = new YogaCourse();
+            course.setYogaCourseId(results.getString(0));
             arrayListCourse.add(course);
             results.moveToNext();
         }
@@ -233,6 +269,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         rowValues.put(TEACHER_NAME_COLUMN_NAME,schedule.getTeacherName());
         rowValues.put(COMMENT_COLUMN_NAME,schedule.getComment());
         rowValues.put(IS_UPLOADED_SCHEDULE_COLUMN_NAME,schedule.getIsUploaded());
+        rowValues.put(IS_DELETED_SCHEDULE_COLUMN_NAME,schedule.getIsDeleted());
         return database.insertOrThrow(COURSE_SCHEDULE_TABLE_NAME, null, rowValues);
     }
 
@@ -243,6 +280,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         rowValues.put(TEACHER_NAME_COLUMN_NAME,schedule.getTeacherName());
         rowValues.put(COMMENT_COLUMN_NAME,schedule.getComment());
         rowValues.put(IS_UPLOADED_SCHEDULE_COLUMN_NAME,schedule.getIsUploaded());
+        rowValues.put(IS_DELETED_SCHEDULE_COLUMN_NAME,schedule.getIsDeleted());
         database.update(COURSE_SCHEDULE_TABLE_NAME, rowValues, COURSE_SCHEDULE_ID_COLUMN_NAME + "=" + schedule.getScheduleId(), null);
     }
 
@@ -256,13 +294,16 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public ArrayList<Schedule> getAllSchedules() {
-        Cursor results = database.query("yoga_course_schedules",
-                new String[]{"yoga_course_schedule_id",
+        Cursor results = database.query(
+                "schedules",
+                new String[]{"schedule_id",
                         "yoga_course_id",
                         "date",
                         "teacher_name",
-                        "comment"},
-                null, null, null, null, "date");
+                        "comment",
+                        "is_uploaded",
+                        "is_deleted"},
+                "is_deleted = 0", null, null, null, "date");
         ArrayList<Schedule> arrayListSchedule = new ArrayList<Schedule>();
         results.moveToFirst();
         while (!results.isAfterLast()) {
@@ -273,7 +314,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
             String comment = results.getString(4);
             String idStr = String.valueOf(yoga_course_schedule_id);
             String yoga_course_idStr = String.valueOf(yoga_course_id);
-            Schedule schedule = new Schedule(idStr, yoga_course_idStr, date, teacher_name, comment);
+            Schedule schedule = new Schedule(idStr, yoga_course_idStr, date, teacher_name, comment, 0, 0);
             arrayListSchedule.add(schedule);
             results.moveToNext();
         }
@@ -281,10 +322,49 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return arrayListSchedule;
     }
 
-    public ArrayList<Schedule> getScheduleNotUpload(){
-        String QUERY = "SELECT * FROM yoga_course_schedules WHERE is_uploaded = 0";
+    public ArrayList<Schedule> getSchedulesByCourseId(String yoga_course_id){
         ArrayList<Schedule> arrayListSchedule = new ArrayList<Schedule>();
-        Cursor results = database.rawQuery(QUERY, null);
+        Cursor results = database.query(
+                "schedules",
+                new String[]{"schedule_id",
+                        "yoga_course_id",
+                        "date",
+                        "teacher_name",
+                        "comment",
+                        "is_uploaded",
+                        "is_deleted"},
+                "yoga_course_id = " + yoga_course_id + " AND is_deleted = 0", null, null, null, "date");
+
+        results.moveToFirst();
+        while(!results.isAfterLast()) {
+            Schedule schedule = new Schedule();
+            schedule.setScheduleId(results.getString(0));
+            schedule.setYogaCourseId(results.getString(1));
+            schedule.setDate(results.getString(2));
+            schedule.setTeacherName(results.getString(3));
+            schedule.setComment(results.getString(4));
+            arrayListSchedule.add(schedule);
+            results.moveToNext();
+        }
+        results.close();
+        return arrayListSchedule;
+    }
+
+
+    public ArrayList<Schedule> getSchedulesNotUpload(){
+        ArrayList<Schedule> arrayListSchedule = new ArrayList<Schedule>();
+
+        Cursor results = database.query(
+                "schedules",
+                new String[]{"schedule_id",
+                        "yoga_course_id",
+                        "date",
+                        "teacher_name",
+                        "comment",
+                        "is_uploaded",
+                        "is_deleted"},
+                "is_uploaded = 0 AND is_deleted = 0", null, null, null, "date"
+        );
         results.moveToFirst();
         while(!results.isAfterLast()){
             Schedule schedule = new Schedule();
@@ -300,8 +380,41 @@ public class DatabaseHelper extends SQLiteOpenHelper {
         return arrayListSchedule;
     }
 
+    public ArrayList<Schedule> getSchedulesDeleted(){
+        ArrayList<Schedule> arrayListSchedule = new ArrayList<Schedule>();
+        Cursor results = database.query(
+                "schedules",
+                new String[]{"schedule_id"},
+                "is_deleted = 1", null, null, null, null);
+
+        results.moveToFirst();
+        while(!results.isAfterLast()){
+            Schedule schedule = new Schedule();
+            schedule.setScheduleId(results.getString(0));
+            arrayListSchedule.add(schedule);
+            results.moveToNext();
+        }
+        results.close();
+        return arrayListSchedule;
+    }
+
+
     @SuppressLint("Recycle")
     public ArrayList<Schedule> getYogaCourseJoinScheduleList(){
+         String COURSE_JOIN_SCHEDULE_QUERY =
+                "SELECT " + "y" + "." + COURSE_ID_COLUMN_NAME + ", " +
+                        "y" + "." + NAME_COLUMN_NAME + ", " +
+                        "y" + "." + DAY_OF_WEEK_COLUMN_NAME + ", " +
+                        "s" + "." + COURSE_SCHEDULE_ID_COLUMN_NAME+ ", " +
+                        "s" + "." + DATE_COLUMN_NAME + ", " +
+                        "s" + "." + TEACHER_NAME_COLUMN_NAME + ", " +
+                        "s" + "." + COMMENT_COLUMN_NAME + " " +
+                        "FROM "  +  YOGA_COURSE_TABLE_NAME + " y " +                    // y stand for yoga courses
+                        "JOIN "  +  COURSE_SCHEDULE_TABLE_NAME + " s " +                // s stand for schedule
+                        "ON "    +  "y" + "." + COURSE_ID_COLUMN_NAME + " = " + "s" + "." + YOGA_COURSE_ID_COLUMN_NAME + " "+
+                        "WHERE " +  "s" + "." + IS_DELETED_SCHEDULE_COLUMN_NAME + " = 0 " +
+                        "ORDER BY " + "s" + "." + DATE_COLUMN_NAME + " ASC";
+
         Cursor results = database.rawQuery(COURSE_JOIN_SCHEDULE_QUERY, null, null);
         ArrayList<Schedule> arrayListSchedule = new ArrayList<Schedule>();
         results.moveToFirst();
@@ -342,17 +455,18 @@ public class DatabaseHelper extends SQLiteOpenHelper {
 
          String COURSE_JOIN_SCHEDULE_FILTERED_QUERY =
                 "SELECT " + "y" + "." + COURSE_ID_COLUMN_NAME + ", " +
-                        "y" + "." + NAME_COLUMN_NAME + ", " +
-                        "y" + "." + DAY_OF_WEEK_COLUMN_NAME + ", " +
-                        "s" + "." + COURSE_SCHEDULE_ID_COLUMN_NAME+ ", " +
-                        "s" + "." + DATE_COLUMN_NAME + ", " +
-                        "s" + "." + TEACHER_NAME_COLUMN_NAME + ", " +
-                        "s" + "." + COMMENT_COLUMN_NAME + " " +
-                        "FROM "  +  YOGA_COURSE_TABLE_NAME + " y " +
-                        "JOIN "  +  COURSE_SCHEDULE_TABLE_NAME + " s " +
-                        "ON " + "y" + "." + COURSE_ID_COLUMN_NAME + " = " + " s" + "." + YOGA_COURSE_ID_COLUMN_NAME + " "+
-                        "WHERE " + "s" + "." + columnSearchName + " LIKE '%" + keyWord + "%' " +
-                        "ORDER BY " + "s" + "." + DATE_COLUMN_NAME + " ASC " ;
+                            "y" + "." + NAME_COLUMN_NAME + ", " +
+                            "y" + "." + DAY_OF_WEEK_COLUMN_NAME + ", " +
+                            "s" + "." + COURSE_SCHEDULE_ID_COLUMN_NAME+ ", " +
+                            "s" + "." + DATE_COLUMN_NAME + ", " +
+                            "s" + "." + TEACHER_NAME_COLUMN_NAME + ", " +
+                            "s" + "." + COMMENT_COLUMN_NAME + " " +
+                "FROM "  +  YOGA_COURSE_TABLE_NAME + " y " +
+                "JOIN "  +  COURSE_SCHEDULE_TABLE_NAME + " s " +
+                "ON "    + "y" + "." + COURSE_ID_COLUMN_NAME + " = " + " s" + "." + YOGA_COURSE_ID_COLUMN_NAME + " "+
+                "WHERE " + "s" + "." + columnSearchName + " LIKE '%" + keyWord + "%' " +
+                "AND "   + "s" + "." + IS_DELETED_SCHEDULE_COLUMN_NAME + " = 0 " +
+                "ORDER BY " + "s" + "." + DATE_COLUMN_NAME + " ASC " ;
         Cursor results = database.rawQuery(COURSE_JOIN_SCHEDULE_FILTERED_QUERY, null, null);
         ArrayList<Schedule> arrayListSchedule = new ArrayList<Schedule>();
         results.moveToFirst();

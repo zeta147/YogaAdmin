@@ -1,8 +1,11 @@
 package com.example.yogaadmin;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -27,10 +30,7 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
             _textViewDurationErrorMessage,
             _textViewPriceErrorMessage,
             _textViewTypeErrorMessage;
-    private DatabaseHelper _dbHelper;
-    private FirebaseHelper _firebaseHelper;
     private Context _context;
-    private boolean _isSuccessfulAdded;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +45,33 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
 
         InitializeSetErrorMessageInvisible();
         _context = this;
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_item, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.navigate_homepage) {
+            if(_context.getClass() == YogaCourseActivity.class)
+                return true;
+            Intent i = new Intent(this, YogaCourseActivity.class);
+            startActivity(i);
+            return true;
+        }
+        else if (id == R.id.navigate_schedules) {
+            if(_context.getClass() == ScheduleActivity.class)
+                return true;
+            Intent i = new Intent(this, ScheduleActivity.class);
+            startActivity(i);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     /// set error message invisible when this activity is created
@@ -85,16 +112,15 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
         Thread t = new Thread(new AddYogaCourseThread());
         t.start();
         while(t.isAlive()){} // wait for thread to finish
-        if(!_isSuccessfulAdded){
-            Toast.makeText(this, "Course create failed", Toast.LENGTH_SHORT).show();
-        }
-        else{
-            Toast.makeText(this, "Course with id: " + _course_id + " create successfully", Toast.LENGTH_SHORT).show();
-        }
+        Toast.makeText(this, "Course create successfully", Toast.LENGTH_SHORT).show();
+
+
     }
 
     /// insert new course to database method
     private void addNewCourse(){
+        DatabaseHelper dbHelper = new DatabaseHelper(getApplicationContext());
+        FirebaseHelper firebaseHelper = new FirebaseHelper();
         YogaCourse newCourse = new YogaCourse(null,
                 _name,
                 _dayOfWeek,
@@ -103,21 +129,20 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
                 _duration,
                 _price,
                 _type,
-                _description);
+                _description,
+                0,
+                0);
 
-        boolean canUploadOnFirebase = NetworkConnection.isConnected(_context);
-        if(canUploadOnFirebase){
-            newCourse.setIsUploaded(1);
-        }
-        _dbHelper = new DatabaseHelper(getApplicationContext());
-        _course_id = String.valueOf(_dbHelper.insertYogaCourse(newCourse));
-        _isSuccessfulAdded = true;
-        _dbHelper.close();
-        if(!canUploadOnFirebase)
+        if(!NetworkConnection.isConnected(_context)) {
+            dbHelper.insertYogaCourse(newCourse);
+            dbHelper.close();
             return;
+        }
+        newCourse.setIsUploaded(1);
+        _course_id = String.valueOf(dbHelper.insertYogaCourse(newCourse));
         newCourse.setYogaCourseId(_course_id);
-        _firebaseHelper = new FirebaseHelper();
-        _firebaseHelper.insertYogaCourse(newCourse);
+        firebaseHelper.insertYogaCourse(newCourse);
+        dbHelper.close();
     }
 
     /// this is a thread to insert new course to database
