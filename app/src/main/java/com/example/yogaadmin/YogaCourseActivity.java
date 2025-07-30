@@ -95,6 +95,9 @@ public class YogaCourseActivity extends AppCompatActivity {
         if(_yogaCoursesList.isEmpty()){
             _panelNoYogaCourseMessage.setVisibility(View.VISIBLE);
         }
+        else{
+            _panelNoYogaCourseMessage.setVisibility(View.GONE);
+        }
         setListViewYogaCourse();
     }
 

@@ -15,13 +15,15 @@
         android:background="@drawable/listview_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextSearchBar" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextSearchBar"
+        app:layout_constraintVertical_bias="1.0" />
 
     <TextView
         android:id="@+id/textViewScheduleListLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
+        android:layout_marginStart="132dp"
+        android:layout_marginTop="4dp"
         android:fontFamily="sans-serif-black"
         android:text="@string/yoga_course_schedule_label"
         android:textColor="@color/black"
@@ -33,25 +35,27 @@
         android:id="@+id/spinnerSearchType"
         android:layout_width="120dp"
         android:layout_height="48dp"
-        android:layout_marginTop="64dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="68dp"
         android:background="@drawable/searchbar_background"
         android:entries="@array/search_type"
-        app:layout_constraintEnd_toStartOf="@+id/editTextSearchBar"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/editTextSearchBar"
-        android:layout_width="240dp"
+        android:layout_width="235dp"
         android:layout_height="48dp"
+        android:layout_marginStart="124dp"
+        android:layout_marginTop="68dp"
         android:background="@drawable/searchbar_background"
         android:ems="10"
         android:hint="@string/search"
         android:inputType="text"
-        android:paddingLeft="5dp"
-        app:layout_constraintEnd_toStartOf="@+id/imageButtonSearch"
-        app:layout_constraintStart_toEndOf="@+id/spinnerSearchType"
-        app:layout_constraintTop_toTopOf="@+id/spinnerSearchType" />
+        android:paddingStart="5dp"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageButton
         android:id="@+id/imageButtonSearch"
@@ -59,6 +63,7 @@
         android:layout_height="48dp"
         android:background="@drawable/button_background"
         android:clickable="true"
+        android:contentDescription="@string/search"
         android:focusable="true"
         android:onClick="onClickSearchSchedule"
         android:padding="5dp"
@@ -102,7 +107,6 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp" />
     </RelativeLayout>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

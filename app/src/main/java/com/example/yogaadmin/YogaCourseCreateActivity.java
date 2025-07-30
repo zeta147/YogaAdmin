@@ -113,8 +113,7 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
         t.start();
         while(t.isAlive()){} // wait for thread to finish
         Toast.makeText(this, "Course create successfully", Toast.LENGTH_SHORT).show();
-
-
+        finish();
     }
 
     /// insert new course to database method
@@ -199,6 +198,10 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
             setErrorMessageVisible(_textViewNameErrorMessage, "Name cannot be empty");
             return false;
         }
+        else if(nameTemp.length() > 255){
+            setErrorMessageVisible(_textViewNameErrorMessage, "Name cannot be more than 255 characters");
+            return false;
+        }
         else {
             setErrorMessageInvisible(_textViewNameErrorMessage);
         }
@@ -250,7 +253,7 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
         try {
             _capacity = Integer.parseInt(capacityTemp);
         } catch (NumberFormatException e) {
-            setErrorMessageVisible(_textViewCapacityErrorMessage, "Capacity must be a number");
+            setErrorMessageVisible(_textViewCapacityErrorMessage, "Capacity is not valid (or is too large)");
             return false;
         }
         return true;
@@ -284,7 +287,7 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
         try {
             _price = Float.parseFloat(priceTemp);
         } catch (NumberFormatException e) {
-            setErrorMessageVisible(_textViewPriceErrorMessage, "Price must be a number");
+            setErrorMessageVisible(_textViewPriceErrorMessage, "Price is not valid (or is too large)");
             return false;
         }
         return true;

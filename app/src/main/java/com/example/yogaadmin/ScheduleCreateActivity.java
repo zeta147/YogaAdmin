@@ -200,7 +200,7 @@ public class ScheduleCreateActivity extends AppCompatActivity {
     private boolean checkValidDate(){
         boolean isValid;
         isValid = checkScheduleYear()
-                && checkScheduleMonth()
+//                && checkScheduleMonth()
 //                && checkScheduleDayOfMonth()
                 && checkScheduleDayOfWeek();
         return isValid;
@@ -227,16 +227,16 @@ public class ScheduleCreateActivity extends AppCompatActivity {
     }
 
     /// check schedule month having a current or future month
-    private boolean checkScheduleMonth() {
-        if (_month < _monthCurrent) {
-            setErrorMessageVisible(_textViewDateErrorMessage, "Please select a current or future month");
-            return false;
-        }
-        else{
-            setErrorMessageInvisible(_textViewDateErrorMessage);
-        }
-        return true;
-    }
+//    private boolean checkScheduleMonth() {
+//        if (_month < _monthCurrent) {
+//            setErrorMessageVisible(_textViewDateErrorMessage, "Please select a current or future month");
+//            return false;
+//        }
+//        else{
+//            setErrorMessageInvisible(_textViewDateErrorMessage);
+//        }
+//        return true;
+//    }
 
     /// check schedule day of month having a current or future day of month
 //    private boolean checkScheduleDayOfMonth() {
@@ -275,7 +275,12 @@ public class ScheduleCreateActivity extends AppCompatActivity {
         if (teacherNameTemp.isEmpty()) {
             setErrorMessageVisible(_textViewTeacherNameErrorMessage, "Please enter teacher name");
             return false;
-        } else {
+        }
+        else if (teacherNameTemp.length() > 50) {
+            setErrorMessageVisible(_textViewTeacherNameErrorMessage, "Please enter a teacher name less than 50 characters");
+            return false;
+        }
+        else {
             setErrorMessageInvisible(_textViewTeacherNameErrorMessage);
         }
         return true;

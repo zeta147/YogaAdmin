@@ -36,7 +36,6 @@ public class ScheduleDetailActivity extends AppCompatActivity {
     private TextView _textViewDateScheduleErrorMessage,
                     _textViewTeacherNameErrorMessage,
                     _textViewCommentErrorMessage;
-
     private Button _buttonEdit,
             _buttonSave,
             _buttonCancel,
@@ -178,8 +177,8 @@ public class ScheduleDetailActivity extends AppCompatActivity {
 
     /// call when click view button
     private void viewMode(){
-        _buttonSave.setVisibility(View.INVISIBLE);
-        _buttonCancel.setVisibility(View.INVISIBLE);
+        _buttonSave.setVisibility(View.GONE);
+        _buttonCancel.setVisibility(View.GONE);
         _buttonEdit.setVisibility(View.VISIBLE);
         _buttonDelete.setVisibility(View.VISIBLE);
         disableInputWidget();
@@ -189,11 +188,10 @@ public class ScheduleDetailActivity extends AppCompatActivity {
     private void editMode(){
         _buttonSave.setVisibility(View.VISIBLE);
         _buttonCancel.setVisibility(View.VISIBLE);
-        _buttonEdit.setVisibility(View.INVISIBLE);
-        _buttonDelete.setVisibility(View.INVISIBLE);
+        _buttonEdit.setVisibility(View.GONE);
+        _buttonDelete.setVisibility(View.GONE);
         enableInputWidget();
     }
-
 
     /// call when click update schedule
     public void onClickUpdateSchedule(View view){
@@ -294,6 +292,7 @@ public class ScheduleDetailActivity extends AppCompatActivity {
             dbHelper.deleteSchedule(_schedule);
             firebaseHelper.deleteSchedule(_schedule);
         }
+        dbHelper.close();
     }
 
     /// this is a thread to delete schedule from database
@@ -312,8 +311,8 @@ public class ScheduleDetailActivity extends AppCompatActivity {
     private boolean checkValidDate(){
         boolean isValid;
         isValid = checkScheduleYear()
-                && checkScheduleMonth()
-                && checkScheduleDayOfMonth()
+//                && checkScheduleMonth()
+//                && checkScheduleDayOfMonth()
                 && checkScheduleDayOfWeek();
         return isValid;
     }
@@ -338,28 +337,28 @@ public class ScheduleDetailActivity extends AppCompatActivity {
     }
 
     /// check schedule month having a current or future month
-    private boolean checkScheduleMonth(){
-        if(_month < _monthCurrent){
-            setErrorMessageVisible(_textViewDateScheduleErrorMessage, "Please select a current or future month");
-            return false;
-        }
-        else{
-            setErrorMessageInvisible(_textViewDateScheduleErrorMessage);
-        }
-        return true;
-    }
+//    private boolean checkScheduleMonth(){
+//        if(_month < _monthCurrent){
+//            setErrorMessageVisible(_textViewDateScheduleErrorMessage, "Please select a current or future month");
+//            return false;
+//        }
+//        else{
+//            setErrorMessageInvisible(_textViewDateScheduleErrorMessage);
+//        }
+//        return true;
+//    }
 
     /// check schedule day of month having a current or future day of month
-    private boolean checkScheduleDayOfMonth(){
-        if(_dayOfMonth < _dayOfMonthCurrent){
-            setErrorMessageVisible(_textViewDateScheduleErrorMessage, "Please select a current or future date");
-            return false;
-        }
-        else{
-            setErrorMessageInvisible(_textViewDateScheduleErrorMessage);
-        }
-        return true;
-    }
+//    private boolean checkScheduleDayOfMonth(){
+//        if(_dayOfMonth < _dayOfMonthCurrent){
+//            setErrorMessageVisible(_textViewDateScheduleErrorMessage, "Please select a current or future date");
+//            return false;
+//        }
+//        else{
+//            setErrorMessageInvisible(_textViewDateScheduleErrorMessage);
+//        }
+//        return true;
+//    }
 
     /// check schedule day of week having a correct day of week
     private boolean checkScheduleDayOfWeek(){
@@ -383,6 +382,10 @@ public class ScheduleDetailActivity extends AppCompatActivity {
         String teacherNameTemp = _editTextTeacherName.getText().toString();
         if(teacherNameTemp.isEmpty()){
             setErrorMessageVisible(_textViewTeacherNameErrorMessage, "Please enter teacher name");
+            return false;
+        }
+        else if(teacherNameTemp.length() > 50){
+            setErrorMessageVisible(_textViewTeacherNameErrorMessage, "Please enter a teacher name less than 50 characters");
             return false;
         }
         else{

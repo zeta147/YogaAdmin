@@ -30,6 +30,7 @@
         android:layout_marginTop="16dp"
         android:background="@drawable/button_background"
         android:clickable="true"
+        android:contentDescription="@string/create_course_label"
         android:focusable="true"
         android:onClick="onClickViewAddYogaCourse"
         android:padding="5dp"
@@ -46,6 +47,7 @@
         android:layout_marginTop="16dp"
         android:background="@drawable/button_background"
         android:clickable="true"
+        android:contentDescription="@string/yoga_course_schedule_label"
         android:focusable="true"
         android:onClick="onClickViewYogaCourseSchedule"
         android:padding="5dp"
@@ -53,6 +55,18 @@
         app:layout_constraintStart_toEndOf="@+id/buttonAddYogaCourse"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/button_schedule" />
+
+    <ListView
+        android:id="@+id/listViewYogaCourse"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="25dp"
+        android:background="@drawable/listview_background"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonAddYogaCourse" />
 
     <RelativeLayout
         android:id="@+id/panelNoYogaCourseMessage"
@@ -70,7 +84,8 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:text="@string/no_yoga_course_message"
-            android:textSize="24sp" />
+            android:textSize="24sp"
+            tools:visibility="visible" />
     </RelativeLayout>
 
     <RelativeLayout
@@ -89,18 +104,6 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp" />
     </RelativeLayout>
-
-    <ListView
-        android:id="@+id/listViewYogaCourse"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginTop="25dp"
-        android:scrollbars="vertical"
-        android:background="@drawable/listview_background"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/buttonAddYogaCourse" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

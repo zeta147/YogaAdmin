@@ -48,9 +48,9 @@
         <item>180 Minutes</item>
     </string-array>
     <string-array name="type">
-        <item>Beginner</item>
-        <item>Intermediate</item>
-        <item>Advanced</item>
+        <item>Flow Yoga</item>
+        <item>Aerial Yoga</item>
+        <item>Family Yoga</item>
     </string-array>
     <string-array name="search_type">
         <item>teacher name</item>
@@ -70,7 +70,6 @@
     <string name="teacher_label">Teacher:</string>"
     <string name="teacher_name_label">Teacher Name</string>
     <string name="comment_label">Comment (Optional)</string>
-
     <string name="yoga_course_label">Yoga Courses</string>
     <string name="create_course_label">Create Yoga Course</string>"
     <string name="yoga_course_details_label">Yoga Course Details</string>
@@ -79,10 +78,21 @@
     <string name="yoga_course_schedule_details_label">Course Schedule Details</string>
 
     <string name="search">Search</string>
+    <string name="search_type_label">Search type: </string>
+    <string name="error_message">Error message</string>"
+
+    <string name="course_name_hint">Enter course Name</string>
+    <string name="day_of_week_hint">Please choose day of week</string>
+    <string name="time_hint">Please choose time</string>
+    <string name="capacity_hint">Enter capacity (number)</string>
+    <string name="duration_hint">Enter duration</string>"
+    <string name="price_hint">Enter price</string>
+    <string name="type_hint">Pleas choose type</string>
+    <string name="description_hint">Enter to describe the course</string>
+    <string name="teacher_name_hint">Enter teacher Name</string>
+    <string name="comment_hint">Enter comment</string>
 
     <string name="no_yoga_course_message">No yoga course found</string>"
-
     <string name="no_schedule_message">No schedule found</string>
-
 
 </resources>

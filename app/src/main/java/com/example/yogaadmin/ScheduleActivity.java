@@ -95,7 +95,8 @@ public class ScheduleActivity extends AppCompatActivity {
         _panelLoading.setVisibility(View.GONE);
         if(_scheduleList.isEmpty()){
             _panelNoScheduleMessage.setVisibility(View.VISIBLE);
-        }else{
+        }
+        else{
             _panelNoScheduleMessage.setVisibility(View.GONE);
         }
         _scheduleAdapter = new ScheduleAdapter(this, _scheduleList);

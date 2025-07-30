@@ -237,8 +237,8 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
     }
 
     private void viewMode() {
-        _buttonSave.setVisibility(View.INVISIBLE);
-        _buttonCancel.setVisibility(View.INVISIBLE);
+        _buttonSave.setVisibility(View.GONE);
+        _buttonCancel.setVisibility(View.GONE);
         _buttonEdit.setVisibility(View.VISIBLE);
         _buttonDelete.setVisibility(View.VISIBLE);
         disableInputField();
@@ -247,8 +247,8 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
     private void editMode(){
         _buttonSave.setVisibility(View.VISIBLE);
         _buttonCancel.setVisibility(View.VISIBLE);
-        _buttonEdit.setVisibility(View.INVISIBLE);
-        _buttonDelete.setVisibility(View.INVISIBLE);
+        _buttonEdit.setVisibility(View.GONE);
+        _buttonDelete.setVisibility(View.GONE);
         enableInputField();
     }
 
@@ -412,7 +412,12 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
         if (nameTemp.isEmpty()) {
             setErrorMessageVisible(_textViewNameErrorMessage, "Please enter course name");
             return false;
-        } else {
+        }
+        else if (nameTemp.length() > 255) {
+            setErrorMessageVisible(_textViewNameErrorMessage, "Course name cannot be more than 255 characters");
+            return false;
+        }
+        else {
             setErrorMessageInvisible(_textViewNameErrorMessage);
         }
         _name = nameTemp;
@@ -425,7 +430,8 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
         if (dayOfWeekTemp.isEmpty()) {
             setErrorMessageVisible(_textViewDayOfWeekErrorMessage, "Please select day of week");
             return false;
-        } else {
+        }
+        else {
             setErrorMessageInvisible(_textViewDayOfWeekErrorMessage);
         }
         _dayOfWeek = dayOfWeekTemp;
@@ -438,7 +444,8 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
         if (timeTemp.isEmpty()) {
             setErrorMessageVisible(_textViewTimeErrorMessage, "Please select time");
             return false;
-        } else {
+        }
+        else {
             setErrorMessageInvisible(_textViewTimeErrorMessage);
             _time = timeTemp;
         }
@@ -451,10 +458,16 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
         if (capacityTemp.isEmpty()) {
             setErrorMessageVisible(_textViewCapacityErrorMessage, "Please enter capacity");
             return false;
-        } else {
+        }
+        else {
             setErrorMessageInvisible(_textViewCapacityErrorMessage);
         }
-        _capacity = Integer.parseInt(capacityTemp);
+        try {
+            _capacity = Integer.parseInt(capacityTemp);
+        } catch (NumberFormatException e) {
+            setErrorMessageVisible(_textViewCapacityErrorMessage, "Capacity is not valid (or is too large)");
+            return false;
+        }
         return true;
 
     }
@@ -465,7 +478,8 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
         if (durationTemp.isEmpty()) {
             setErrorMessageVisible(_textViewDurationErrorMessage, "Please select duration");
             return false;
-        } else {
+        }
+        else {
             setErrorMessageInvisible(_textViewDurationErrorMessage);
         }
         _duration = durationTemp;
@@ -478,10 +492,17 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
         if (priceTemp.isEmpty()) {
             setErrorMessageVisible(_textViewPriceErrorMessage, "Please enter price");
             return false;
-        } else {
+        }
+        else {
             setErrorMessageInvisible(_textViewPriceErrorMessage);
         }
-        _price = Float.parseFloat(priceTemp);
+        try {
+            _price = Float.parseFloat(priceTemp);
+        }
+        catch (NumberFormatException e) {
+            setErrorMessageVisible(_textViewPriceErrorMessage, "Price is not valid (or is too large)");
+            return false;
+        }
         return true;
     }
 
@@ -491,7 +512,8 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
         if (typeTemp.isEmpty()) {
             setErrorMessageVisible(_textViewTypeErrorMessage, "Please select type");
             return false;
-        } else {
+        }
+        else {
             setErrorMessageInvisible(_textViewTypeErrorMessage);
         }
         _type = typeTemp;
@@ -504,7 +526,8 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
         if (descriptionTemp.length() > 255) {
             setErrorMessageVisible(_textViewDescriptionErrorMessage, "Description cannot be more than 255 characters");
             return false;
-        } else {
+        }
+        else {
             setErrorMessageInvisible(_textViewDescriptionErrorMessage);
         }
         _description = descriptionTemp;
