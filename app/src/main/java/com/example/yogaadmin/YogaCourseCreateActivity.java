@@ -29,7 +29,9 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
             _textViewCapacityErrorMessage,
             _textViewDurationErrorMessage,
             _textViewPriceErrorMessage,
-            _textViewTypeErrorMessage;
+            _textViewTypeErrorMessage,
+            _textViewDescriptionErrorMessage;
+
     private Context _context;
 
     @Override
@@ -83,6 +85,7 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
         _textViewDurationErrorMessage = findViewById(R.id.textViewDurationErrorMessage);
         _textViewPriceErrorMessage = findViewById(R.id.textViewPriceErrorMessage);
         _textViewTypeErrorMessage = findViewById(R.id.textViewTypeErrorMessage);
+        _textViewDescriptionErrorMessage = findViewById(R.id.textViewDescriptionErrorMessage);
 
         _textViewNameErrorMessage.setVisibility(View.INVISIBLE);
         _textViewDayOfWeekErrorMessage.setVisibility(View.INVISIBLE);
@@ -91,6 +94,7 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
         _textViewDurationErrorMessage.setVisibility(View.INVISIBLE);
         _textViewPriceErrorMessage.setVisibility(View.INVISIBLE);
         _textViewTypeErrorMessage.setVisibility(View.INVISIBLE);
+        _textViewDescriptionErrorMessage.setVisibility(View.INVISIBLE);
     }
 
     /// call when click view add yoga course to insert new course to database
@@ -313,11 +317,11 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
         EditText editTextDescription = findViewById(R.id.editTextDescription);
         String descriptionTemp = editTextDescription.getText().toString();
         if(descriptionTemp.length() > 255){
-            setErrorMessageVisible(_textViewTypeErrorMessage, "Description cannot be more than 255 characters");
+            setErrorMessageVisible(_textViewDescriptionErrorMessage, "Description cannot be more than 255 characters");
             return false;
         }
         else {
-            setErrorMessageInvisible(_textViewTypeErrorMessage);
+            setErrorMessageInvisible(_textViewDescriptionErrorMessage);
         }
         _description = descriptionTemp;
         return true;
