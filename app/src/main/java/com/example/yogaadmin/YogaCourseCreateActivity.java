@@ -197,7 +197,7 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
     /// check input name is empty and return false, return true if name is not empty
     private boolean checkInputName(){
         EditText editTextName = findViewById(R.id.editTextCourseName);
-        String nameTemp = editTextName.getText().toString();
+        String nameTemp = editTextName.getText().toString().trim();
         if(nameTemp.isEmpty()){
             setErrorMessageVisible(_textViewNameErrorMessage, "Name cannot be empty");
             return false;
@@ -246,7 +246,7 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
     /// check input capacity is empty and return false, return true if capacity is not empty
     private boolean checkInputCapacity(){
         EditText editTextCapacity = findViewById(R.id.editTextCapacity);
-        String capacityTemp = editTextCapacity.getText().toString();
+        String capacityTemp = editTextCapacity.getText().toString().trim();
         if(capacityTemp.isEmpty()){
             setErrorMessageVisible(_textViewCapacityErrorMessage, "Capacity cannot be empty");
             return false;
@@ -280,7 +280,7 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
     /// check input price is empty and return false, return true if price is not empty
     private boolean checkInputPrice(){
         EditText editTextPrice = findViewById(R.id.editTextPrice);
-        String priceTemp = editTextPrice.getText().toString();
+        String priceTemp = editTextPrice.getText().toString().trim();
         if(priceTemp.isEmpty()){
             setErrorMessageVisible(_textViewPriceErrorMessage, "Price cannot be empty");
             return false;
@@ -312,12 +312,12 @@ public class YogaCourseCreateActivity extends AppCompatActivity {
         return true;
     }
 
-    /// check input description has more than 255 characters and return false, return true if description has less than 255 characters
+    /// check input description has more than 2000 characters and return false, return true if description has less than 2000 characters
     private boolean checkInputDescription(){
         EditText editTextDescription = findViewById(R.id.editTextDescription);
-        String descriptionTemp = editTextDescription.getText().toString();
-        if(descriptionTemp.length() > 255){
-            setErrorMessageVisible(_textViewDescriptionErrorMessage, "Description cannot be more than 255 characters");
+        String descriptionTemp = editTextDescription.getText().toString().trim();
+        if(descriptionTemp.length() > 2000){
+            setErrorMessageVisible(_textViewDescriptionErrorMessage, "Description cannot be more than 2000 characters");
             return false;
         }
         else {

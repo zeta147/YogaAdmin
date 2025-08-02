@@ -408,7 +408,7 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
 
     /// check input name is empty and return false, return true if name is not empty
     private boolean checkYogaCourseDetailsName() {
-        String nameTemp = _textViewCourseName.getText().toString();
+        String nameTemp = _textViewCourseName.getText().toString().trim();
         if (nameTemp.isEmpty()) {
             setErrorMessageVisible(_textViewNameErrorMessage, "Please enter course name");
             return false;
@@ -454,7 +454,7 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
 
     /// check input capacity is empty and return false, return true if capacity is not empty
     private boolean checkYogaCourseDetailsCapacity() {
-        String capacityTemp = _textViewCourseCapacity.getText().toString();
+        String capacityTemp = _textViewCourseCapacity.getText().toString().trim();
         if (capacityTemp.isEmpty()) {
             setErrorMessageVisible(_textViewCapacityErrorMessage, "Please enter capacity");
             return false;
@@ -488,7 +488,7 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
 
     /// check input price is empty and return false, return true if price is not empty
     private boolean checkYogaCourseDetailsPrice() {
-        String priceTemp = _textViewCoursePrice.getText().toString();
+        String priceTemp = _textViewCoursePrice.getText().toString().trim();
         if (priceTemp.isEmpty()) {
             setErrorMessageVisible(_textViewPriceErrorMessage, "Please enter price");
             return false;
@@ -520,11 +520,11 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
         return true;
     }
 
-    /// check input description has more than 255 characters and return false, return true if description has less than 255 characters
+    /// check input description has more than 2000 characters and return false, return true if description has less than 2000 characters
     private boolean checkYogaCourseDetailsDescription() {
-        String descriptionTemp = _textViewCourseDescription.getText().toString();
-        if (descriptionTemp.length() > 255) {
-            setErrorMessageVisible(_textViewDescriptionErrorMessage, "Description cannot be more than 255 characters");
+        String descriptionTemp = _textViewCourseDescription.getText().toString().trim();
+        if (descriptionTemp.length() > 2000) {
+            setErrorMessageVisible(_textViewDescriptionErrorMessage, "Description cannot be more than 2000 characters");
             return false;
         }
         else {

@@ -22,7 +22,7 @@ import androidx.core.view.WindowInsetsCompat;
 import java.util.Calendar;
 
 public class ScheduleCreateActivity extends AppCompatActivity {
-    private String _scheduleId, _courseId, _courseName, _courseDayOfWeek;
+    private String _scheduleId, _courseId, _courseName, _courseDayOfWeek, _teacherName, _comment;
     private int _year, _month, _dayOfMonth, _dayOfWeek;
 
     private TextView _textViewCourseName;
@@ -265,13 +265,12 @@ public class ScheduleCreateActivity extends AppCompatActivity {
         else {
             setErrorMessageInvisible(_textViewDateErrorMessage);
         }
-
         return true;
     }
 
     /// check schedule teacher name is not empty
     private boolean checkScheduleTeacherName() {
-        String teacherNameTemp = _editTextTeacherName.getText().toString();
+        String teacherNameTemp = _editTextTeacherName.getText().toString().trim();
         if (teacherNameTemp.isEmpty()) {
             setErrorMessageVisible(_textViewTeacherNameErrorMessage, "Please enter teacher name");
             return false;
@@ -283,18 +282,21 @@ public class ScheduleCreateActivity extends AppCompatActivity {
         else {
             setErrorMessageInvisible(_textViewTeacherNameErrorMessage);
         }
+        _teacherName = teacherNameTemp;
         return true;
     }
 
-    /// check schedule comment having less than 255 characters
+    /// check schedule comment having less than 1000 characters
     private boolean checkScheduleComment() {
-        String commentTemp = _editTextComment.getText().toString();
-        if (commentTemp.length() > 255) {
-            setErrorMessageVisible(_textViewCommentErrorMessage, "Please enter a comment less than 255 characters");
+        String commentTemp = _editTextComment.getText().toString().trim();
+        if (commentTemp.length() > 1000) {
+            setErrorMessageVisible(_textViewCommentErrorMessage, "Please enter a comment less than 1000 characters");
             return false;
-        } else {
+        }
+        else {
             setErrorMessageInvisible(_textViewCommentErrorMessage);
         }
+        _comment = commentTemp;
         return true;
     }
 

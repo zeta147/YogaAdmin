@@ -379,13 +379,13 @@ public class ScheduleDetailActivity extends AppCompatActivity {
 
     /// check schedule teacher name is not empty
     private boolean checkScheduleTeacherName(){
-        String teacherNameTemp = _editTextTeacherName.getText().toString();
+        String teacherNameTemp = _editTextTeacherName.getText().toString().trim();
         if(teacherNameTemp.isEmpty()){
             setErrorMessageVisible(_textViewTeacherNameErrorMessage, "Please enter teacher name");
             return false;
         }
-        else if(teacherNameTemp.length() > 50){
-            setErrorMessageVisible(_textViewTeacherNameErrorMessage, "Please enter a teacher name less than 50 characters");
+        else if(teacherNameTemp.length() > 255){
+            setErrorMessageVisible(_textViewTeacherNameErrorMessage, "Please enter a teacher name less than 255 characters");
             return false;
         }
         else{
@@ -395,11 +395,11 @@ public class ScheduleDetailActivity extends AppCompatActivity {
         return true;
     }
 
-    /// check schedule comment having less than 255 characters
+    /// check schedule comment having less than 1000 characters
     private boolean checkScheduleComment(){
-        String commentTemp = _editTextComment.getText().toString();
-        if(commentTemp.length() > 255){
-            setErrorMessageVisible(_textViewCommentErrorMessage, "Please enter a comment less than 255 characters");
+        String commentTemp = _editTextComment.getText().toString().trim();
+        if(commentTemp.length() > 1000){
+            setErrorMessageVisible(_textViewCommentErrorMessage, "Please enter a comment less than 1000 characters");
             return false;
         }
         else{

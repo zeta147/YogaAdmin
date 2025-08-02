@@ -133,11 +133,19 @@ public class ScheduleActivity extends AppCompatActivity {
 
     /// call when click search schedule to search teacher name of the schedule
     public void onClickSearchSchedule(View view){
+        _panelLoading.setVisibility(View.VISIBLE);
         String searchType = _spinnerSearchType.getSelectedItem().toString();
         String keyWord = _editTextScheduleSearchBar.getText().toString();
         Thread searchScheduleThread = new Thread(new searchScheduleThread(keyWord, searchType));
         searchScheduleThread.start();
         while(searchScheduleThread.isAlive()){}
+        _panelLoading.setVisibility(View.GONE);
+        if(_scheduleList.isEmpty()){
+            _panelNoScheduleMessage.setVisibility(View.VISIBLE);
+        }
+        else {
+            _panelNoScheduleMessage.setVisibility(View.GONE);
+        }
         _scheduleAdapter = new ScheduleAdapter(this, _scheduleList);
         _listViewSchedule.setAdapter((ListAdapter) _scheduleAdapter);
         _listViewSchedule.setOnItemClickListener(new AdapterView.OnItemClickListener() {

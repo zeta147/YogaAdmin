@@ -437,19 +437,21 @@ public class DatabaseHelper extends SQLiteOpenHelper {
     }
 
     public ArrayList<Schedule> getScheduleSearchList(String keyWord, String searchType){
+        // y is yoga courses table name, s is schedule table name
+
         String columnSearchName = "";
         switch (searchType){
             case "course name":
-                columnSearchName = NAME_COLUMN_NAME;
+                columnSearchName = "y." + NAME_COLUMN_NAME;
                 break;
             case "teacher name":
-                columnSearchName = TEACHER_NAME_COLUMN_NAME;
+                columnSearchName = "s." + TEACHER_NAME_COLUMN_NAME;
                 break;
             case "date":
-                columnSearchName = DATE_COLUMN_NAME;
+                columnSearchName = "s." + DATE_COLUMN_NAME;
                 break;
             default:
-                columnSearchName = TEACHER_NAME_COLUMN_NAME;
+                columnSearchName = "y." + TEACHER_NAME_COLUMN_NAME;
                 break;
         }
 
@@ -464,7 +466,7 @@ public class DatabaseHelper extends SQLiteOpenHelper {
                 "FROM "  +  YOGA_COURSE_TABLE_NAME + " y " +
                 "JOIN "  +  COURSE_SCHEDULE_TABLE_NAME + " s " +
                 "ON "    + "y" + "." + COURSE_ID_COLUMN_NAME + " = " + " s" + "." + YOGA_COURSE_ID_COLUMN_NAME + " "+
-                "WHERE " + "s" + "." + columnSearchName + " LIKE '%" + keyWord + "%' " +
+                "WHERE " +  columnSearchName + " LIKE '%" + keyWord + "%' " +
                 "AND "   + "s" + "." + IS_DELETED_SCHEDULE_COLUMN_NAME + " = 0 " +
                 "ORDER BY " + "s" + "." + DATE_COLUMN_NAME + " ASC " ;
         Cursor results = database.rawQuery(COURSE_JOIN_SCHEDULE_FILTERED_QUERY, null, null);
