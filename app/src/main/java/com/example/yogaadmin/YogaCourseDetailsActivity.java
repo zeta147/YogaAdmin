@@ -279,7 +279,7 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
             Thread updateDatabaseYogaCourse = new Thread(new UpdateDatabaseYogaCourse());
             updateDatabaseYogaCourse.start();
             while (updateDatabaseYogaCourse.isAlive()) {}
-            Toast.makeText(this, "Course with id: " + _course_id + " has been updated", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Course name: " + _name + " has been updated", Toast.LENGTH_SHORT).show();
             finish();
         });
         alertDialog.create().show();
@@ -344,7 +344,7 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
             Thread deleteDatabaseYogaCourse = new Thread(new DeleteDatabaseYogaCourseThread());
             deleteDatabaseYogaCourse.start();
             while (deleteDatabaseYogaCourse.isAlive()) {}
-            Toast.makeText(this, "Course with id: " + _course_id + " has been deleted", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Course name: " + _name + " has been deleted", Toast.LENGTH_SHORT).show();
             finish();
         });
         alertDialog.create().show();

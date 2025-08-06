@@ -214,7 +214,7 @@ public class ScheduleDetailActivity extends AppCompatActivity {
             Thread t = new Thread(new UpdateScheduleThread());
             t.start();
             while(t.isAlive()){}
-            Toast.makeText(this, "Update _schedule successfully", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Update schedule successfully", Toast.LENGTH_SHORT).show();
         });
         alertDialog.create().show();
     }
@@ -273,7 +273,7 @@ public class ScheduleDetailActivity extends AppCompatActivity {
             Thread t = new Thread(new DeleteScheduleThread());
             t.start();
             while(t.isAlive()){}
-            Toast.makeText(_context, "Delete _schedule successfully", Toast.LENGTH_SHORT).show();
+            Toast.makeText(_context, "Delete schedule successfully", Toast.LENGTH_SHORT).show();
             finish();
         });
         alertDialog.create().show();
