@@ -92,6 +92,12 @@ public class ScheduleDetailActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getCalendarViewDate();
+    }
+
     /// initialize widget input, button, and error message
     private void initializeWidget(){
         _textViewCourseName = findViewById(R.id.textViewCourseScheduleName);
@@ -163,6 +169,7 @@ public class ScheduleDetailActivity extends AppCompatActivity {
 
     /// get date from calendar view
     private void getCalendarViewDate(){
+
         _calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             @Override
             public void onSelectedDayChange(@NonNull CalendarView view, int year, int month, int dayOfMonth) {
@@ -196,14 +203,13 @@ public class ScheduleDetailActivity extends AppCompatActivity {
     /// call when click update schedule
     public void onClickUpdateSchedule(View view){
         if(!_isEditing) {
-            Toast.makeText(_context, "Please click edit button to update _schedule", Toast.LENGTH_SHORT).show();
+            Toast.makeText(_context, "Please click edit button to update schedule", Toast.LENGTH_SHORT).show();
             return;
         }
         boolean canUpdateSchedule;
         getCalendarViewDate();
         canUpdateSchedule = checkValidDate() && checkValidInput();
         if(!canUpdateSchedule){
-            Toast.makeText(_context, "Please check your input", Toast.LENGTH_SHORT).show();
             return;
         }
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(_context);
@@ -369,7 +375,8 @@ public class ScheduleDetailActivity extends AppCompatActivity {
         //_dayOfWeek is one based (Sunday = 1)
         //dayOfWeekEnum is zero based (Sunday = 0)
         if(_dayOfWeekEnum[_dayOfWeek - 1] != DayOfWeekEnum.valueOf(_courseDayOfWeek)){
-            setErrorMessageVisible(_textViewDateScheduleErrorMessage, "Please select the correct day of week");
+            setErrorMessageVisible(_textViewDateScheduleErrorMessage, "Please select on "+DayOfWeekEnum.valueOf(_courseDayOfWeek).toString());
+            return false;
         }
         else{
             setErrorMessageInvisible(_textViewDateScheduleErrorMessage);

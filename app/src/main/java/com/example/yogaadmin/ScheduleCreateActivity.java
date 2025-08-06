@@ -85,6 +85,11 @@ public class ScheduleCreateActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        getCalendarViewDate();
+    }
 
     private void getScheduleInputWidget() {
         _textViewCourseName = findViewById(R.id.textViewCourseScheduleName);
@@ -143,7 +148,6 @@ public class ScheduleCreateActivity extends AppCompatActivity {
         _monthCurrent = _calendar.get(Calendar.MONTH)+1; //Calendar.MONTH is zero based
         _dayOfMonthCurrent = _calendar.get(Calendar.DAY_OF_MONTH);
     }
-
 
     /// call when click add schedule
     public void onClickAddSchedule(View view) {
@@ -259,7 +263,7 @@ public class ScheduleCreateActivity extends AppCompatActivity {
 
         //compare method 2
         if (_dayOfWeekEnum[_dayOfWeek - 1] != DayOfWeekEnum.valueOf(_courseDayOfWeek)) {
-            setErrorMessageVisible(_textViewDateErrorMessage, "Please select the correct day of week");
+            setErrorMessageVisible(_textViewDateErrorMessage, "Please select on " + DayOfWeekEnum.valueOf(_courseDayOfWeek).toString());
             return false;
         }
         else {

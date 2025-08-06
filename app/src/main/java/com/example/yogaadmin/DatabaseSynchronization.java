@@ -56,7 +56,6 @@ public class DatabaseSynchronization {
             catch (Exception e){
                 Log.e("DatabaseSynchronization", "Error getting not upload yoga course list:" + e.getMessage());
             }
-
         }
     }
 
