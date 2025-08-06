@@ -42,11 +42,10 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
             _textViewTypeErrorMessage,
             _textViewDescriptionErrorMessage;
 
-
-    Spinner _textViewCourseDayOfWeek,
-            _textViewCourseTime,
-            _textViewCourseDuration,
-            _textViewCourseType;
+    Spinner _spinnerCourseDayOfWeek,
+            _spinnerCourseTime,
+            _spinnerCourseDuration,
+            _spinnerCourseType;
 
     Button _buttonEdit,
             _buttonSave,
@@ -74,7 +73,7 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
             return insets;
         });
         assignYogaCourseDetailsValue();
-        InitializeWidget();
+        initializeWidget();
         initializeSetErrorMessageInvisible();
         _context = this;
         _isEditing = false;
@@ -90,20 +89,6 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
                 _description,
                 0,
                 0);
-
-        _dayOfWeekAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item,
-                getResources().getStringArray(R.array.day_of_week));
-        _timeAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item,
-                getResources().getStringArray(R.array.time));
-        _durationAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item,
-                getResources().getStringArray(R.array.duration));
-        _typeAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item,
-                getResources().getStringArray(R.array.type));
-
         setYogaCourseDetailsValue();
         disableInputField();
     }
@@ -135,14 +120,14 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void InitializeWidget() {
+    private void initializeWidget() {
         _textViewCourseName = findViewById(R.id.textViewNameValue);
-        _textViewCourseDayOfWeek = findViewById(R.id.textViewDayOfWeekValue);
-        _textViewCourseTime = findViewById(R.id.textViewTimeValue);
+        _spinnerCourseDayOfWeek = findViewById(R.id.textViewDayOfWeekValue);
+        _spinnerCourseTime = findViewById(R.id.textViewTimeValue);
         _textViewCourseCapacity = findViewById(R.id.textViewCapacityValue);
-        _textViewCourseDuration = findViewById(R.id.textViewDurationValue);
+        _spinnerCourseDuration = findViewById(R.id.textViewDurationValue);
         _textViewCoursePrice = findViewById(R.id.textViewPriceValue);
-        _textViewCourseType = findViewById(R.id.textViewTypeValue);
+        _spinnerCourseType = findViewById(R.id.textViewTypeValue);
         _textViewCourseDescription = findViewById(R.id.textViewDescriptionValue);
 
         _textViewNameErrorMessage = findViewById(R.id.textViewNameErrorMessage);
@@ -188,51 +173,64 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
     }
 
     private void setYogaCourseDetailsValue() {
+        _dayOfWeekAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item,
+                getResources().getStringArray(R.array.day_of_week));
+        _timeAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item,
+                getResources().getStringArray(R.array.time));
+        _durationAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item,
+                getResources().getStringArray(R.array.duration));
+        _typeAdapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_spinner_item,
+                getResources().getStringArray(R.array.type));
+
         int position = 0;
         _textViewCourseName.setText(_name);
         position = _dayOfWeekAdapter.getPosition(_dayOfWeek);
-        _textViewCourseDayOfWeek.setSelection(position);
+        _spinnerCourseDayOfWeek.setSelection(position);
         position = _timeAdapter.getPosition(_time);
-        _textViewCourseTime.setSelection(position);
+        _spinnerCourseTime.setSelection(position);
         _textViewCourseCapacity.setText(String.valueOf(_capacity));
         position = _durationAdapter.getPosition(_duration);
-        _textViewCourseDuration.setSelection(position);
+        _spinnerCourseDuration.setSelection(position);
         _textViewCoursePrice.setText(String.valueOf(_price));
         position = _typeAdapter.getPosition(_type);
-        _textViewCourseType.setSelection(position);
+        _spinnerCourseType.setSelection(position);
         _textViewCourseDescription.setText(_description);
     }
 
     private void getYogaCourseDetailsValue() {
         _name = _textViewCourseName.getText().toString();
-        _dayOfWeek = _textViewCourseDayOfWeek.getSelectedItem().toString();
-        _time = _textViewCourseTime.getSelectedItem().toString();
+        _dayOfWeek = _spinnerCourseDayOfWeek.getSelectedItem().toString();
+        _time = _spinnerCourseTime.getSelectedItem().toString();
         _capacity = Integer.parseInt(_textViewCourseCapacity.getText().toString());
-        _duration = _textViewCourseDuration.getSelectedItem().toString();
+        _duration = _spinnerCourseDuration.getSelectedItem().toString();
         _price = Float.parseFloat(_textViewCoursePrice.getText().toString());
-        _type = _textViewCourseType.getSelectedItem().toString();
+        _type = _spinnerCourseType.getSelectedItem().toString();
         _description = _textViewCourseDescription.getText().toString();
     }
 
     private void disableInputField() {
         _textViewCourseName.setEnabled(false);
-        _textViewCourseDayOfWeek.setEnabled(false);
-        _textViewCourseTime.setEnabled(false);
+        _spinnerCourseDayOfWeek.setEnabled(false);
+        _spinnerCourseTime.setEnabled(false);
         _textViewCourseCapacity.setEnabled(false);
-        _textViewCourseDuration.setEnabled(false);
+        _spinnerCourseDuration.setEnabled(false);
         _textViewCoursePrice.setEnabled(false);
-        _textViewCourseType.setEnabled(false);
+        _spinnerCourseType.setEnabled(false);
         _textViewCourseDescription.setEnabled(false);
     }
 
     private void enableInputField() {
         _textViewCourseName.setEnabled(true);
-        _textViewCourseDayOfWeek.setEnabled(true);
-        _textViewCourseTime.setEnabled(true);
+        _spinnerCourseDayOfWeek.setEnabled(true);
+        _spinnerCourseTime.setEnabled(true);
         _textViewCourseCapacity.setEnabled(true);
-        _textViewCourseDuration.setEnabled(true);
+        _spinnerCourseDuration.setEnabled(true);
         _textViewCoursePrice.setEnabled(true);
-        _textViewCourseType.setEnabled(true);
+        _spinnerCourseType.setEnabled(true);
         _textViewCourseDescription.setEnabled(true);
     }
 
@@ -426,7 +424,7 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
 
     /// check input day of week is empty and return false, return true if day of week is not empty
     private boolean checkYogaCourseDetailsDayOfWeek() {
-        String dayOfWeekTemp = _textViewCourseDayOfWeek.getSelectedItem().toString();
+        String dayOfWeekTemp = _spinnerCourseDayOfWeek.getSelectedItem().toString();
         if (dayOfWeekTemp.isEmpty()) {
             setErrorMessageVisible(_textViewDayOfWeekErrorMessage, "Please select day of week");
             return false;
@@ -440,7 +438,7 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
 
     /// check input time is empty and return false, return true if time is not empty
     private boolean checkYogaCourseDetailsTime() {
-        String timeTemp = _textViewCourseTime.getSelectedItem().toString();
+        String timeTemp = _spinnerCourseTime.getSelectedItem().toString();
         if (timeTemp.isEmpty()) {
             setErrorMessageVisible(_textViewTimeErrorMessage, "Please select time");
             return false;
@@ -474,7 +472,7 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
 
     /// check input duration is empty and return false, return true if duration is not empty
     private boolean checkYogaCourseDetailsDuration() {
-        String durationTemp = _textViewCourseDuration.getSelectedItem().toString();
+        String durationTemp = _spinnerCourseDuration.getSelectedItem().toString();
         if (durationTemp.isEmpty()) {
             setErrorMessageVisible(_textViewDurationErrorMessage, "Please select duration");
             return false;
@@ -508,7 +506,7 @@ public class YogaCourseDetailsActivity extends AppCompatActivity {
 
     /// check input type is empty and return false, return true if type is not empty
     private boolean checkYogaCourseDetailsType() {
-        String typeTemp = _textViewCourseType.getSelectedItem().toString();
+        String typeTemp = _spinnerCourseType.getSelectedItem().toString();
         if (typeTemp.isEmpty()) {
             setErrorMessageVisible(_textViewTypeErrorMessage, "Please select type");
             return false;
