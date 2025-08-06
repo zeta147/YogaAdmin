@@ -10,6 +10,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
 
 
 public class FirebaseHelper {
@@ -24,7 +25,7 @@ public class FirebaseHelper {
         try{
             _databaseReference
             .child("yogaCourses")
-            .child(String.valueOf(yogaCourse.getYogaCourseId()))
+            .push()
             .setValue(yogaCourse)
             .addOnSuccessListener(taskSnapshot -> {
                 // Handle success
@@ -35,16 +36,58 @@ public class FirebaseHelper {
                 Log.w("Firebase", "Failed to add yoga course to firebase");
             });
         }catch (Exception e){
-            throw new RuntimeException(e.getMessage());
+            Log.e("FirebaseHelper", "Error: " + e.getMessage());
         }
     }
 
     public void updateYogaCourse(YogaCourse yogaCourse) {
-        _databaseReference.child("yogaCourses").child(yogaCourse.getYogaCourseId()).setValue(yogaCourse);
+        HashMap<String, Object> yogaCourseValues = new HashMap<>();
+        yogaCourseValues.put("name", yogaCourse.getName());
+        yogaCourseValues.put("dayOfWeek", yogaCourse.getDayOfWeek());
+        yogaCourseValues.put("time", yogaCourse.getTime());
+        yogaCourseValues.put("capacity", yogaCourse.getCapacity());
+        yogaCourseValues.put("duration", yogaCourse.getDuration());
+        yogaCourseValues.put("price", yogaCourse.getPrice());
+        yogaCourseValues.put("type", yogaCourse.getType());
+        yogaCourseValues.put("description", yogaCourse.getDescription());
+        yogaCourseValues.put("isUploaded", yogaCourse.getIsUploaded());
+        yogaCourseValues.put("isDeleted", yogaCourse.getIsDeleted());
+
+        _databaseReference.child("yogaCourses")
+                .orderByChild("yogaCourseId")
+                .equalTo(yogaCourse.getYogaCourseId())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot yogaCourseSnapshot : snapshot.getChildren()) {
+                            yogaCourseSnapshot.getRef().updateChildren(yogaCourseValues);
+                        }
+                        Log.d("Firebase", "Yoga course updated in firebase successfully");
+                    }
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+                        Log.w("Firebase", "Failed to update yoga course in firebase");
+                    }
+        });
     }
 
     public void deleteYogaCourse(YogaCourse yogaCourse) {
-        _databaseReference.child("yogaCourses").child(yogaCourse.getYogaCourseId()).removeValue();
+        _databaseReference.child("yogaCourses")
+        .orderByChild("yogaCourseId")
+        .equalTo(yogaCourse.getYogaCourseId())
+        .addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot yogaCourseSnapshot : snapshot.getChildren()) {
+                    yogaCourseSnapshot.getRef().removeValue();
+                }
+                Log.d("Firebase", "Yoga course deleted from firebase successfully");
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w("Firebase", "Failed to delete yoga course from firebase");
+            }
+        });
     }
 
     public void deleteAllYogaCourses() {
@@ -68,7 +111,7 @@ public class FirebaseHelper {
     public void insertSchedule(Schedule schedule) {
         try {
             _databaseReference.child("schedules")
-            .child(String.valueOf(schedule.getScheduleId()))
+            .push()
             .setValue(schedule).addOnSuccessListener(taskSnapshot -> {
                 // Handle success
                 Log.d("Firebase", "Schedule added to firebase successfully");
@@ -84,11 +127,50 @@ public class FirebaseHelper {
     }
 
     public void updateSchedule(Schedule schedule) {
-        _databaseReference.child("schedules").child(schedule.getScheduleId()).setValue(schedule);
+        HashMap<String, Object> scheduleValues = new HashMap<>();
+        scheduleValues.put("courseId", schedule.getYogaCourseId());
+        scheduleValues.put("date", schedule.getDate());
+        scheduleValues.put("teacherName", schedule.getTeacherName());
+        scheduleValues.put("comment", schedule.getComment());
+        scheduleValues.put("isUploaded", schedule.getIsUploaded());
+        scheduleValues.put("isDeleted", schedule.getIsDeleted());
+
+        _databaseReference.child("schedules")
+        .orderByChild("scheduleId")
+        .equalTo(schedule.getScheduleId())
+        .addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot scheduleSnapshot : snapshot.getChildren()) {
+                    scheduleSnapshot.getRef().updateChildren(scheduleValues);
+                }
+                Log.d("Firebase", "Schedule updated in firebase successfully");
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w("Firebase", "Failed to update schedule in firebase");
+            }
+        });
     }
 
     public void deleteSchedule(Schedule schedule) {
-        _databaseReference.child("schedules").child(schedule.getScheduleId()).removeValue();
+        _databaseReference.child("schedules")
+        .orderByChild("scheduleId")
+        .equalTo(schedule.getScheduleId())
+        .addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot scheduleSnapshot : snapshot.getChildren()) {
+                    scheduleSnapshot.getRef().removeValue();
+                    Log.d("Firebase", "Schedule deleted from firebase successfully");
+                }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w("Firebase", "Failed to delete schedule from firebase");
+            }
+        });
     }
 
     public void deleteAllSchedules() {

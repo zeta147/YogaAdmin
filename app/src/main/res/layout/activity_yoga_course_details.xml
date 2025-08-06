@@ -385,15 +385,17 @@
     <Button
         android:id="@+id/buttonAddSchedule"
         android:layout_width="130dp"
-        android:layout_height="65dp"
+        android:layout_height="75dp"
         android:layout_marginStart="142dp"
-        android:layout_marginBottom="50dp"
-        android:backgroundTint="#FF2196F3"
+        android:layout_marginBottom="45dp"
+        android:backgroundTint="@color/white"
         android:fontFamily="sans-serif-black"
         android:onClick="onClickAddSchedule"
         android:text="@string/add_schedule_yoga_course"
-        android:textColor="@color/white"
+        android:textColor="@color/blue"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:strokeColor="@color/blue"
+        app:strokeWidth="2dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>
